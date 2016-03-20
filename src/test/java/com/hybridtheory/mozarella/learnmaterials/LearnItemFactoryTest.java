@@ -3,6 +3,11 @@ package com.hybridtheory.mozarella.learnmaterials;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemFactory;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.MultiWord;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.Word;
+
 public class LearnItemFactoryTest {
 
 	@Test

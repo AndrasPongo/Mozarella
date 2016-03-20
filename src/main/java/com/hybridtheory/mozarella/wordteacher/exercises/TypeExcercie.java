@@ -1,4 +1,4 @@
-package com.hybridtheory.mozarella.exercises;
+package com.hybridtheory.mozarella.wordteacher.exercises;
 
 public class TypeExcercie extends AbstractExcercise  {
 

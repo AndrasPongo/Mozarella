@@ -1,6 +1,6 @@
-package com.hybridtheory.mozarella.teacher;
+package com.hybridtheory.mozarella.wordteacher.teacher;
 
-import com.hybridtheory.mozarella.learnmaterials.Word;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.Word;
 
 public class Teacher {
 	

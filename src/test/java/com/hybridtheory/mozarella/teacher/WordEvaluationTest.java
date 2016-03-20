@@ -3,8 +3,8 @@ package com.hybridtheory.mozarella.teacher;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
-import com.hybridtheory.mozarella.learnmaterials.*;
-import com.hybridtheory.mozarella.teacher.Teacher;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.*;
+import com.hybridtheory.mozarella.wordteacher.teacher.Teacher;
 
 public class WordEvaluationTest {
 
