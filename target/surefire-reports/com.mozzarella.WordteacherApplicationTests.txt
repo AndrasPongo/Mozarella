@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.mozzarella.WordteacherApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.124 sec - in com.mozzarella.WordteacherApplicationTests

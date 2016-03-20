@@ -17,7 +17,7 @@ public class WordEvaluationTest {
 		Word testword = new Word("testword", "xyz");
 				
 		//Then
-		assertTrue(teacher.Evaluate(testword, "xyz") == true);
+		assertTrue(teacher.Evaluate(testword, "xyz"));
 	}	
 	
 	@Test
@@ -29,7 +29,7 @@ public class WordEvaluationTest {
 		Word testword = new Word("testword", "_xyz_");
 				
 		//Then
-		assertTrue(teacher.Evaluate(testword, "xyz") == false);
+		assertTrue(teacher.Evaluate(testword, "xyz"));
 	}	
 	
 }
