@@ -6,6 +6,7 @@ public abstract class AbstractLearnItem implements LearnItem {
 	protected String text;
 	protected String translation;
 	protected String[] alternativeTranslation;
+	protected int priority;
 	protected int strength;
 	protected String pictureReference;
 	private String helperItem;
@@ -67,6 +68,19 @@ public abstract class AbstractLearnItem implements LearnItem {
 		}
 		return strength;
 	}
+	
+	@Override
+	public void setPriority(int priority) {
+		this.priority = priority;		
+	}
+	
+	@Override
+	public int getPriority() {
+		if (this.priority == 0)  {
+			return 0;
+		}
+		return priority;
+	}
 
 	@Override
 	public void setPictureReference(String pictureReference) {
@@ -92,5 +106,5 @@ public abstract class AbstractLearnItem implements LearnItem {
 			return null;
 		}
 		return this.helperItem;
-	}	
+	}
 }

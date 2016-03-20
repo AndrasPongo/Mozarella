@@ -16,10 +16,13 @@ public interface LearnItem {
 	public void setStrength(int strength);
 	public int getStrength();
 	
+	public void setPriority(int priority);
+	public int getPriority();
+	
 	public void setPictureReference(String pictureReference);
 	public String getPictureReference();
 	
 	public void setHelperItem(String helperItem);
-	public String getHelperItem();	
+	public String getHelperItem();
 }
 
