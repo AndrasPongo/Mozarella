@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManagerTest" time="0.008" tests="12" errors="0" skipped="0" failures="0">
+<testsuite name="com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManagerTest" time="0" tests="12" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk1.8.0_65.jdk/Contents/Home/jre/lib"/>
@@ -26,7 +26,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="os.name" value="Mac OS X"/>
-    <property name="classworlds.conf" value="/Users/krisztian/Documents/workspace/.metadata/.plugins/org.eclipse.m2e.launching/launches/m2conf7874011945585553088.tmp"/>
+    <property name="classworlds.conf" value="/Users/krisztian/Documents/workspace/.metadata/.plugins/org.eclipse.m2e.launching/launches/m2conf74345815598295104.tmp"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
     <property name="java.library.path" value="/Users/krisztian/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
@@ -62,16 +62,16 @@
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase name="learnItemsManager_addNewValidMultiWordToExistingList" classname="com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManagerTest" time="0.002"/>
+  <testcase name="learnItemsManager_addNewValidMultiWordToExistingList" classname="com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManagerTest" time="0"/>
   <testcase name="learnItemsManager_createLearnItemsListWithValidName" classname="com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManagerTest" time="0"/>
-  <testcase name="learnItemsManager_getValidMultiWordFromExistingList" classname="com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManagerTest" time="0.001"/>
-  <testcase name="learnItemsManager_createLearnItemsListWithNull" classname="com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManagerTest" time="0.001"/>
+  <testcase name="learnItemsManager_getValidMultiWordFromExistingList" classname="com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManagerTest" time="0"/>
+  <testcase name="learnItemsManager_createLearnItemsListWithNull" classname="com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManagerTest" time="0"/>
   <testcase name="learnItemsManager_initializeWithValidName" classname="com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManagerTest" time="0"/>
-  <testcase name="learnItemsManager_addNewValidWordToExistingList" classname="com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManagerTest" time="0.001"/>
-  <testcase name="learnItemsManager_addNewValidWordToNotExistingList" classname="com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManagerTest" time="0.001"/>
+  <testcase name="learnItemsManager_addNewValidWordToExistingList" classname="com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManagerTest" time="0"/>
+  <testcase name="learnItemsManager_addNewValidWordToNotExistingList" classname="com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManagerTest" time="0"/>
   <testcase name="learnItemsManager_getValidWordFromExistingList" classname="com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManagerTest" time="0"/>
-  <testcase name="learnItemsManager_removeValidWordFromValidList" classname="com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManagerTest" time="0.001"/>
+  <testcase name="learnItemsManager_removeValidWordFromValidList" classname="com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManagerTest" time="0"/>
   <testcase name="learnItemsManager_addNewValidMultiWordToNotExistingList" classname="com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManagerTest" time="0"/>
-  <testcase name="learnItemsManager_createAlreadyExistingLearnItemsList" classname="com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManagerTest" time="0.001"/>
+  <testcase name="learnItemsManager_createAlreadyExistingLearnItemsList" classname="com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManagerTest" time="0"/>
   <testcase name="learnItemsManager_createWithNullUser" classname="com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManagerTest" time="0"/>
 </testsuite>
