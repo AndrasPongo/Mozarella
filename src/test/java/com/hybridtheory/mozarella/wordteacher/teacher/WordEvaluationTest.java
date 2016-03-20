@@ -1,4 +1,4 @@
-package com.hybridtheory.mozarella.teacher;
+package com.hybridtheory.mozarella.wordteacher.teacher;
 
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
@@ -12,28 +12,24 @@ public class WordEvaluationTest {
 	public void testEvaluations_answerIsCorrect() {
 		//Given
 		Teacher teacher = new Teacher();
-		LearnItemFactory learnItemFactory = new LearnItemFactory();
-		Word word = (Word)learnItemFactory.createLearnItem("testword");
-		
+	
 		//When
-		word.setTranslation("xyz");
-		
+		Word testword = new Word("testword", "xyz");
+				
 		//Then
-		assertTrue(teacher.Evaluate(word, "xyz") == true);
+		assertTrue(teacher.Evaluate(testword, "xyz") == true);
 	}	
 	
 	@Test
 	public void testEvaluations_answerIsNotCorrect() {
 		//Given
 		Teacher teacher = new Teacher();
-		LearnItemFactory learnItemFactory = new LearnItemFactory();
-		Word word = (Word)learnItemFactory.createLearnItem("testword");
 		
 		//When
-		word.setTranslation("xyz");
-		
+		Word testword = new Word("testword", "_xyz_");
+				
 		//Then
-		assertTrue(teacher.Evaluate(word, "_xyz_") == false);
+		assertTrue(teacher.Evaluate(testword, "xyz") == false);
 	}	
 	
 }

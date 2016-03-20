@@ -1,29 +1,25 @@
 package com.hybridtheory.mozarella.wordteacher.learnmaterials;
 
+import com.hybridtheory.mozarella.wordteacher.InputSanitizer;
+
 public class LearnItemFactory {
+	private String typeOfInput = "";
+	private boolean validInput = false;
+	private InputSanitizer inputSanitizer = new InputSanitizer();
 	
-	public LearnItem createLearnItem(String text) {
-		if (text==null) {
-			throw new IllegalArgumentException();
+	public LearnItem createLearnItem(String text, String translation) {
+		validInput = inputSanitizer.checkIfLearnItemInputsAreValid(text, translation);
+		if (!validInput) {
+			throw new IllegalArgumentException("Invalid input when creating LearnItem");
 		}
 		
-		//TODO: should we allow numbers in the string at all (guess we should: why not allow "4ever" for the user if he likes it?). This also eliminates the possibility to restrict the entry of numbers on the GUI side
-		text.trim();
-		if (text == "" || isNumeric(text)) {
-			throw new IllegalArgumentException("Invalid input");
-		}
-
-		if (!text.contains(" ")) {
-			return new Word(text);
-		} else if(text instanceof String) {
-			return new MultiWord();
+		typeOfInput = inputSanitizer.determineTypeOfValidLearnItemInput(text);
+		if (typeOfInput == "word") {
+			return new Word(text, translation);
+		} else if (typeOfInput == "multi word"){
+			return new MultiWord(text, translation);
 		} else {
-			throw new IllegalArgumentException("Invalid input");
+			throw new IllegalArgumentException("Invalid input when creating LearnItem");
 		}
 	}
-	
-	private static boolean isNumeric(String str)
-	{
-	  return str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
-	}	
 }
