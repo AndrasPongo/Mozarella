@@ -1,6 +1,8 @@
 package com.hybridtheory.mozarella.wordteacher.learnmaterials;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
 import com.hybridtheory.mozarella.users.Student;
 
 public class LearnItemsManager {
@@ -68,5 +70,18 @@ public class LearnItemsManager {
 	public void removeLearnItemFromLearnItemsList(LearnItemsList learnItemsList, LearnItem learnItem) {
 		//TODO: checks
 		learnItemsList.removeLearnItem(getLearnItemFromList(learnItemsList, learnItem.getText()));
+	}
+	
+	protected List<String> getExistingListNames() {
+
+		return learnItemsLists.stream().map(LearnItemsList::getName).collect(Collectors.toList());
+		
+		/*//TODO: Java8
+		int i = 0;
+		for (LearnItemsList learnItemsList : learnItemsLists) {
+			ownedLearnItemsListNames[i] = learnItemsList.getName();
+			i++;
+		}
+		return ownedLearnItemsListNames; */
 	}
 }

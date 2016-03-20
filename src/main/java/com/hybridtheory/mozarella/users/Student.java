@@ -37,15 +37,4 @@ public class Student {
 		//ownedLearnItemsLists.add(learnItemsList);
 	}
 
-	protected String[] getExistingListNames() {
-		List<LearnItemsList> ownedLearnItemsLists = ownLearnItemManager.getLearnItemsLists();
-		String[] ownedLearnItemsListNames = new String[ownedLearnItemsLists.size()];
-		//TODO: Java8
-		int i = 0;
-		for (LearnItemsList learnItemsList : ownedLearnItemsLists) {
-			ownedLearnItemsListNames[i] = learnItemsList.getName();
-			i++;
-		}
-		return ownedLearnItemsListNames;
-	}
 }
