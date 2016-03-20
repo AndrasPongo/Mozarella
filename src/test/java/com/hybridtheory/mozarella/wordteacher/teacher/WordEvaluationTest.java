@@ -26,10 +26,10 @@ public class WordEvaluationTest {
 		Teacher teacher = new Teacher();
 		
 		//When
-		Word testword = new Word("testword", "_xyz_");
+		Word testword = new Word("testword", "xyz");
 				
 		//Then
-		assertTrue(teacher.Evaluate(testword, "xyz"));
+		assertTrue(!teacher.Evaluate(testword, "_xyz_"));
 	}	
 	
 }
