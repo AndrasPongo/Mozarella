@@ -25,7 +25,7 @@ public class LearnItemsManager {
 
 	public LearnItemsList createLearnItemsList(String name) {
 		LearnItemsList newLearnItemsList = new LearnItemsList(name);
-		if (name != null || !learnItemsLists.contains(newLearnItemsList)) {
+		if (name != null && !learnItemsLists.contains(newLearnItemsList)) {
 			learnItemsLists.add(newLearnItemsList);
 			return newLearnItemsList;
 		} else {
