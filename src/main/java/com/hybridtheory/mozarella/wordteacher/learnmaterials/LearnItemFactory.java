@@ -1,4 +1,4 @@
-package com.hybridtheory.mozarella.learnmaterials;
+package com.hybridtheory.mozarella.wordteacher.learnmaterials;
 
 public class LearnItemFactory {
 	
