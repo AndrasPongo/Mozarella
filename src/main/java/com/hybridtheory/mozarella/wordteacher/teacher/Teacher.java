@@ -7,4 +7,6 @@ public class Teacher {
 	public boolean Evaluate(Word word, String answer) {
 		return word.getTranslation().equals(answer);	
 	}
+	
+	
 }
