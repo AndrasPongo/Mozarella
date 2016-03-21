@@ -1,5 +1,5 @@
 package com.hybridtheory.mozarella.pet;
 
-public abstract class AbstractHabitat implements Habitat {
+public abstract class AbstractHabitat implements PetHabitat {
 
 }

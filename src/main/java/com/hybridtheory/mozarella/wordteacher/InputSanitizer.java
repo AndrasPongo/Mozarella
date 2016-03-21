@@ -61,4 +61,15 @@ public class InputSanitizer {
 			return true;
 		}
 	}
+	
+	public boolean checkPetNameIsValid(String petName) {
+		//TODO: To be extended
+		if (!StringUtils.hasText(petName) || 
+				petName == null || 
+				forbiddenWords.contains(petName)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 }

@@ -15,39 +15,7 @@ public class StudentTest {
 		//Then
 		assertTrue(student.getName()=="testStudent1");
 	}	
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void testStudent_incorrectInputs_onlyWhiteSpaces() {
-		//Given
-	
-		//When & Then
-		new Student("  ");
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void testStudent_incorrectInputs_emptyString() {
-		//Given
-	
-		//When & Then
-		new Student("");
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void testStudent_incorrectInputs_null() {
-		//Given
-	
-		//When & Then
-		new Student(null);
-	}	
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void testStudent_incorrectInputs_forbiddenWord() {
-		//Given
-	
-		//When & Then
-		new Student("ForbiddenCharSequenceForTestRADNOMlkkbwesadvu84416rk2u3");
-	}
-	
+
 	@Test
 	public void testStudent_learnItemsManagerCreation() {
 		//Given
@@ -60,7 +28,7 @@ public class StudentTest {
 	}
 	
 	@Test
-	public void testStudent_addNewLearnItemsList() {
+	public void testStudent_addAndGetNewLearnItemsList() {
 		//Given
 	
 		//When
@@ -69,5 +37,17 @@ public class StudentTest {
 				
 		//Then
 		assertTrue(student.getOwnLearnItemLists() != null);
+	}
+	
+	@Test
+	public void testStudent_initializePet() {
+		//Given
+		Student student = new Student("testStudent1");
+		
+		//When
+		student.initializePet("testPet1");
+		
+		//Then
+		assertTrue(student.getPet() != null);
 	}
 }

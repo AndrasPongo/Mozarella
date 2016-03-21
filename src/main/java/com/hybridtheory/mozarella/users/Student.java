@@ -2,6 +2,10 @@ package com.hybridtheory.mozarella.users;
 
 import java.util.List;
 
+import com.hybridtheory.mozarella.pet.Pet;
+import com.hybridtheory.mozarella.pet.PetHabitat;
+import com.hybridtheory.mozarella.pet.cubefish.Aquarium;
+import com.hybridtheory.mozarella.pet.cubefish.CubeFish;
 import com.hybridtheory.mozarella.wordteacher.InputSanitizer;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.*;
 
@@ -10,6 +14,8 @@ public class Student {
 	private String name = "";
 	
 	private LearnItemsManager ownLearnItemManager = null;
+	private Pet ownPet = null;
+	private PetHabitat ownPetHabitat = null;
 	private InputSanitizer inputSanitizer = new InputSanitizer();
 	
 	public String getName() {
@@ -28,7 +34,20 @@ public class Student {
 		}
 		this.id = "testStudent"+Math.random()*1000;
 		this.name = studentName;
-		ownLearnItemManager = new LearnItemsManager(this);		
+		ownLearnItemManager = new LearnItemsManager(this);
+	}
+	
+	protected void initializePet(String petName) {
+		ownPet = new CubeFish(petName);
+		ownPetHabitat = new Aquarium();	
+	}
+	
+	public Pet getPet() {
+		if (ownPet != null) {
+			return this.ownPet;
+		} else {
+			return null;
+		}
 	}
 
 	protected LearnItemsManager getOwnLearnItemManager() {
