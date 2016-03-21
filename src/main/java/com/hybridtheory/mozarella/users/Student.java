@@ -1,10 +1,9 @@
 package com.hybridtheory.mozarella.users;
 
-import java.util.*;
+import java.util.List;
 
 import com.hybridtheory.mozarella.wordteacher.InputSanitizer;
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsList;
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManager;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.*;
 
 public class Student {
 	private String id = "";
@@ -12,6 +11,10 @@ public class Student {
 	
 	private LearnItemsManager ownLearnItemManager = null;
 	private InputSanitizer inputSanitizer = new InputSanitizer();
+	
+	public String getName() {
+		return this.name;
+	}
 	
 	public Student(String studentName) {
 		initializeStudent(studentName);
@@ -31,10 +34,17 @@ public class Student {
 	protected LearnItemsManager getOwnLearnItemManager() {
 		return ownLearnItemManager;
 	}
+	
+	protected List<LearnItemsList> getOwnLearnItemLists() {
+		List<LearnItemsList> ownLearnItemsLists = ownLearnItemManager.getLearnItemsLists();
+		if (ownLearnItemsLists != null) {
+			return ownLearnItemsLists;	
+		} else {
+			return null;
+		}
+	}
 
 	protected void addNewLearnItemsList(String name) {
 		ownLearnItemManager.createLearnItemsList(name);
-		//ownedLearnItemsLists.add(learnItemsList);
 	}
-
 }
