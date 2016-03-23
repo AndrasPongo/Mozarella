@@ -1,7 +1,6 @@
 com/hybridtheory/mozarella/users/Student.class
 com/hybridtheory/mozarella/wordteacher/learnmaterials/LearnItem.class
 com/hybridtheory/mozarella/wordteacher/learnmaterials/MultiWord.class
-com/hybridtheory/mozarella/pet/AbstractPet.class
 com/hybridtheory/mozarella/pet/Pet.class
 com/hybridtheory/mozarella/wordteacher/learnmaterials/AbstractLearnItem.class
 com/hybridtheory/mozarella/wordteacher/learnmaterials/LearnItemsList.class
@@ -15,8 +14,9 @@ com/hybridtheory/mozarella/wordteacher/teacher/Teacher.class
 com/mozzarella/WordteacherApplication.class
 com/hybridtheory/mozarella/pet/Habitat.class
 com/hybridtheory/mozarella/wordteacher/exercises/Excercise.class
+com/hybridtheory/mozzarella/configuration/JavaConfig.class
+com/hybridtheory/mozarella/wordteacher/exercises/TypeExcercise.class
 com/hybridtheory/mozarella/wordteacher/InputSanitizer.class
-com/hybridtheory/mozarella/wordteacher/exercises/TypeExcercie.class
-com/hybridtheory/mozarella/pet/AbstractHabitat.class
 com/hybridtheory/mozarella/wordteacher/learnmaterials/LearnItemFactory.class
 com/hybridtheory/mozarella/pet/cubefish/Aquarium.class
+com/hybridtheory/mozzarella/persistence/StudentRepository.class

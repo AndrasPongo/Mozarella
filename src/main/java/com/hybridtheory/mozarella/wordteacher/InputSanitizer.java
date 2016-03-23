@@ -6,6 +6,7 @@ import org.springframework.util.StringUtils;
 import com.hybridtheory.mozarella.users.Student;
 
 public class InputSanitizer {
+	
 	private List<String> forbiddenWords = new ArrayList<String>();
 
 	public InputSanitizer() {

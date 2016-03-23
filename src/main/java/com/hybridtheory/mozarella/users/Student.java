@@ -2,20 +2,35 @@ package com.hybridtheory.mozarella.users;
 
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Transient;
+
+import com.hybridtheory.mozarella.pet.Habitat;
 import com.hybridtheory.mozarella.pet.Pet;
-import com.hybridtheory.mozarella.pet.PetHabitat;
 import com.hybridtheory.mozarella.pet.cubefish.Aquarium;
 import com.hybridtheory.mozarella.pet.cubefish.CubeFish;
 import com.hybridtheory.mozarella.wordteacher.InputSanitizer;
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.*;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsList;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManager;
 
+@Entity
 public class Student {
-	private String id = "";
+	
+	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer id;
 	private String name = "";
 	
+	@Transient
 	private LearnItemsManager ownLearnItemManager = null;
+	
+	@OneToOne(targetEntity=CubeFish.class)
 	private Pet ownPet = null;
-	private PetHabitat ownPetHabitat = null;
+	
+	@Transient
 	private InputSanitizer inputSanitizer = new InputSanitizer();
 	
 	public String getName() {
@@ -32,14 +47,12 @@ public class Student {
 		if (!validName) {
 			throw new IllegalArgumentException("Invalid name for Student");
 		}
-		this.id = "testStudent"+Math.random()*1000;
 		this.name = studentName;
 		ownLearnItemManager = new LearnItemsManager(this);
 	}
 	
 	protected void initializePet(String petName) {
 		ownPet = new CubeFish(petName);
-		ownPetHabitat = new Aquarium();	
 	}
 	
 	public Pet getPet() {

@@ -1,7 +1,5 @@
 package com.hybridtheory.mozarella.pet;
 
-public interface PetHabitat {
+public abstract class Habitat {
 
-	
-	
 }

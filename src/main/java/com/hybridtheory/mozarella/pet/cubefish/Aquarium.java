@@ -1,7 +1,16 @@
 package com.hybridtheory.mozarella.pet.cubefish;
 
-import com.hybridtheory.mozarella.pet.AbstractHabitat;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-public class Aquarium extends AbstractHabitat {
+import com.hybridtheory.mozarella.pet.Habitat;
 
+@Entity
+public class Aquarium extends Habitat {
+
+	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer id;
+	
 }
