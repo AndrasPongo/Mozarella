@@ -3,9 +3,7 @@ package com.hybridtheory.mozarella.pet;
 import java.time.LocalDate;
 import java.util.Map;
 
-import javax.persistence.OneToOne;
-
-import com.hybridtheory.mozarella.pet.cubefish.Aquarium;
+import javax.persistence.Transient;
 
 
 public abstract class Pet {
@@ -15,7 +13,8 @@ public abstract class Pet {
 	protected Map extras = null;
 	protected LocalDate lastFeedTime = null;
 	
-	@OneToOne(targetEntity=Aquarium.class)
+	//@OneToOne(targetEntity=Aquarium.class)
+	//@Transient
 	protected Habitat ownHabitat = null;
 
 	public void setName(String name) {

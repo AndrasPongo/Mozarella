@@ -11,10 +11,10 @@ import javax.persistence.Transient;
 import com.hybridtheory.mozarella.pet.Pet;
 import com.hybridtheory.mozarella.wordteacher.InputSanitizer;
 
-@Entity
+//@Entity
 public class CubeFish extends Pet {
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Integer id;
+	private Integer id2;
 	
 	@Transient
 	private InputSanitizer inputSanitizer = new InputSanitizer();

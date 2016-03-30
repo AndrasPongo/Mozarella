@@ -6,12 +6,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
-import com.hybridtheory.mozarella.pet.Habitat;
 import com.hybridtheory.mozarella.pet.Pet;
-import com.hybridtheory.mozarella.pet.cubefish.Aquarium;
 import com.hybridtheory.mozarella.pet.cubefish.CubeFish;
 import com.hybridtheory.mozarella.wordteacher.InputSanitizer;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsList;
@@ -27,8 +24,9 @@ public class Student {
 	@Transient
 	private LearnItemsManager ownLearnItemManager = null;
 	
-	@OneToOne(targetEntity=CubeFish.class)
-	private Pet ownPet = null;
+	//@OneToOne(targetEntity=CubeFish.class)
+	@Transient
+	private Pet ownPet;
 	
 	@Transient
 	private InputSanitizer inputSanitizer = new InputSanitizer();
@@ -56,11 +54,7 @@ public class Student {
 	}
 	
 	public Pet getPet() {
-		if (ownPet != null) {
-			return this.ownPet;
-		} else {
-			return null;
-		}
+			return ownPet;
 	}
 
 	protected LearnItemsManager getOwnLearnItemManager() {
@@ -68,15 +62,16 @@ public class Student {
 	}
 	
 	protected List<LearnItemsList> getOwnLearnItemLists() {
-		List<LearnItemsList> ownLearnItemsLists = ownLearnItemManager.getLearnItemsLists();
-		if (ownLearnItemsLists != null) {
-			return ownLearnItemsLists;	
-		} else {
-			return null;
-		}
+		return ownLearnItemManager.getLearnItemsLists();
 	}
 
 	protected void addNewLearnItemsList(String name) {
 		ownLearnItemManager.createLearnItemsList(name);
 	}
+	
+	@Override
+	public String toString(){
+		return "Student with name " + name + "id: " + id;
+	}
+	
 }
