@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 import com.hybridtheory.mozarella.pet.Pet;
@@ -24,11 +25,10 @@ public class Student {
 	@Transient
 	private LearnItemsManager ownLearnItemManager = null;
 	
-	//@OneToOne(targetEntity=CubeFish.class)
-	@Transient
+	@OneToOne(targetEntity=CubeFish.class)
 	private Pet ownPet;
 	
-	@Transient
+	@OneToOne(targetEntity=InputSanitizer.class)
 	private InputSanitizer inputSanitizer = new InputSanitizer();
 	
 	public String getName() {

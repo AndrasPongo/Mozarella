@@ -10,7 +10,5 @@ import com.hybridtheory.mozarella.pet.Habitat;
 @Entity
 public class Aquarium extends Habitat {
 
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Integer id;
 	
 }

@@ -3,26 +3,35 @@ package com.hybridtheory.mozarella.pet;
 import java.time.LocalDate;
 import java.util.Map;
 
-import javax.persistence.Transient;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
+import com.hybridtheory.mozarella.pet.cubefish.Aquarium;
 
+@Entity
 public abstract class Pet {
 
-	protected String name = "";
+	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	protected Integer id;
+	protected String petname = "";
 	protected int level = 0;
-	protected Map extras = null;
+	@ElementCollection
+	protected Map<Integer, String> extras = null;
 	protected LocalDate lastFeedTime = null;
 	
-	//@OneToOne(targetEntity=Aquarium.class)
-	//@Transient
+	@OneToOne(targetEntity=Aquarium.class)
 	protected Habitat ownHabitat = null;
 
 	public void setName(String name) {
-		this.name = name;
+		this.petname = name;
 	}
 	
 	public String getName() {
-		return this.name;
+		return this.petname;
 	}
 	
 	public Habitat getHabitat() {
