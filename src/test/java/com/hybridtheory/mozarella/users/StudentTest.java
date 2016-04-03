@@ -1,7 +1,12 @@
 package com.hybridtheory.mozarella.users;
 
 import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
+
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemFactory;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsList;
 
 public class StudentTest {
 
@@ -37,6 +42,21 @@ public class StudentTest {
 				
 		//Then
 		assertTrue(student.getOwnLearnItemLists() != null);
+	}
+	
+	@Test
+	public void testStudent_addAndGetNewLearnItemToExistingList() {
+		//Given
+		LearnItemFactory learnItemFactory = new LearnItemFactory();
+		LearnItem learnItem = learnItemFactory.createLearnItem("testword", "xyz");
+	
+		//When
+		Student student = new Student("testStudent1");
+		LearnItemsList learnItemsList = student.addNewLearnItemsList("testList1");
+		student.addNewLearnItemToExistingList(learnItemsList, learnItem);
+				
+		//Then
+		assertTrue(student.getALearnItemList("testList1") != null);
 	}
 	
 	@Test

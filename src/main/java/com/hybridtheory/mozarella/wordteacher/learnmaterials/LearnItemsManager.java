@@ -38,9 +38,10 @@ public class LearnItemsManager {
 		return learnItemsLists;
 	}
 	
-	public LearnItemsList getLearnItemsList(LearnItemsList learnItemsList) {
+//	public LearnItemsList getLearnItemsList(LearnItemsList learnItemsList) {
+	public LearnItemsList getLearnItemsList(String nameOfList) {
 		for (LearnItemsList lit : learnItemsLists) {
-			if (lit == learnItemsList) {
+			if (lit.getName() == nameOfList) {
 				return lit;
 			}
 		}
@@ -48,6 +49,7 @@ public class LearnItemsManager {
 	}
 	
 	public void createNewLearnItemToLearnItemsList(LearnItemsList learnItemsList, String text, String translation) {
+		//TODO: check text and translation too!
 		if (learnItemsList == null || !learnItemsLists.contains(learnItemsList)) {
 			throw new IllegalArgumentException("Invalid input when creating LearnItemsList");
 		} else {
@@ -56,6 +58,14 @@ public class LearnItemsManager {
 			learnItemsList.addLearnItem(newLearnItem);
 		}
 	}
+	
+	public void addNewLearnItemToLearnItemsList(LearnItemsList learnItemsList, LearnItem learnItem) {
+		if (learnItemsList == null || !learnItemsLists.contains(learnItemsList) || learnItem == null) {
+			throw new IllegalArgumentException("Invalid input when creating LearnItemsList");
+		} else {
+			learnItemsList.addLearnItem(learnItem);
+		}
+	}	
 	
 	public LearnItem getLearnItemFromList(LearnItemsList learnItemsList, String textOfLearnItem) {
 		//TODO: checks
@@ -66,6 +76,15 @@ public class LearnItemsManager {
 	//TODO: add alternative(s) to existing words in list
 	//TODO: modify priority of learn item
 	//TODO: modify strength
+	
+	public void setStrengthOfLearnItem(LearnItem learnItem, int strength) {
+		if (learnItem != null && strength >= 0 && strength <= 10) {
+			learnItem.setStrength(strength);
+		} else {
+			throw new IllegalArgumentException("Invalid input when creating setting strength for Learn Item");
+		}
+	}
+	
 	
 	public void removeLearnItemFromLearnItemsList(LearnItemsList learnItemsList, LearnItem learnItem) {
 		//TODO: checks

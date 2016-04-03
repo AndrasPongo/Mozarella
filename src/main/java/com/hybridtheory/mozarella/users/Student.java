@@ -12,6 +12,7 @@ import javax.persistence.Transient;
 import com.hybridtheory.mozarella.pet.Pet;
 import com.hybridtheory.mozarella.pet.cubefish.CubeFish;
 import com.hybridtheory.mozarella.wordteacher.InputSanitizer;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsList;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManager;
 
@@ -64,9 +65,17 @@ public class Student {
 	protected List<LearnItemsList> getOwnLearnItemLists() {
 		return ownLearnItemManager.getLearnItemsLists();
 	}
+	
+	protected LearnItemsList getALearnItemList(String nameOfList) {
+		return ownLearnItemManager.getLearnItemsList(nameOfList);
+	}
 
-	protected void addNewLearnItemsList(String name) {
-		ownLearnItemManager.createLearnItemsList(name);
+	protected LearnItemsList addNewLearnItemsList(String name) {
+		return ownLearnItemManager.createLearnItemsList(name);
+	}
+	
+	protected void addNewLearnItemToExistingList(LearnItemsList learnItemsList, LearnItem learnItem) {
+		ownLearnItemManager.addNewLearnItemToLearnItemsList(learnItemsList, learnItem);
 	}
 	
 	@Override
