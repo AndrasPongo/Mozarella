@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.hybridtheory.mozarella.users.Student;
+import com.hybridtheory.mozarella.wordteacher.InputSanitizer;
 
 public class LearnItemsManager {
 	private Student owner = null;
@@ -49,7 +50,6 @@ public class LearnItemsManager {
 	}
 	
 	public void createNewLearnItemToLearnItemsList(LearnItemsList learnItemsList, String text, String translation) {
-		//TODO: check text and translation too!
 		if (learnItemsList == null || !learnItemsLists.contains(learnItemsList)) {
 			throw new IllegalArgumentException("Invalid input when creating LearnItemsList");
 		} else {
@@ -72,10 +72,47 @@ public class LearnItemsManager {
 		return learnItemsList.getLearnItem(textOfLearnItem);
 	}
 
-	//TODO: modify existing word in list
 	//TODO: add alternative(s) to existing words in list
-	//TODO: modify priority of learn item
-	//TODO: modify strength
+	
+	public void modifyExitingLearnItem_newText(LearnItem learnItem, String newText) {
+		if (learnItem != null) {
+			learnItem.setText(newText);
+		} else {
+			throw new IllegalArgumentException("Invalid input when creating setting new Text for Learn Item");
+		}
+	}
+	
+	public void modifyExitingLearnItem_newTranslation(LearnItem learnItem, String newTranslation) {
+		if (learnItem != null) {
+			learnItem.setText(newTranslation);
+		} else {
+			throw new IllegalArgumentException("Invalid input when creating setting new Translation for Learn Item");
+		}
+	}
+	
+	public void modifyExitingLearnItem_newAlternativeTranslation(LearnItem learnItem, String newAlternativeTranslation) {
+		if (learnItem != null) {
+			learnItem.setAlternativeTranslation(newAlternativeTranslation);
+		} else {
+			throw new IllegalArgumentException("Invalid input when creating setting new Translation for Learn Item");
+		}
+	}
+	
+	public void modifyExitingLearnItem_removeAlternativeTranslation(LearnItem learnItem, String newAlternativeTranslation) {
+		if (learnItem != null) {
+			learnItem.setAlternativeTranslation(newAlternativeTranslation);
+		} else {
+			throw new IllegalArgumentException("Invalid input when creating setting new Translation for Learn Item");
+		}
+	}
+	
+	public void setPriorityOfLearnItem(LearnItem learnItem, int priority) {
+		if (learnItem != null && priority >= 1 && priority <= 10) {
+			learnItem.setPriority(priority);
+		} else {
+			throw new IllegalArgumentException("Invalid input when creating setting strength for Learn Item");
+		}
+	}
 	
 	public void setStrengthOfLearnItem(LearnItem learnItem, int strength) {
 		if (learnItem != null && strength >= 0 && strength <= 10) {
