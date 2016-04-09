@@ -31,12 +31,12 @@ public class Student {
 	@OneToOne(targetEntity=InputSanitizer.class)
 	private InputSanitizer inputSanitizer = new InputSanitizer();
 	
-	public String getName() {
-		return this.name;
+	public Student(){
+		ownLearnItemManager = new LearnItemsManager(this);
 	}
 	
-	public Student(String studentName) {
-		initializeStudent(studentName);
+	public String getName() {
+		return this.name;
 	}
 	
 	private void initializeStudent(String studentName) {
@@ -61,14 +61,40 @@ public class Student {
 		return ownLearnItemManager;
 	}
 	
-	protected List<LearnItemsList> getOwnLearnItemLists() {
+	public List<LearnItemsList> getOwnLearnItemLists() {
 		return ownLearnItemManager.getLearnItemsLists();
 	}
 
-	protected void addNewLearnItemsList(String name) {
-		ownLearnItemManager.createLearnItemsList(name);
+	protected void addNewLearnItemsList(LearnItemsList learnItemList) {
+		if(!ownLearnItemManager.getLearnItemsLists().contains(learnItemList)){
+			ownLearnItemManager.getLearnItemsLists().add(learnItemList);
+		}
 	}
 	
+	public Pet getOwnPet() {
+		return ownPet;
+	}
+
+	public void setOwnPet(Pet ownPet) {
+		this.ownPet = ownPet;
+	}
+
+	public InputSanitizer getInputSanitizer() {
+		return inputSanitizer;
+	}
+
+	public void setInputSanitizer(InputSanitizer inputSanitizer) {
+		this.inputSanitizer = inputSanitizer;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setOwnLearnItemManager(LearnItemsManager ownLearnItemManager) {
+		this.ownLearnItemManager = ownLearnItemManager;
+	}
+
 	@Override
 	public String toString(){
 		return "Student with name " + name + "id: " + id;

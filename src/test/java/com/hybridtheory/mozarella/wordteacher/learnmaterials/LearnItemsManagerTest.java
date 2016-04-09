@@ -10,7 +10,7 @@ public class LearnItemsManagerTest {
 	@Test
 	public void learnItemsManager_initializeWithValidName() {
 		//Given
-		Student testStudent1 = new Student("testStudent1");
+		Student testStudent1 = new Student();
 		
 		//When
 		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
@@ -30,7 +30,7 @@ public class LearnItemsManagerTest {
 	@Test
 	public void learnItemsManager_createLearnItemsListWithValidName() {
 		//Given
-		Student testStudent1 = new Student("testStudent1");
+		Student testStudent1 = new Student();
 		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
 
 		//When
@@ -44,7 +44,7 @@ public class LearnItemsManagerTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void learnItemsManager_createLearnItemsListWithNull() {
 		//Given
-		Student testStudent1 = new Student("testStudent1");
+		Student testStudent1 = new Student();
 		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
 
 		//When & Then
@@ -54,7 +54,7 @@ public class LearnItemsManagerTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void learnItemsManager_createAlreadyExistingLearnItemsList() {
 		//Given
-		Student testStudent1 = new Student("testStudent1");
+		Student testStudent1 = new Student();
 		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
 		learnItemsManager.createLearnItemsList("testLearnItemsList");
 
@@ -65,7 +65,7 @@ public class LearnItemsManagerTest {
 	@Test
 	public void learnItemsManager_addNewValidWordToExistingList() {
 		//Given
-		Student testStudent1 = new Student("testStudent1");
+		Student testStudent1 = new Student();
 		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
 		LearnItemsList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
 		
@@ -80,7 +80,7 @@ public class LearnItemsManagerTest {
 	@Test
 	public void learnItemsManager_addNewValidMultiWordToExistingList() {
 		//Given
-		Student testStudent1 = new Student("testStudent1");
+		Student testStudent1 = new Student();
 		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
 		LearnItemsList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
 		
@@ -95,7 +95,7 @@ public class LearnItemsManagerTest {
 	@Test
 	public void learnItemsManager_getValidWordFromExistingList() {
 		//Given
-		Student testStudent1 = new Student("testStudent1");
+		Student testStudent1 = new Student();
 		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
 		LearnItemsList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
 		learnItemsManager.createNewLearnItemToLearnItemsList(existingLearnItemsList, "testword", "xyz");
@@ -110,7 +110,7 @@ public class LearnItemsManagerTest {
 	@Test
 	public void learnItemsManager_getValidMultiWordFromExistingList() {
 		//Given
-		Student testStudent1 = new Student("testStudent1");
+		Student testStudent1 = new Student();
 		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
 		LearnItemsList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
 		learnItemsManager.createNewLearnItemToLearnItemsList(existingLearnItemsList, "test multi word", "abc xyz");
@@ -125,7 +125,7 @@ public class LearnItemsManagerTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void learnItemsManager_addNewValidWordToNotExistingList() {
 		//Given
-		Student testStudent1 = new Student("testStudent1");
+		Student testStudent1 = new Student();
 		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
 		
 		//When & Then
@@ -135,7 +135,7 @@ public class LearnItemsManagerTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void learnItemsManager_addNewValidMultiWordToNotExistingList() {
 		//Given
-		Student testStudent1 = new Student("testStudent1");
+		Student testStudent1 = new Student();
 		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
 		
 		//When & Then
@@ -145,7 +145,7 @@ public class LearnItemsManagerTest {
 	@Test
 	public void learnItemsManager_removeValidWordFromValidList() {
 		//Given
-		Student testStudent1 = new Student("testStudent1");
+		Student testStudent1 = new Student();
 		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
 		LearnItemsList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
 		learnItemsManager.createNewLearnItemToLearnItemsList(existingLearnItemsList, "testword", "xyz");

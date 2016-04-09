@@ -16,6 +16,10 @@ public class CubeFish extends Pet {
 	//@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	//private Integer id2;
 	
+	public CubeFish(){
+		level = 1;
+	}
+	
 	@Transient
 	private InputSanitizer inputSanitizer = new InputSanitizer();
 

@@ -18,7 +18,7 @@ public abstract class Pet {
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	protected Integer id;
 	protected String petname = "";
-	protected int level = 0;
+	protected Integer level = 0;
 	@ElementCollection
 	protected Map<Integer, String> extras = null;
 	protected LocalDate lastFeedTime = null;
@@ -41,6 +41,7 @@ public abstract class Pet {
 	
 	public void setLevel() {
 		// TODO Auto-generated method stub
+		level=0;
 
 	}
 

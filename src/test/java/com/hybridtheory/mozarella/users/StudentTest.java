@@ -1,7 +1,10 @@
 package com.hybridtheory.mozarella.users;
 
 import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
+
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsList;
 
 public class StudentTest {
 
@@ -10,10 +13,11 @@ public class StudentTest {
 		//Given
 	
 		//When
-		Student student = new Student("testStudent1");
+		Student student = new Student();
+		student.setName("testStudent1");
 				
 		//Then
-		assertTrue(student.getName()=="testStudent1");
+		assertTrue(student.getName().equals("testStudent1"));
 	}	
 
 	@Test
@@ -21,7 +25,7 @@ public class StudentTest {
 		//Given
 	
 		//When
-		Student student = new Student("testStudent1");
+		Student student = new Student();
 				
 		//Then
 		assertTrue(student.getOwnLearnItemManager() != null);
@@ -30,19 +34,19 @@ public class StudentTest {
 	@Test
 	public void testStudent_addAndGetNewLearnItemsList() {
 		//Given
-	
+		LearnItemsList learnItemsList = new LearnItemsList("testLearnItemList");
 		//When
-		Student student = new Student("testStudent1");
-		student.addNewLearnItemsList("testList1");
+		Student student = new Student();
+		student.addNewLearnItemsList(learnItemsList);
 				
 		//Then
-		assertTrue(student.getOwnLearnItemLists() != null);
+		assertTrue(student.getOwnLearnItemLists().contains(learnItemsList));
 	}
 	
 	@Test
 	public void testStudent_initializePet() {
 		//Given
-		Student student = new Student("testStudent1");
+		Student student = new Student();
 		
 		//When
 		student.initializePet("testPet1");
