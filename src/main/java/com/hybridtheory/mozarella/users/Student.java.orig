@@ -70,12 +70,19 @@ public class Student {
 		return ownLearnItemManager.getLearnItemsList(nameOfList);
 	}
 
+<<<<<<< HEAD
+	protected void addNewLearnItemsList(LearnItemsList learnItemList) {
+		if(!ownLearnItemManager.getLearnItemsLists().contains(learnItemList)){
+			ownLearnItemManager.getLearnItemsLists().add(learnItemList);
+		}
+=======
 	protected LearnItemsList addNewLearnItemsList(String name) {
 		return ownLearnItemManager.createLearnItemsList(name);
 	}
 	
-	protected LearnItemsList addNewLearnItemsList(LearnItemsList learnItemsList) {
-		return ownLearnItemManager.addNewLearnItemsList(learnItemsList);
+	protected void addNewLearnItemToExistingList(LearnItemsList learnItemsList, LearnItem learnItem) {
+		ownLearnItemManager.addNewLearnItemToLearnItemsList(learnItemsList, learnItem);
+>>>>>>> abea634e1f84bc2933112bbd761a3bd8660fc54c
 	}
 	
 	public Pet getOwnPet() {
@@ -100,10 +107,6 @@ public class Student {
 
 	public void setOwnLearnItemManager(LearnItemsManager ownLearnItemManager) {
 		this.ownLearnItemManager = ownLearnItemManager;
-	}
-	
-	protected void addNewLearnItemToExistingList(LearnItemsList learnItemsList, LearnItem learnItem) {
-		ownLearnItemManager.addNewLearnItemToLearnItemsList(learnItemsList, learnItem);
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package com.hybridtheory.mozarella.wordteacher.learnmaterials;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import com.hybridtheory.mozarella.users.Student;
@@ -38,9 +39,10 @@ public class LearnItemsManager {
 		return learnItemsLists;
 	}
 	
-	public LearnItemsList getLearnItemsList(LearnItemsList learnItemsList) {
+//	public LearnItemsList getLearnItemsList(LearnItemsList learnItemsList) {
+	public LearnItemsList getLearnItemsList(String nameOfList) {
 		for (LearnItemsList lit : learnItemsLists) {
-			if (lit == learnItemsList) {
+			if (lit.getName() == nameOfList) {
 				return lit;
 			}
 		}
@@ -57,15 +59,69 @@ public class LearnItemsManager {
 		}
 	}
 	
+	public void addNewLearnItemToLearnItemsList(LearnItemsList learnItemsList, LearnItem learnItem) {
+		if (learnItemsList == null || !learnItemsLists.contains(learnItemsList) || learnItem == null) {
+			throw new IllegalArgumentException("Invalid input when creating LearnItemsList");
+		} else {
+			learnItemsList.addLearnItem(learnItem);
+		}
+	}	
+	
 	public LearnItem getLearnItemFromList(LearnItemsList learnItemsList, String textOfLearnItem) {
 		//TODO: checks
 		return learnItemsList.getLearnItem(textOfLearnItem);
 	}
 
-	//TODO: modify existing word in list
 	//TODO: add alternative(s) to existing words in list
-	//TODO: modify priority of learn item
-	//TODO: modify strength
+	
+	public void modifyExitingLearnItem_newText(LearnItem learnItem, String newText) {
+		if (learnItem != null) {
+			learnItem.setText(newText);
+		} else {
+			throw new IllegalArgumentException("Invalid input when creating setting new Text for Learn Item");
+		}
+	}
+	
+	public void modifyExitingLearnItem_newTranslation(LearnItem learnItem, String newTranslation) {
+		if (learnItem != null) {
+			learnItem.setText(newTranslation);
+		} else {
+			throw new IllegalArgumentException("Invalid input when creating setting new Translation for Learn Item");
+		}
+	}
+	
+	public void modifyExitingLearnItem_newAlternativeTranslation(LearnItem learnItem, String newAlternativeTranslation) {
+		if (learnItem != null) {
+			learnItem.setAlternativeTranslation(newAlternativeTranslation);
+		} else {
+			throw new IllegalArgumentException("Invalid input when creating setting new Translation for Learn Item");
+		}
+	}
+	
+	public void modifyExitingLearnItem_removeAlternativeTranslation(LearnItem learnItem, String newAlternativeTranslation) {
+		if (learnItem != null) {
+			learnItem.setAlternativeTranslation(newAlternativeTranslation);
+		} else {
+			throw new IllegalArgumentException("Invalid input when creating setting new Translation for Learn Item");
+		}
+	}
+	
+	public void setPriorityOfLearnItem(LearnItem learnItem, int priority) {
+		if (learnItem != null && priority >= 1 && priority <= 10) {
+			learnItem.setPriority(priority);
+		} else {
+			throw new IllegalArgumentException("Invalid input when creating setting strength for Learn Item");
+		}
+	}
+	
+	public void setStrengthOfLearnItem(LearnItem learnItem, int strength) {
+		if (learnItem != null && strength >= 0 && strength <= 10) {
+			learnItem.setStrength(strength);
+		} else {
+			throw new IllegalArgumentException("Invalid input when creating setting strength for Learn Item");
+		}
+	}
+	
 	
 	public void removeLearnItemFromLearnItemsList(LearnItemsList learnItemsList, LearnItem learnItem) {
 		//TODO: checks
@@ -76,12 +132,12 @@ public class LearnItemsManager {
 
 		return learnItemsLists.stream().map(LearnItemsList::getName).collect(Collectors.toList());
 		
-		/*//TODO: Java8
-		int i = 0;
-		for (LearnItemsList learnItemsList : learnItemsLists) {
-			ownedLearnItemsListNames[i] = learnItemsList.getName();
-			i++;
+	}
+
+	public LearnItemsList addNewLearnItemsList(LearnItemsList learnItemsList) {
+		if(!learnItemsLists.contains(learnItemsList)){
+			learnItemsLists.add(learnItemsList);
 		}
-		return ownedLearnItemsListNames; */
+		return learnItemsList;
 	}
 }

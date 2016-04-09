@@ -71,7 +71,7 @@ public class LearnItemsManagerTest {
 		
 		//When
 		learnItemsManager.createNewLearnItemToLearnItemsList(existingLearnItemsList, "testword", "xyz");
-		LearnItemsList learnItemsList = learnItemsManager.getLearnItemsList(existingLearnItemsList);
+		LearnItemsList learnItemsList = learnItemsManager.getLearnItemsList("testLearnItemsList");
 		
 		//Then
 		assertTrue(learnItemsList.getNumberOfLearnItemsInList()==1);
@@ -86,10 +86,26 @@ public class LearnItemsManagerTest {
 		
 		//When
 		learnItemsManager.createNewLearnItemToLearnItemsList(existingLearnItemsList, "test multi word", "abc xyz");
-		LearnItemsList learnItemsList = learnItemsManager.getLearnItemsList(existingLearnItemsList);
+		LearnItemsList learnItemsList = learnItemsManager.getLearnItemsList("testLearnItemsList");
 		
 		//Then
 		assertTrue(learnItemsList.getNumberOfLearnItemsInList()==1);
+	}
+	
+	@Test
+	public void learnItemsManager_addNewValidLearnItemToExistingList() {
+		//Given
+		Student testStudent1 = new Student();
+		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
+		LearnItemsList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
+		LearnItemFactory learnItemFactory = new LearnItemFactory();
+		LearnItem learnItem = learnItemFactory.createLearnItem("testword", "xyz");
+		
+		//When
+		learnItemsManager.addNewLearnItemToLearnItemsList(existingLearnItemsList, learnItem);
+		
+		//Then
+		assertTrue(existingLearnItemsList.getNumberOfLearnItemsInList()==1);
 	}
 	
 	@Test
@@ -156,5 +172,34 @@ public class LearnItemsManagerTest {
 		
 		//Then
 		assertTrue(existingLearnItemsList.getNumberOfLearnItemsInList()==0);
+	}
+	
+	@Test
+	public void learnItemsManager_setStrengthOfLearnItem_valid() {
+		//Given
+		Student testStudent1 = new Student();
+		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
+		LearnItemsList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
+		learnItemsManager.createNewLearnItemToLearnItemsList(existingLearnItemsList, "testword", "xyz");
+		LearnItem learnItem = learnItemsManager.getLearnItemFromList(existingLearnItemsList, "testword");
+
+		//When
+		learnItemsManager.setStrengthOfLearnItem(learnItem, 1);
+		
+		//Then
+		assertTrue(learnItem.getStrength()==1);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void learnItemsManager_setStrengthOfLearnItem_invalid() {
+		//Given
+		Student testStudent1 = new Student();
+		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
+		LearnItemsList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
+		learnItemsManager.createNewLearnItemToLearnItemsList(existingLearnItemsList, "testword", "xyz");
+		LearnItem learnItem = learnItemsManager.getLearnItemFromList(existingLearnItemsList, "testword");
+
+		//When & Then
+		learnItemsManager.setStrengthOfLearnItem(learnItem, 11);
 	}
 }

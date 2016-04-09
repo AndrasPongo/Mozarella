@@ -4,7 +4,7 @@ import java.util.*;
 import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.InputSanitizer;
 
-public class LearnItemsList implements Comparable<LearnItemsList> {
+public class LearnItemsList implements Comparable<LearnItemsList>, Iterable<LearnItem> {
 	
 	private String id = "";
 	private String name = "";
@@ -47,7 +47,7 @@ public class LearnItemsList implements Comparable<LearnItemsList> {
 		return this.user;
 	}
 	
-	protected int getNumberOfLearnItemsInList() {
+	public int getNumberOfLearnItemsInList() {
 		return this.numberOfLearnItemsInList;
 	}
 	
@@ -62,7 +62,7 @@ public class LearnItemsList implements Comparable<LearnItemsList> {
 	}
 	
 	
-	protected LearnItem getLearnItem(String text) {
+	public LearnItem getLearnItem(String text) {
 		//TODO: at this point it became apparent that we need to separate the check for the text and the translation. Will do. For now... CHEAT
 		if (!inputSanitizer.checkIfLearnItemInputsAreValid(text, "translationThatCircumventsTheSanitizer")) {
 			return null;
@@ -99,4 +99,11 @@ public class LearnItemsList implements Comparable<LearnItemsList> {
 	public boolean equals(Object other) {
 		return other instanceof LearnItemsList && this.name.equals(((LearnItemsList)(other)).name);
 	}
+
+	@Override
+	public Iterator<LearnItem> iterator() {
+		return learnItems.iterator();
+	}
+	
+	
 }

@@ -1,11 +1,14 @@
 package com.hybridtheory.mozarella.wordteacher.learnmaterials;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class AbstractLearnItem implements LearnItem {
 
 	protected String idDescriptor;
 	protected String text;
 	protected String translation;
-	protected String[] alternativeTranslation;
+	protected List<String> alternativeTranslation  = new ArrayList<String>();
 	protected int priority;
 	protected int strength;
 	protected String pictureReference;
@@ -44,14 +47,24 @@ public abstract class AbstractLearnItem implements LearnItem {
 	}
 
 	@Override
-	public void setAlternativeTranslation(String[] alternativeTranslation) {
-		this.alternativeTranslation = alternativeTranslation;		
+	public void setAlternativeTranslation(String alternativeTranslation) {
+		this.alternativeTranslation.add(alternativeTranslation);		
 	}
 
 	@Override
-	public String[] getAlternativeTranslations() {
+	public void removeAlternativeTranslation(String alternativeTranslation) {
+		if (alternativeTranslation == null || !this.alternativeTranslation.contains(alternativeTranslation)) {
+			throw new IllegalArgumentException("Alternative translation doesn't exists for this Learn Item");
+		} else {
+			this.alternativeTranslation.remove(this.alternativeTranslation.indexOf(alternativeTranslation));
+
+		}
+	}
+	
+	@Override
+	public List<String> getAlternativeTranslations() {
 		if (this.alternativeTranslation == null)  {
-			return null;			
+			return new ArrayList<String>();			
 		}
 		return alternativeTranslation;
 	}

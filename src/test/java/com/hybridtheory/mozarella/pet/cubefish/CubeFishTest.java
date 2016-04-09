@@ -2,8 +2,6 @@ package com.hybridtheory.mozarella.pet.cubefish;
 
 import static org.junit.Assert.assertTrue;
 
-import java.time.LocalDate;
-
 import org.junit.Test;
 
 import com.hybridtheory.mozarella.pet.Pet;

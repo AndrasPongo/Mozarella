@@ -4,9 +4,10 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsList;
+
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemFactory;
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsList;
 
 public class StudentTest {
 
@@ -52,7 +53,7 @@ public class StudentTest {
 		LearnItem learnItem = learnItemFactory.createLearnItem("testword", "xyz");
 	
 		//When
-		Student student = new Student();
+		Student student = new Student("testStudent1");
 		LearnItemsList learnItemsList = student.addNewLearnItemsList("testList1");
 		student.addNewLearnItemToExistingList(learnItemsList, learnItem);
 				

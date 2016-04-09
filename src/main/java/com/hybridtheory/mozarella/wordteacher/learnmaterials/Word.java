@@ -7,7 +7,7 @@ public class Word extends AbstractLearnItem implements Comparable<LearnItem> {
 		this.setId("testWord"+Math.random()*1000);
 		this.setText(text);
 		this.setTranslation(translation);
-		this.setStrength(1);
+		this.setStrength(0);
 		this.setPriority(10);
 	}
 

@@ -1,5 +1,7 @@
 package com.hybridtheory.mozarella.wordteacher.learnmaterials;
 
+import java.util.List;
+
 public interface LearnItem {
 
 	public void setId(String idDescriptor);
@@ -10,8 +12,9 @@ public interface LearnItem {
 	public void setTranslation(String translation);
 	public String getTranslation();
 	
-	public void setAlternativeTranslation(String[] alternativeTranslation);
-	public String[] getAlternativeTranslations();
+	public void setAlternativeTranslation(String alternativeTranslation);
+	public void removeAlternativeTranslation(String alternativeTranslation);
+	public List<String> getAlternativeTranslations();
 	
 	public void setStrength(int strength);
 	public int getStrength();
