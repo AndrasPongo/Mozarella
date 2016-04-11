@@ -14,13 +14,14 @@ public class StudentProgressTrackerTest {
 	public void testInit_correctInputs() {
 		//Given
 		Student student = new Student();
+		student.setName("testStudent");
 			
 		//When
 		StudentProgressTracker studentProgressTracker = new StudentProgressTracker(student);
 
 				
 		//Then
-		assertTrue(studentProgressTracker.getOwner().getName()=="testStudent1");
+		assertTrue(studentProgressTracker.getOwner() == student);
 	}	
 	
 	@Test(expected = IllegalArgumentException.class)

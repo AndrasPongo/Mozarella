@@ -29,7 +29,7 @@ public class Student {
 	@OneToOne(targetEntity=CubeFish.class)
 	private Pet ownPet;
 	
-	@OneToOne(targetEntity=InputSanitizer.class)
+	@Transient
 	private InputSanitizer inputSanitizer = new InputSanitizer();
 	
 	public Student(){

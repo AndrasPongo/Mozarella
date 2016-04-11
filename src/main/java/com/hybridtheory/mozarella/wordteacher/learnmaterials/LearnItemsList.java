@@ -1,17 +1,35 @@
 package com.hybridtheory.mozarella.wordteacher.learnmaterials;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
+import javax.persistence.Transient;
+
 import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.InputSanitizer;
 
+@Entity
 public class LearnItemsList implements Comparable<LearnItemsList>, Iterable<LearnItem> {
 	
-	private String id = "";
+	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer id;
 	private String name = "";
-	private Student user = null;
+	
+	@OneToMany(mappedBy="learnItemsList", fetch=FetchType.LAZY)
+	@OrderBy("priority")
 	private SortedSet<LearnItem> learnItems = new TreeSet<LearnItem>();
 	private int numberOfLearnItemsInList = 0;
 	
+	@Transient
 	private InputSanitizer inputSanitizer = new InputSanitizer();
 	private boolean validName = false;
 
@@ -21,7 +39,6 @@ public class LearnItemsList implements Comparable<LearnItemsList>, Iterable<Lear
 			throw new IllegalArgumentException("Invalid input when creating LearnItemsList");
 		} else {
 			//TODO: create algorithm for ID creations
-			this.id = "testLearnItemsList"+Math.random()*1000;
 			this.name = name;
 		}
 	}
@@ -35,16 +52,12 @@ public class LearnItemsList implements Comparable<LearnItemsList>, Iterable<Lear
 		}
 	}
 	
-	public String getID() {
+	public Integer getID() {
 		return this.id;
 	}
 	
 	public String getName() {
 		return this.name;
-	}
-	
-	public Student getUser() {
-		return this.user;
 	}
 	
 	public int getNumberOfLearnItemsInList() {
@@ -104,6 +117,13 @@ public class LearnItemsList implements Comparable<LearnItemsList>, Iterable<Lear
 	public Iterator<LearnItem> iterator() {
 		return learnItems.iterator();
 	}
+
+	public Integer getId() {
+		return id;
+	}
 	
+	public Collection<LearnItem> getLearnItems(){
+		return learnItems;
+	}
 	
 }

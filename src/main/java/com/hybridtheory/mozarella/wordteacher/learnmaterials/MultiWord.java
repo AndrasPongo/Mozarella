@@ -1,6 +1,6 @@
 package com.hybridtheory.mozarella.wordteacher.learnmaterials;
 
-public class MultiWord extends AbstractLearnItem implements Comparable<LearnItem> {
+public class MultiWord extends LearnItem implements Comparable<LearnItem> {
 
 	public MultiWord(String text, String translation) {
 		//TODO: create algorithm for ID creations

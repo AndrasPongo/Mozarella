@@ -3,14 +3,24 @@ package com.hybridtheory.mozarella.wordteacher.learnmaterials;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 import com.hybridtheory.mozarella.users.Student;
 
 public class LearnItemsManager {
-	private Student owner = null;
+	
+	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer id;
+	
+	private Student owner;
 	private List<LearnItemsList> learnItemsLists = new ArrayList<LearnItemsList>();
 	private LearnItemFactory learnItemFactory = new LearnItemFactory();
-
+	private List<ResultContainer> results = new ArrayList<ResultContainer>();
+	
 	//TODO: Is this good design? Like this every user will have their own LearnItemManager, which will raise the need towards the User object to know about this Manager itself. Not sure if this is necessary...
 	public LearnItemsManager(Student student) {
 		if (student != null) {
@@ -139,5 +149,26 @@ public class LearnItemsManager {
 			learnItemsLists.add(learnItemsList);
 		}
 		return learnItemsList;
+	}
+	
+	public List<LearnItem> getLearnItemsToPractice(List<Integer> learnItemListIds, Integer numberOfLearnItems){
+		
+		Stream<LearnItem> alreadyPracticedLearnItems =
+		results.stream().filter(result->result.getPriority()>5)
+		.map(ResultContainer::getLearnItem)
+		.filter(learnItem -> learnItemListIds.contains(learnItem.getLearnItemsList().getId()))
+		.limit(numberOfLearnItems);
+		
+		Stream<LearnItem> newLearnItemsForUser = learnItemsLists
+		.stream()
+		.filter(learnItemList -> learnItemListIds.contains(learnItemList.getId()))
+		.map(learnItemList -> learnItemList.getLearnItems())
+		.flatMap(learnItems -> learnItems.stream())
+		.limit(numberOfLearnItems);
+		
+		Stream <LearnItem> learnItemsToReturn = Stream.concat(alreadyPracticedLearnItems, newLearnItemsForUser)
+		.limit(numberOfLearnItems);
+		
+		return learnItemsToReturn.collect(Collectors.toList());
 	}
 }
