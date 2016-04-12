@@ -45,15 +45,16 @@ public class StudentApiIT {
   
   @Before
   public void setUp() {
-	  firstStudent.initializeStudent(FIRST_STUDENT_NAME);
-	  secondStudent.initializeStudent(SECOND_STUDENT_NAME);
-	  thirdStudent.initializeStudent(THIRD_STUDENT_NAME);
+	  firstStudent.initialize(FIRST_STUDENT_NAME);
+	  secondStudent.initialize(SECOND_STUDENT_NAME);
+	  thirdStudent.initialize(THIRD_STUDENT_NAME);
 	  repository.deleteAll();
 	  student1 = repository.save(firstStudent);
 	  student2 = repository.save(secondStudent);
 	  RestAssured.port = serverPort;
   }
   
+ /* TODO: write this after we the details are clear
   @Test
   public void addItemShouldReturnSavedItem() {
     given()
@@ -64,15 +65,15 @@ public class StudentApiIT {
     .then()
       .statusCode(HttpStatus.SC_OK)
       .body(NAME_FIELD, is(THIRD_STUDENT_NAME));
-  }
+  }*/
   
   @Test
   public void getItemShouldReturnSavedItem() {
 	  when()
-	    .get(STUDENTS_RESOURCE)
+	    .get(STUDENTS_RESOURCE,student1.getId())
 	  .then()
 	    .statusCode(HttpStatus.SC_OK)
-	    .body(NAME_FIELD, hasItems(FIRST_STUDENT_NAME, SECOND_STUDENT_NAME));
+	    .body(NAME_FIELD, hasItems(FIRST_STUDENT_NAME));
 	}
   
 } 

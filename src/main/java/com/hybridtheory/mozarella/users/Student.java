@@ -40,7 +40,7 @@ public class Student {
 		return this.name;
 	}
 	
-	public void initializeStudent(String studentName) {
+	public void initialize(String studentName) {
 		boolean validName = false;
 		validName = inputSanitizer.checkStudentNameIsValid(studentName);
 		if (!validName) {
@@ -109,6 +109,10 @@ public class Student {
 	@Override
 	public String toString(){
 		return "Student with name " + name + "id: " + id;
+	}
+
+	public Integer getId() {
+		return id;
 	}
 	
 }

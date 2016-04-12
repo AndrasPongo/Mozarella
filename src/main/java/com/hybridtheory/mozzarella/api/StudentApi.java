@@ -42,12 +42,20 @@ public class StudentApi {
     	return Response.status(200).entity(saved.toString()).build();
     }
     
-    @GET
+    /*@GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     public List<LearnItem> getLearnItems(@PathParam("id") Integer id){
     	//return studentRepository.getOne(id).getOwnLearnItemLists().get(0);
     	return null;
+    }*/
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{id}")
+    public Response getStudent(@PathParam("id") Integer id){
+    	Student student = studentRepository.getOne(id);
+    	return Response.status(200).entity(student.toString()).build();
     }
     
 }
