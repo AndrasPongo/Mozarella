@@ -40,7 +40,7 @@ public class Student {
 		return this.name;
 	}
 	
-	private void initializeStudent(String studentName) {
+	public void initializeStudent(String studentName) {
 		boolean validName = false;
 		validName = inputSanitizer.checkStudentNameIsValid(studentName);
 		if (!validName) {
