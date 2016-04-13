@@ -48,7 +48,7 @@ public class StudentApiIT {
 	  firstStudent.initialize(FIRST_STUDENT_NAME);
 	  secondStudent.initialize(SECOND_STUDENT_NAME);
 	  thirdStudent.initialize(THIRD_STUDENT_NAME);
-	  repository.deleteAll();
+	  //repository.deleteAll();
 	  student1 = repository.save(firstStudent);
 	  student2 = repository.save(secondStudent);
 	  RestAssured.port = serverPort;
