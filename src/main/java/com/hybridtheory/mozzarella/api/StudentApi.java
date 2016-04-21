@@ -1,3 +1,4 @@
+/*
 package com.hybridtheory.mozzarella.api;
 
 import java.util.List;
@@ -14,9 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.hybridtheory.mozarella.users.Student;
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozzarella.persistence.StudentRepository;
- 
+
 @Component
 @Path("students")
 public class StudentApi {
@@ -26,9 +26,17 @@ public class StudentApi {
 	
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Student> getIt() {
+    public Iterable<Student> getIt() {
     	//Pageable pageable = new Pageable();
     	//todo: make this pageable
+
+//    	Student student = new Student();
+//    	student.setName("someStudent1");
+//    	studentRepository.save(student);
+//    	Student student1 = new Student();
+//    	student1.setName("someStudent2");
+//    	studentRepository.save(student1);
+    	
         return studentRepository.findAll();
     }
     
@@ -42,20 +50,20 @@ public class StudentApi {
     	return Response.status(200).entity(saved.toString()).build();
     }
     
-    /*@GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{id}")
-    public List<LearnItem> getLearnItems(@PathParam("id") Integer id){
-    	//return studentRepository.getOne(id).getOwnLearnItemLists().get(0);
-    	return null;
-    }*/
+//    @GET
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Path("/{id}")
+//    public List<LearnItem> getLearnItems(@PathParam("id") Integer id){
+//    	//return studentRepository.getOne(id).getOwnLearnItemLists().get(0);
+//    	return null;
+//    }
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     public Response getStudent(@PathParam("id") Integer id){
-    	Student student = studentRepository.getOne(id);
+    	Student student = studentRepository.findOne(id);
     	return Response.status(200).entity(student.toString()).build();
     }
-    
 }
+*/
