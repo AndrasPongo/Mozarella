@@ -59,7 +59,7 @@ public class StudentProgressTrackerTest {
 		LearnItemFactory learnItemFactory = new LearnItemFactory();
 		LearnItem learnItem = learnItemFactory.createLearnItem("testword", "xyz");
 		student.addNewLearnItemToExistingList(learnItemsList, learnItem);
-		student.getALearnItemList("testLearnItemsList").getLearnItem("testword").setStrength(1);
+		student.getLearnItemListByName("testLearnItemsList").getLearnItem("testword").setStrength(1);
 		
 		StudentProgressTracker studentProgressTracker = new StudentProgressTracker(student);
 

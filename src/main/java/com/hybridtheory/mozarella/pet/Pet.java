@@ -17,7 +17,7 @@ public abstract class Pet {
 
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	protected Integer id;
-	protected String petname = "";
+	protected String name = "";
 	protected Integer level = 0;
 	@ElementCollection
 	protected Map<Integer, String> extras = null;
@@ -27,11 +27,11 @@ public abstract class Pet {
 	protected Habitat ownHabitat = null;
 
 	public void setName(String name) {
-		this.petname = name;
+		this.name = name;
 	}
 	
 	public String getName() {
-		return this.petname;
+		return this.name;
 	}
 	
 	public Habitat getHabitat() {

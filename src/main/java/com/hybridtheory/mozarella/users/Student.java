@@ -2,13 +2,17 @@ package com.hybridtheory.mozarella.users;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hybridtheory.mozarella.pet.Pet;
 import com.hybridtheory.mozarella.pet.cubefish.CubeFish;
 import com.hybridtheory.mozarella.wordteacher.InputSanitizer;
@@ -21,19 +25,29 @@ public class Student {
 	
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
+	
+	@Column(unique=true)
+	private Integer facebookId;
+	
+	@Column(unique=true)
+	private Integer googleId;
+	
 	private String name = "";
 	
-	@Transient
-	private LearnItemsManager ownLearnItemManager = null;
+	@JsonIgnore
+	@OneToOne(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY, optional = false)
+	private LearnItemsManager learnItemManager;
 	
-	@OneToOne(targetEntity=CubeFish.class)
-	private Pet ownPet;
+	@JsonIgnore
+	@OneToOne(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY, optional = false)
+	private Pet pet;
 	
 	@Transient
 	private InputSanitizer inputSanitizer = new InputSanitizer();
 	
 	public Student(){
-		ownLearnItemManager = new LearnItemsManager(this);
+		learnItemManager = new LearnItemsManager(this);
+		pet = new CubeFish();
 	}
 	
 	public String getName() {
@@ -47,43 +61,40 @@ public class Student {
 			throw new IllegalArgumentException("Invalid name for Student");
 		}
 		this.name = studentName;
-		ownLearnItemManager = new LearnItemsManager(this);
+		learnItemManager = new LearnItemsManager(this);
 	}
 	
 	protected void initializePet(String petName) {
-		ownPet = new CubeFish(petName);
+		pet = new CubeFish(petName);
 	}
 	
+	public List<LearnItem> getLearnItemsToPractice(List<Integer> learnItemListIds, Integer numberOfLearnItems){
+		return learnItemManager.getLearnItemsToPractice(learnItemListIds, numberOfLearnItems);
+	}
+	
+	@Transient
 	public Pet getPet() {
-			return ownPet;
+		return pet;
 	}
 
-	protected LearnItemsManager getOwnLearnItemManager() {
-		return ownLearnItemManager;
+	protected LearnItemsManager getLearnItemManager() {
+		return learnItemManager;
+	}
+	@JsonIgnore
+	public List<LearnItemsList> getLearnItemLists() {
+		return learnItemManager.getLearnItemsLists();
 	}
 	
-	public List<LearnItemsList> getOwnLearnItemLists() {
-		return ownLearnItemManager.getLearnItemsLists();
-	}
-	
-	protected LearnItemsList getALearnItemList(String nameOfList) {
-		return ownLearnItemManager.getLearnItemsList(nameOfList);
+	protected LearnItemsList getLearnItemListByName(String nameOfList) {
+		return learnItemManager.getLearnItemsList(nameOfList);
 	}
 
 	protected LearnItemsList addNewLearnItemsList(String name) {
-		return ownLearnItemManager.createLearnItemsList(name);
+		return learnItemManager.createLearnItemsList(name);
 	}
 	
 	protected LearnItemsList addNewLearnItemsList(LearnItemsList learnItemsList) {
-		return ownLearnItemManager.addNewLearnItemsList(learnItemsList);
-	}
-	
-	public Pet getOwnPet() {
-		return ownPet;
-	}
-
-	public void setOwnPet(Pet ownPet) {
-		this.ownPet = ownPet;
+		return learnItemManager.addNewLearnItemsList(learnItemsList);
 	}
 
 	public InputSanitizer getInputSanitizer() {
@@ -98,12 +109,16 @@ public class Student {
 		this.name = name;
 	}
 
-	public void setOwnLearnItemManager(LearnItemsManager ownLearnItemManager) {
-		this.ownLearnItemManager = ownLearnItemManager;
+	public void setLearnItemManager(LearnItemsManager learnItemManager) {
+		this.learnItemManager = learnItemManager;
 	}
 	
 	protected void addNewLearnItemToExistingList(LearnItemsList learnItemsList, LearnItem learnItem) {
-		ownLearnItemManager.addNewLearnItemToLearnItemsList(learnItemsList, learnItem);
+		learnItemManager.addNewLearnItemToLearnItemsList(learnItemsList, learnItem);
+	}
+	
+	public void associateWithLearnItemsList(LearnItemsList learnItemsList){
+		learnItemManager.addNewLearnItemsList(learnItemsList);
 	}
 
 	@Override

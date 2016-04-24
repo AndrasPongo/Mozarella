@@ -5,7 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.hybridtheory.mozarella.users.Student;
 
-@Transactional
 public interface StudentRepository extends CrudRepository<Student, Integer> {
 
+	
 }

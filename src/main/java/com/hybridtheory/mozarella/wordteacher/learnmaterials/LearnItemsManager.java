@@ -5,21 +5,41 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.persistence.CascadeType;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import com.hybridtheory.mozarella.users.Student;
 
+@Entity
 public class LearnItemsManager {
 	
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	
+	@OneToOne(mappedBy="learnItemManager")
 	private Student owner;
+	
+	@ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.REFRESH}, fetch=FetchType.LAZY)
 	private List<LearnItemsList> learnItemsLists = new ArrayList<LearnItemsList>();
+	
+	@Transient
 	private LearnItemFactory learnItemFactory = new LearnItemFactory();
+	
+	@ElementCollection
 	private List<ResultContainer> results = new ArrayList<ResultContainer>();
+	
+	
+	public LearnItemsManager(){
+			
+	}
 	
 	//TODO: Is this good design? Like this every user will have their own LearnItemManager, which will raise the need towards the User object to know about this Manager itself. Not sure if this is necessary...
 	public LearnItemsManager(Student student) {

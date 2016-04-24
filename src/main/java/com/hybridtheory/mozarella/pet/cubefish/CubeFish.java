@@ -3,6 +3,9 @@ package com.hybridtheory.mozarella.pet.cubefish;
 import java.time.LocalDate;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Transient;
 
 import com.hybridtheory.mozarella.pet.Pet;
@@ -11,7 +14,7 @@ import com.hybridtheory.mozarella.wordteacher.InputSanitizer;
 @Entity
 public class CubeFish extends Pet {
 	//@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
-	//private Integer id2;
+	//private Integer id;
 	
 	public CubeFish(){
 		level = 1;
@@ -26,7 +29,7 @@ public class CubeFish extends Pet {
 		if (!validName) {
 			throw new IllegalArgumentException("Invalid name for the Pet");
 		} else {
-			this.petname = petName;
+			this.name = petName;
 			this.setLastFeedTime(LocalDate.now());
 			this.ownHabitat = new Aquarium();		
 		}

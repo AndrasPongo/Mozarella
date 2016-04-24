@@ -30,7 +30,7 @@ public class StudentTest {
 		Student student = new Student();
 				
 		//Then
-		assertTrue(student.getOwnLearnItemManager() != null);
+		assertTrue(student.getLearnItemManager() != null);
 	}
 	
 	@Test
@@ -42,7 +42,7 @@ public class StudentTest {
 		student.addNewLearnItemsList(learnItemsList);
 				
 		//Then
-		assertTrue(student.getOwnLearnItemLists().contains(learnItemsList));
+		assertTrue(student.getLearnItemLists().contains(learnItemsList));
 	}
 	
 	@Test
@@ -57,7 +57,7 @@ public class StudentTest {
 		student.addNewLearnItemToExistingList(learnItemsList, learnItem);
 				
 		//Then
-		assertTrue(student.getALearnItemList("testList1") != null);
+		assertTrue(student.getLearnItemListByName("testList1") != null);
 	}
 	
 	@Test

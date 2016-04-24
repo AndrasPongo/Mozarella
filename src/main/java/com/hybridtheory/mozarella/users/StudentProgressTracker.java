@@ -23,7 +23,7 @@ public class StudentProgressTracker {
 	
 	private List<String> returnLearntWordsOfStudent() {
 		List<String> alreadyLearntWords = new ArrayList<String>();
-		List<LearnItemsList> learnItemListsOfStudent = this.owner.getOwnLearnItemLists();
+		List<LearnItemsList> learnItemListsOfStudent = this.owner.getLearnItemLists();
 		for(LearnItemsList learnItemsList : learnItemListsOfStudent) {
 			for(LearnItem learnItem : learnItemsList) {
 				if (learnItem.getStrength() > 0) {

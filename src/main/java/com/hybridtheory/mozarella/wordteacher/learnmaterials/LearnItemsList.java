@@ -14,7 +14,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Transient;
 
-import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.InputSanitizer;
 
 @Entity
@@ -33,6 +32,10 @@ public class LearnItemsList implements Comparable<LearnItemsList>, Iterable<Lear
 	private InputSanitizer inputSanitizer = new InputSanitizer();
 	private boolean validName = false;
 
+	public LearnItemsList(){
+		
+	}
+	
 	public LearnItemsList(String name) {
 		validName = inputSanitizer.checkIfLearnItemsListNameIsValid(name);
 		if (!validName) {
@@ -50,10 +53,6 @@ public class LearnItemsList implements Comparable<LearnItemsList>, Iterable<Lear
 		} else {
 			this.name = name;
 		}
-	}
-	
-	public Integer getID() {
-		return this.id;
 	}
 	
 	public String getName() {
