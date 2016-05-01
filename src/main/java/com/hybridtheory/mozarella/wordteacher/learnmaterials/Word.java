@@ -1,23 +1,20 @@
 package com.hybridtheory.mozarella.wordteacher.learnmaterials;
 
+import javax.persistence.Entity;
+
+@Entity
 public class Word extends LearnItem implements Comparable<LearnItem> {
 	
 	public Word(String text, String translation) {
 		//TODO: create algorithm for ID creations
 		this.setId("testWord"+Math.random()*1000);
 		this.setText(text);
-		this.setTranslation(translation);
+		this.addTranslation(translation);
 		this.setStrength(0);
 		this.setPriority(10);
 	}
 
-	public int compareTo(LearnItem learnItem) {
-		if (learnItem.getText() == this.text) { 
-			return 0;	
-		} else {
-			return -1;
-		}
-	}
+
 }
 	
 	

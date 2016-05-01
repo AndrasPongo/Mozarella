@@ -13,7 +13,7 @@ public class LearnItemsListTest {
 		//Given
 		
 		//When
-		LearnItemsList learnItemList= new LearnItemsList("testList1");
+		LearnItemList learnItemList= new LearnItemList("testList1");
 		
 		//Then
 		assertTrue(learnItemList.getName() == "testList1");
@@ -24,7 +24,7 @@ public class LearnItemsListTest {
 		//Given
 		
 		//When & Then
-		new LearnItemsList("");
+		new LearnItemList("");
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
@@ -32,7 +32,7 @@ public class LearnItemsListTest {
 		//Given
 		
 		//When & Then
-		new LearnItemsList("       ");
+		new LearnItemList("       ");
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
@@ -40,13 +40,13 @@ public class LearnItemsListTest {
 		//Given
 		
 		//When & Then
-		new LearnItemsList("ForbiddenCharSequenceForTestRADNOMlkkbwesadvu84416rk2u3");
+		new LearnItemList("ForbiddenCharSequenceForTestRADNOMlkkbwesadvu84416rk2u3");
 	}
 	
 	@Test
 	public void learnItemsList_changeNameOfLearnItemsList() {
 		//Given
-		LearnItemsList learnItemList = new LearnItemsList("testList1");
+		LearnItemList learnItemList = new LearnItemList("testList1");
 		
 		//When
 		learnItemList.setName("changedListName1");
@@ -58,7 +58,7 @@ public class LearnItemsListTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void learnItemsList_changeNameOfLearnItemsList_withEmptyString() {
 		//Given
-		LearnItemsList learnItemList = new LearnItemsList("testList1");
+		LearnItemList learnItemList = new LearnItemList("testList1");
 		
 		//When & Then
 		learnItemList.setName("");
@@ -67,7 +67,7 @@ public class LearnItemsListTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void learnItemsList_changeNameOfLearnItemsList_withOnlyWhiteSpaces() {
 		//Given
-		LearnItemsList learnItemList = new LearnItemsList("     ");
+		LearnItemList learnItemList = new LearnItemList("     ");
 		
 		//When & Then
 		learnItemList.setName("");
@@ -76,7 +76,7 @@ public class LearnItemsListTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void learnItemsList_changeNameOfLearnItemsList_withForbiddenName() {
 		//Given
-		LearnItemsList learnItemList = new LearnItemsList("ForbiddenCharSequenceForTestRADNOMlkkbwesadvu84416rk2u3");
+		LearnItemList learnItemList = new LearnItemList("ForbiddenCharSequenceForTestRADNOMlkkbwesadvu84416rk2u3");
 		
 		//When & Then
 		learnItemList.setName("");
@@ -86,7 +86,7 @@ public class LearnItemsListTest {
 	public void learnItemsList_addValidLearnItem() {
 		//Given
 		boolean success = false;
-		LearnItemsList learnItemList = new LearnItemsList("testList1");
+		LearnItemList learnItemList = new LearnItemList("testList1");
 		LearnItem testLearnItem = new Word("testword", "xyz");
 		int originalLearnItemNumber = learnItemList.getNumberOfLearnItemsInList();
 		
@@ -101,7 +101,7 @@ public class LearnItemsListTest {
 	public void learnItemsList_addInvalidLearnItem() {
 		//Given
 		boolean success = false;
-		LearnItemsList learnItemList = new LearnItemsList("testList1");
+		LearnItemList learnItemList = new LearnItemList("testList1");
 		int originalLearnItemNumber = learnItemList.getNumberOfLearnItemsInList();
 		
 		//When
@@ -115,7 +115,7 @@ public class LearnItemsListTest {
 	public void learnItemsList_addAlreadyExistingLearnItem() {
 		//Given
 		boolean success = false;
-		LearnItemsList learnItemList = new LearnItemsList("testList1");
+		LearnItemList learnItemList = new LearnItemList("testList1");
 		LearnItem testLearnItem = new Word("testword", "xyz");
 		learnItemList.addLearnItem(testLearnItem);
 		int originalLearnItemNumber = learnItemList.getNumberOfLearnItemsInList();
@@ -130,7 +130,7 @@ public class LearnItemsListTest {
 	@Test
 	public void learnItemsList_getExistingLearnItem() {
 		//Given
-		LearnItemsList learnItemList = new LearnItemsList("testList1");
+		LearnItemList learnItemList = new LearnItemList("testList1");
 		LearnItem testLearnItem = new Word("testword", "xyz");
 		learnItemList.addLearnItem(testLearnItem);
 		
@@ -147,7 +147,7 @@ public class LearnItemsListTest {
 	public void learnItemsList_removeValidLearnItem() {
 		//Given
 		boolean success = false;
-		LearnItemsList learnItemList = new LearnItemsList("testList1");
+		LearnItemList learnItemList = new LearnItemList("testList1");
 		LearnItem testLearnItem = new Word("testword", "xyz");
 		learnItemList.addLearnItem(testLearnItem);
 		int originalLearnItemNumber = learnItemList.getNumberOfLearnItemsInList();
@@ -163,7 +163,7 @@ public class LearnItemsListTest {
 	public void learnItemsList_removeNullLearnItem() {
 		//Given
 		boolean success = false;
-		LearnItemsList learnItemList = new LearnItemsList("testList1");
+		LearnItemList learnItemList = new LearnItemList("testList1");
 		int originalLearnItemNumber = learnItemList.getNumberOfLearnItemsInList();
 		
 		//When
@@ -177,7 +177,7 @@ public class LearnItemsListTest {
 	public void learnItemsList_removeNotExistingLearnItem() {
 		//Given
 		boolean success = false;
-		LearnItemsList learnItemList = new LearnItemsList("testList1");
+		LearnItemList learnItemList = new LearnItemList("testList1");
 		int originalLearnItemNumber = learnItemList.getNumberOfLearnItemsInList();
 		
 		//When

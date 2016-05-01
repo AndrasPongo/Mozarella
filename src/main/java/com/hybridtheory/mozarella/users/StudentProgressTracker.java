@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsList;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
 
 public class StudentProgressTracker {
 	private Student owner;
@@ -23,8 +23,8 @@ public class StudentProgressTracker {
 	
 	private List<String> returnLearntWordsOfStudent() {
 		List<String> alreadyLearntWords = new ArrayList<String>();
-		List<LearnItemsList> learnItemListsOfStudent = this.owner.getLearnItemLists();
-		for(LearnItemsList learnItemsList : learnItemListsOfStudent) {
+		List<LearnItemList> learnItemListsOfStudent = this.owner.getLearnItemLists();
+		for(LearnItemList learnItemsList : learnItemListsOfStudent) {
 			for(LearnItem learnItem : learnItemsList) {
 				if (learnItem.getStrength() > 0) {
 					alreadyLearntWords.add(learnItem.getText());
@@ -43,7 +43,7 @@ public class StudentProgressTracker {
 	}
 	
 	
-	public int returnWordsOfCertainStrength(LearnItemsList learnItemsList, int strength) {
+	public int returnWordsOfCertainStrength(LearnItemList learnItemsList, int strength) {
 	int count = 0;
 		for(LearnItem li : learnItemsList) {
 			if (li.getStrength() == strength) {

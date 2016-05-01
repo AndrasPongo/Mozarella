@@ -34,7 +34,7 @@ public class LearnItemsManagerTest {
 		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
 
 		//When
-		LearnItemsList newLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
+		LearnItemList newLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
 
 		
 		//Then
@@ -67,11 +67,11 @@ public class LearnItemsManagerTest {
 		//Given
 		Student testStudent1 = new Student();
 		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
-		LearnItemsList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
+		LearnItemList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
 		
 		//When
 		learnItemsManager.createNewLearnItemToLearnItemsList(existingLearnItemsList, "testword", "xyz");
-		LearnItemsList learnItemsList = learnItemsManager.getLearnItemsList("testLearnItemsList");
+		LearnItemList learnItemsList = learnItemsManager.getLearnItemsList("testLearnItemsList");
 		
 		//Then
 		assertTrue(learnItemsList.getNumberOfLearnItemsInList()==1);
@@ -82,11 +82,11 @@ public class LearnItemsManagerTest {
 		//Given
 		Student testStudent1 = new Student();
 		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
-		LearnItemsList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
+		LearnItemList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
 		
 		//When
 		learnItemsManager.createNewLearnItemToLearnItemsList(existingLearnItemsList, "test multi word", "abc xyz");
-		LearnItemsList learnItemsList = learnItemsManager.getLearnItemsList("testLearnItemsList");
+		LearnItemList learnItemsList = learnItemsManager.getLearnItemsList("testLearnItemsList");
 		
 		//Then
 		assertTrue(learnItemsList.getNumberOfLearnItemsInList()==1);
@@ -97,7 +97,7 @@ public class LearnItemsManagerTest {
 		//Given
 		Student testStudent1 = new Student();
 		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
-		LearnItemsList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
+		LearnItemList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
 		LearnItemFactory learnItemFactory = new LearnItemFactory();
 		LearnItem learnItem = learnItemFactory.createLearnItem("testword", "xyz");
 		
@@ -113,7 +113,7 @@ public class LearnItemsManagerTest {
 		//Given
 		Student testStudent1 = new Student();
 		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
-		LearnItemsList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
+		LearnItemList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
 		learnItemsManager.createNewLearnItemToLearnItemsList(existingLearnItemsList, "testword", "xyz");
 
 		//When
@@ -128,7 +128,7 @@ public class LearnItemsManagerTest {
 		//Given
 		Student testStudent1 = new Student();
 		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
-		LearnItemsList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
+		LearnItemList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
 		learnItemsManager.createNewLearnItemToLearnItemsList(existingLearnItemsList, "test multi word", "abc xyz");
 
 		//When
@@ -163,7 +163,7 @@ public class LearnItemsManagerTest {
 		//Given
 		Student testStudent1 = new Student();
 		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
-		LearnItemsList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
+		LearnItemList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
 		learnItemsManager.createNewLearnItemToLearnItemsList(existingLearnItemsList, "testword", "xyz");
 		LearnItem learnItem = learnItemsManager.getLearnItemFromList(existingLearnItemsList, "testword");
 		
@@ -179,7 +179,7 @@ public class LearnItemsManagerTest {
 		//Given
 		Student testStudent1 = new Student();
 		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
-		LearnItemsList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
+		LearnItemList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
 		learnItemsManager.createNewLearnItemToLearnItemsList(existingLearnItemsList, "testword", "xyz");
 		LearnItem learnItem = learnItemsManager.getLearnItemFromList(existingLearnItemsList, "testword");
 
@@ -195,11 +195,16 @@ public class LearnItemsManagerTest {
 		//Given
 		Student testStudent1 = new Student();
 		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
-		LearnItemsList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
+		LearnItemList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
 		learnItemsManager.createNewLearnItemToLearnItemsList(existingLearnItemsList, "testword", "xyz");
 		LearnItem learnItem = learnItemsManager.getLearnItemFromList(existingLearnItemsList, "testword");
 
 		//When & Then
 		learnItemsManager.setStrengthOfLearnItem(learnItem, 11);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void learnItemsToPracticeAreOrderedByPriority() {
+		//TODO: figure out if this can be tested
 	}
 }

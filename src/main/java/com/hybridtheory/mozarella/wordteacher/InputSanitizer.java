@@ -15,7 +15,7 @@ import org.springframework.util.StringUtils;
 @Entity
 public class InputSanitizer {
 	
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	
 	@ElementCollection

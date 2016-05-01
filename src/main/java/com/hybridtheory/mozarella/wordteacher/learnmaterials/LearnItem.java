@@ -13,20 +13,27 @@ import javax.persistence.ManyToOne;
 @Entity
 public class LearnItem {
 	
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	@ManyToOne
-	protected LearnItemsList learnItemsList;
+	protected LearnItemList learnItemList;
 	protected String idDescriptor;
 	protected String text;
-	protected String translation;
 	
 	@ElementCollection
-	protected List<String> alternativeTranslation  = new ArrayList<String>();
+	protected List<String> translations  = new ArrayList<String>();
 	protected double priority;
 	protected int strength;
 	protected String pictureReference;
 	private String helperItem;
+	
+	public int compareTo(LearnItem learnItem) {
+		if (learnItem.getText() == this.text) { 
+			return 0;	
+		} else {
+			return -1;
+		}
+	}
 	
 	public void setId(String idDescriptor) {
 		this.idDescriptor = idDescriptor;		
@@ -37,42 +44,34 @@ public class LearnItem {
 	}
 
 	public String getText() {
-		if (this.text == null)  {
-			return null;		
-		}
 		return this.text;
 	}
 
-	public void setTranslation(String translation) {
-		this.translation = translation;
+	public void addTranslation(String translation) {
+		this.translations.add(translation);
 		
 	}
 
-	public String getTranslation() {
-		if (this.translation == null)  {
-			return null;		
-		}
-		return translation;
+	public String getTranslation(){
+		return getTranslation(0);
 	}
-
-	public void setAlternativeTranslation(String alternativeTranslation) {
-		this.alternativeTranslation.add(alternativeTranslation);		
+	
+	public String getTranslation(Integer index) {
+		if(this.translations.size()>index){
+			return translations.get(index);
+		}
+		else {
+			return "";
+		}
 	}
 
 	public void removeAlternativeTranslation(String alternativeTranslation) {
-		if (alternativeTranslation == null || !this.alternativeTranslation.contains(alternativeTranslation)) {
-			throw new IllegalArgumentException("Alternative translation doesn't exists for this Learn Item");
+		if (alternativeTranslation == null || !translations.contains(alternativeTranslation)) {
+			throw new IllegalArgumentException("Alternative translation doesn't exist for this Learn Item");
 		} else {
-			this.alternativeTranslation.remove(this.alternativeTranslation.indexOf(alternativeTranslation));
+			this.translations.remove(this.translations.indexOf(alternativeTranslation));
 
 		}
-	}
-	
-	public List<String> getAlternativeTranslations() {
-		if (this.alternativeTranslation == null)  {
-			return new ArrayList<String>();			
-		}
-		return alternativeTranslation;
 	}
 
 	public void setStrength(int strength) {
@@ -80,9 +79,6 @@ public class LearnItem {
 	}
 
 	public int getStrength() {
-		if (this.strength == 0)  {
-			return 0;
-		}
 		return strength;
 	}
 	
@@ -99,9 +95,6 @@ public class LearnItem {
 	}
 
 	public String getPictureReference() {
-		if (this.pictureReference == null) {
-			return null;
-		}
 		return this.pictureReference;
 	}
 
@@ -110,18 +103,23 @@ public class LearnItem {
 	}
 
 	public String getHelperItem() {
-		if (this.helperItem == null) { 
-			return null;
-		}
 		return this.helperItem;
 	}
 
-	public LearnItemsList getLearnItemsList() {
-		return learnItemsList;
+	public LearnItemList getLearnItemsList() {
+		return learnItemList;
 	}
 
-	public void setLearnItemsList(LearnItemsList learnItemsList) {
-		this.learnItemsList = learnItemsList;
+	public void setLearnItemsList(LearnItemList learnItemsList) {
+		this.learnItemList = learnItemsList;
+	}
+	
+	public List<String> getTranslations(){
+		return translations;
+	}
+
+	public Integer getId() {
+		return id;
 	}
 
 }

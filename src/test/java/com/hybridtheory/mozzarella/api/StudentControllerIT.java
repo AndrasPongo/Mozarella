@@ -15,7 +15,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.hybridtheory.mozarella.users.Student;
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsList;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.Word;
 import com.hybridtheory.mozzarella.persistence.StudentRepository;
 
 public class StudentControllerIT extends ApplicationTests {
@@ -26,10 +27,10 @@ public class StudentControllerIT extends ApplicationTests {
     @Autowired
     private StudentRepository repository;
     
-    private Student student1 = new Student();
-    private Student student2 = new Student();
-    private LearnItemsList learnItemsList;
-    private LearnItemsList learnItemsList2;
+    private static Student student1 = new Student();
+    private static Student student2 = new Student();
+    private static LearnItemList learnItemsList;
+    private static LearnItemList learnItemsList2;
     private static String STUDENT1NAME = "Anakin Skywalker";
     private static String STUDENT2NAME = "Qui Gon Jinn";
 
@@ -38,22 +39,34 @@ public class StudentControllerIT extends ApplicationTests {
     private static String learnitemlistresource = "/students/{ids}/learnitemslists/{learnItemListIds}";
     private static String learnitemresource = "/students/{ids}/learnitemslists/{learnItemListIds}/learnItems";
 
+    private static Boolean initializedFlag = false;
+    
     @Before
     public void setup() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+    	mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .build();
-        
-        learnItemsList = new LearnItemsList("learnItemList1");
-        learnItemsList2 = new LearnItemsList("learnItemList2");
-        
-        student1.setName(STUDENT1NAME);
-        student1.associateWithLearnItemsList(learnItemsList);
-        student1.associateWithLearnItemsList(learnItemsList2);
-        
-        student2.setName(STUDENT2NAME);
-        student2.associateWithLearnItemsList(learnItemsList);
-        
-        repository.save(student1);
+    	
+    	if(!initializedFlag){
+            
+            learnItemsList = new LearnItemList("learnItemList1");
+            learnItemsList2 = new LearnItemList("learnItemList2");
+            
+            student1.setName(STUDENT1NAME);
+            student1.associateWithLearnItemsList(learnItemsList);
+            student1.associateWithLearnItemsList(learnItemsList2);
+            
+            student2.setName(STUDENT2NAME);
+            student2.associateWithLearnItemsList(learnItemsList);
+            
+            learnItemsList.addLearnItem(new Word("exampleword","exampletranslation"));
+            learnItemsList.addLearnItem(new Word("exampleword2","exampletranslation2"));
+            learnItemsList.addLearnItem(new Word("exampleword2","exampletranslation2"));
+            learnItemsList.addLearnItem(new Word("exampleword2","exampletranslation2"));
+            
+            repository.save(student1);
+            
+            initializedFlag = true;
+    	}    
     }
 
     @Test
@@ -63,7 +76,7 @@ public class StudentControllerIT extends ApplicationTests {
                 .andExpect(status().isOk())
                 .andExpect(
                         content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$.name").value(STUDENT1NAME))
+                .andExpect(jsonPath("$[0].name").value(STUDENT1NAME))
                 .andExpect(jsonPath("$").isArray())
         		.andExpect(jsonPath("$",hasSize(1)));
     }
@@ -89,7 +102,11 @@ public class StudentControllerIT extends ApplicationTests {
     
     @Test
     public void validate_get_learnitems() throws Exception{
-    	mockMvc.perform(get(learnitemresource,student1.getId(),learnItemsList.getId()+","+learnItemsList2.getId()));
+    	mockMvc.perform(get(learnitemresource,student1.getId(),learnItemsList.getId()+","+learnItemsList2.getId()).param("number", "100"))
+    	.andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .andExpect(jsonPath("$").isArray())
+        .andExpect(jsonPath("$",hasSize(4)));
     }
 
 }

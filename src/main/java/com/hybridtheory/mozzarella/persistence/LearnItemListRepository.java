@@ -2,9 +2,9 @@ package com.hybridtheory.mozzarella.persistence;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsList;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
 
-public interface LearnItemListRepository extends CrudRepository<LearnItemsList,Integer> {
+public interface LearnItemListRepository extends CrudRepository<LearnItemList,Integer> {
 	
 	//TODO: implement this correctly
 	//@Query("SELECT l FROM Learnitemslist l, Student s, where t.title in ?1")

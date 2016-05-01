@@ -9,10 +9,12 @@ import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,7 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsList;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
+import com.hybridtheory.mozzarella.persistence.LearnItemRepository;
 import com.hybridtheory.mozzarella.persistence.StudentRepository;
 
 @RestController
@@ -30,6 +33,9 @@ public class StudentController {
 	
     @Autowired
     private StudentRepository studentRepository;
+    
+    @Autowired
+    private LearnItemRepository learnItemRepository;
 
     @RequestMapping(value="/students", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Student> create(@RequestParam("credentialType") String credentialType, String value) {
@@ -46,7 +52,6 @@ public class StudentController {
     public ResponseEntity<Iterable<Student>> listStudents() {
     	LOGGER.info("/students controller method call"+new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date()));
     	Iterable<Student> studentsFound = studentRepository.findAll();
-    	LOGGER.info("query over"+new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date()));
     	return new ResponseEntity<Iterable<Student>>(studentsFound, HttpStatus.OK);   		
     }
     
@@ -56,37 +61,46 @@ public class StudentController {
     }
    
     @RequestMapping(value="/students/{ids}/learnitemslists/", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<List<LearnItemsList>> getLearnItemsLists(@PathVariable("ids") String ids) {
+    public ResponseEntity<List<LearnItemList>> getLearnItemsLists(@PathVariable("ids") String ids) {
         return getLearnItemsLists(ids, "");
     }
     
     @RequestMapping(value="/students/{ids}/learnitemslists/{learnItemListIds}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<List<LearnItemsList>> getLearnItemsLists(@PathVariable("ids") String ids, @PathVariable("learnItemListIds") String learnItemsListIds) {
+    public ResponseEntity<List<LearnItemList>> getLearnItemsLists(@PathVariable("ids") String ids, @PathVariable("learnItemListIds") String learnItemsListIds) {
     	List<Integer> learnItemListIdInts = IdSplitter.getIds(learnItemsListIds);
     	List<Integer> idInts = IdSplitter.getIds(ids);
     	
-    	List<LearnItemsList> learnItemsLists = getLearnItemsListsForUsers(getStudentsByIds(idInts),learnItemListIdInts);
+    	List<LearnItemList> learnItemsLists = getLearnItemsListsForUsers(getStudentsByIds(idInts),learnItemListIdInts);
     	
-    	return new ResponseEntity<List<LearnItemsList>>(learnItemsLists,HttpStatus.OK);
+    	return new ResponseEntity<List<LearnItemList>>(learnItemsLists,HttpStatus.OK);
     }
     
     
-	@RequestMapping(value="/students/{ids}/learnitemslists/{learnItemListIds}/learnItems", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@RequestMapping(value="/students/{ids}/learnitemslists/{learnItemListIds}/learnitems", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<LearnItem>> getLearnItems(@PathVariable("ids") String ids, 
-    		@PathVariable("learnItemListIds") String learnItemsListIds, @RequestParam("numberOfLearnItems") Integer numberOfLearnItems) {
+    		@PathVariable("learnItemListIds") String learnItemsListIds, @RequestParam("number") Integer numberOfLearnItems) {
     	
-    	Iterable<Student> students = getStudentsByIds(IdSplitter.getIds(ids));
-    	List<Student> studentList = StreamSupport.stream(students.spliterator(), false).collect(Collectors.toList());
-    	Student student;
+		List<Integer> learnItemListIds = IdSplitter.getIds(learnItemsListIds);
+		List<Integer> studentIds = IdSplitter.getIds(ids);
     	
-    	if(studentList.size()==1){
-    		student = studentList.get(0);
+		Integer studentId;
+		
+    	if(studentIds.size()==1){
+    		studentId = studentIds.get(0);
     	} else {
     		return new ResponseEntity<List<LearnItem>>(HttpStatus.BAD_REQUEST);
     	}
+		
+		List<LearnItem> learnItemsToReturn = learnItemRepository.getLearnItemsForStudent(studentId, learnItemListIds, new PageRequest(0,numberOfLearnItems));
+    	return new ResponseEntity<List<LearnItem>>(learnItemsToReturn,HttpStatus.OK);						
+    }
+	
+    @RequestMapping(value="/students/{id}/learnitems/{learnItemId}", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity postResult(@PathVariable("id") Integer userid, @RequestParam("result") Boolean result, @RequestBody LearnItem learnItem) {
+    	Student toUpdate = studentRepository.findOne(userid);
+    	toUpdate.getLearnItemManager().acceptResult(learnItem, result);
     	
-    	return new ResponseEntity<List<LearnItem>>(student.getLearnItemsToPractice(IdSplitter.getIds(learnItemsListIds), numberOfLearnItems),HttpStatus.OK);			
-    						
+    	return new ResponseEntity(HttpStatus.OK);
     }
     
     private List<Student> getStudentsByIds(List<Integer> ids){
@@ -94,7 +108,7 @@ public class StudentController {
     	return StreamSupport.stream(studentsWithIds.spliterator(),false).collect(Collectors.toList());
     }
     
-    private List<LearnItemsList> getLearnItemsListsForUsers(List<Student> students, List<Integer> learnItemsListIds){
+    private List<LearnItemList> getLearnItemsListsForUsers(List<Student> students, List<Integer> learnItemsListIds){
     	//TODO WRONG! navie implementation, causes additional queries for each student, unacceptably slow
     	//create a method in learnitemlistrepository that queries by userid insted
     	return students.stream()

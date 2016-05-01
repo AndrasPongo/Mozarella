@@ -17,13 +17,13 @@ import javax.persistence.Transient;
 import com.hybridtheory.mozarella.wordteacher.InputSanitizer;
 
 @Entity
-public class LearnItemsList implements Comparable<LearnItemsList>, Iterable<LearnItem> {
+public class LearnItemList implements Comparable<LearnItemList>, Iterable<LearnItem> {
 	
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	private String name = "";
 	
-	@OneToMany(mappedBy="learnItemsList", fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="learnItemList", fetch=FetchType.LAZY)
 	@OrderBy("priority")
 	private SortedSet<LearnItem> learnItems = new TreeSet<LearnItem>();
 	private int numberOfLearnItemsInList = 0;
@@ -32,11 +32,11 @@ public class LearnItemsList implements Comparable<LearnItemsList>, Iterable<Lear
 	private InputSanitizer inputSanitizer = new InputSanitizer();
 	private boolean validName = false;
 
-	public LearnItemsList(){
+	public LearnItemList(){
 		
 	}
 	
-	public LearnItemsList(String name) {
+	public LearnItemList(String name) {
 		validName = inputSanitizer.checkIfLearnItemsListNameIsValid(name);
 		if (!validName) {
 			throw new IllegalArgumentException("Invalid input when creating LearnItemsList");
@@ -63,7 +63,7 @@ public class LearnItemsList implements Comparable<LearnItemsList>, Iterable<Lear
 		return this.numberOfLearnItemsInList;
 	}
 	
-	protected boolean addLearnItem(LearnItem learnItem) {
+	public Boolean addLearnItem(LearnItem learnItem) {
 		if (learnItem == null || this.learnItems.contains(learnItem)) {
 			return false;
 		} else {
@@ -99,7 +99,7 @@ public class LearnItemsList implements Comparable<LearnItemsList>, Iterable<Lear
 	}
 
 	@Override
-	public int compareTo(LearnItemsList learnItemsList) {
+	public int compareTo(LearnItemList learnItemsList) {
 		if (learnItemsList.getName() == this.name) {
 			return 0;	
 		} else {
@@ -109,7 +109,7 @@ public class LearnItemsList implements Comparable<LearnItemsList>, Iterable<Lear
 	
 	@Override
 	public boolean equals(Object other) {
-		return other instanceof LearnItemsList && this.name.equals(((LearnItemsList)(other)).name);
+		return other instanceof LearnItemList && this.name.equals(((LearnItemList)(other)).name);
 	}
 
 	@Override

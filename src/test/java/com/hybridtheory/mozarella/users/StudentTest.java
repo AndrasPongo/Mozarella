@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemFactory;
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsList;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
 
 public class StudentTest {
 
@@ -36,7 +36,7 @@ public class StudentTest {
 	@Test
 	public void testStudent_addAndGetNewLearnItemsList() {
 		//Given
-		LearnItemsList learnItemsList = new LearnItemsList("testLearnItemList");
+		LearnItemList learnItemsList = new LearnItemList("testLearnItemList");
 		//When
 		Student student = new Student();
 		student.addNewLearnItemsList(learnItemsList);
@@ -53,7 +53,7 @@ public class StudentTest {
 	
 		//When
 		Student student = new Student();
-		LearnItemsList learnItemsList = student.addNewLearnItemsList("testList1");
+		LearnItemList learnItemsList = student.addNewLearnItemsList("testList1");
 		student.addNewLearnItemToExistingList(learnItemsList, learnItem);
 				
 		//Then

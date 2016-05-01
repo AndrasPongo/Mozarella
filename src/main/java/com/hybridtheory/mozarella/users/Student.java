@@ -17,13 +17,13 @@ import com.hybridtheory.mozarella.pet.Pet;
 import com.hybridtheory.mozarella.pet.cubefish.CubeFish;
 import com.hybridtheory.mozarella.wordteacher.InputSanitizer;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsList;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManager;
 
 @Entity
 public class Student {
 	
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	
 	@Column(unique=true)
@@ -77,23 +77,20 @@ public class Student {
 		return pet;
 	}
 
-	protected LearnItemsManager getLearnItemManager() {
-		return learnItemManager;
-	}
 	@JsonIgnore
-	public List<LearnItemsList> getLearnItemLists() {
+	public List<LearnItemList> getLearnItemLists() {
 		return learnItemManager.getLearnItemsLists();
 	}
 	
-	protected LearnItemsList getLearnItemListByName(String nameOfList) {
+	protected LearnItemList getLearnItemListByName(String nameOfList) {
 		return learnItemManager.getLearnItemsList(nameOfList);
 	}
 
-	protected LearnItemsList addNewLearnItemsList(String name) {
+	protected LearnItemList addNewLearnItemsList(String name) {
 		return learnItemManager.createLearnItemsList(name);
 	}
 	
-	protected LearnItemsList addNewLearnItemsList(LearnItemsList learnItemsList) {
+	protected LearnItemList addNewLearnItemsList(LearnItemList learnItemsList) {
 		return learnItemManager.addNewLearnItemsList(learnItemsList);
 	}
 
@@ -113,14 +110,18 @@ public class Student {
 		this.learnItemManager = learnItemManager;
 	}
 	
-	protected void addNewLearnItemToExistingList(LearnItemsList learnItemsList, LearnItem learnItem) {
+	protected void addNewLearnItemToExistingList(LearnItemList learnItemsList, LearnItem learnItem) {
 		learnItemManager.addNewLearnItemToLearnItemsList(learnItemsList, learnItem);
 	}
 	
-	public void associateWithLearnItemsList(LearnItemsList learnItemsList){
+	public void associateWithLearnItemsList(LearnItemList learnItemsList){
 		learnItemManager.addNewLearnItemsList(learnItemsList);
 	}
 
+	public LearnItemsManager getLearnItemManager(){
+		return this.learnItemManager;
+	}
+	
 	@Override
 	public String toString(){
 		return "Student with name " + name + "id: " + id;

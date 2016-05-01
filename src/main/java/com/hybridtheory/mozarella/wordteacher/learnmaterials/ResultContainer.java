@@ -1,5 +1,6 @@
 package com.hybridtheory.mozarella.wordteacher.learnmaterials;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -13,7 +14,7 @@ import javax.persistence.OneToOne;
 @Entity
 public class ResultContainer {
 	
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	protected Integer id;
 	
 	@OneToOne(cascade = {CascadeType.ALL})
@@ -22,15 +23,32 @@ public class ResultContainer {
 	@ElementCollection
 	private List<Boolean> previousAnswers;
 	
+	LocalDateTime timeOfLastAnswer;
+	
+	private Double priority = 0.0;
+	
 	public ResultContainer(LearnItem learnItem){
 		this.learnItem = learnItem;
 	}
 		
 	public Double getPriority(){
-		return 0.0;
+		//TODO discuss, then implement this
+		return priority;
+	}
+	
+	private void recalculatePriority(){
+		//TODO implement this
 	}
 	
 	public LearnItem getLearnItem(){
 		return this.learnItem;
+	}
+
+	public void registerResult(Boolean isCorrect) {
+		// TODO 
+		
+		timeOfLastAnswer = LocalDateTime.now();
+		previousAnswers.add(isCorrect);
+		recalculatePriority();
 	}
 }

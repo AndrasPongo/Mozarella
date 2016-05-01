@@ -6,7 +6,7 @@ public class MultiWord extends LearnItem implements Comparable<LearnItem> {
 		//TODO: create algorithm for ID creations
 		this.setId("testMultiWord"+Math.random()*1000);
 		this.setText(text);
-		this.setTranslation(translation);
+		this.addTranslation(translation);
 		this.setStrength(1);
 		this.setPriority(10);
 	}

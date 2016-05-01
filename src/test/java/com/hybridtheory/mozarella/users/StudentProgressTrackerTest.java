@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemFactory;
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsList;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
 
 public class StudentProgressTrackerTest {
 	
@@ -36,7 +36,7 @@ public class StudentProgressTrackerTest {
 	public void testLearntCount_correctInputs_noLearntWords() {
 		//Given
 		Student student = new Student();
-		LearnItemsList learnItemsList = student.addNewLearnItemsList("testLearnItemsList");
+		LearnItemList learnItemsList = student.addNewLearnItemsList("testLearnItemsList");
 		LearnItemFactory learnItemFactory = new LearnItemFactory();
 		LearnItem learnItem = learnItemFactory.createLearnItem("testword", "xyz");
 		student.addNewLearnItemToExistingList(learnItemsList, learnItem);
@@ -55,7 +55,7 @@ public class StudentProgressTrackerTest {
 	public void testLearntCount_correctInputs_withLearntWord() {
 		//Given
 		Student student = new Student();
-		LearnItemsList learnItemsList = student.addNewLearnItemsList("testLearnItemsList");
+		LearnItemList learnItemsList = student.addNewLearnItemsList("testLearnItemsList");
 		LearnItemFactory learnItemFactory = new LearnItemFactory();
 		LearnItem learnItem = learnItemFactory.createLearnItem("testword", "xyz");
 		student.addNewLearnItemToExistingList(learnItemsList, learnItem);

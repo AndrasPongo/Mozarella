@@ -42,7 +42,7 @@ public class LearnItemTest {
 		LearnItem testLearnItem = new Word("testword", "xyz");
 
 		//When		
-		testLearnItem.setTranslation("xyz_new");
+		testLearnItem.addTranslation("xyz_new");
 
 		//Then
 		assertTrue(testLearnItem.getTranslation()== "xyz_new");
@@ -54,23 +54,23 @@ public class LearnItemTest {
 		LearnItem testLearnItem = new Word("testword", "xyz");
 
 		//When		
-		testLearnItem.setAlternativeTranslation("xyz_alternative");
+		testLearnItem.addTranslation("xyz_alternative");
 
 		//Then
-		assertTrue(testLearnItem.getAlternativeTranslations().get(0)== "xyz_alternative");
+		assertTrue(testLearnItem.getTranslations().get(0)== "xyz_alternative");
 	}
 	
 	@Test
 	public void learnItemsList_removeAlternativeTranslationOfLearnItem() {
 		//Given
 		LearnItem testLearnItem = new Word("testword", "xyz");
-		testLearnItem.setAlternativeTranslation("xyz_alternative");
+		testLearnItem.addTranslation("xyz_alternative");
 
 		//When		
 		testLearnItem.removeAlternativeTranslation("xyz_alternative");
 
 		//Then
-		assertTrue(testLearnItem.getAlternativeTranslations().size()==0);
+		assertTrue(testLearnItem.getTranslations().size()==0);
 	}
 	
 	//TODO: test for the rest of the setters/getters(?)

@@ -15,7 +15,7 @@ import com.hybridtheory.mozarella.pet.cubefish.Aquarium;
 @Entity
 public abstract class Pet {
 
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	protected Integer id;
 	protected String name = "";
 	protected Integer level = 0;
