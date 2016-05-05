@@ -1,27 +1,26 @@
 package com.hybridtheory.mozarella.wordteacher.learnmaterials;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class LearnItem {
 	
 	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
+	
 	@ManyToOne
+	@JsonIgnore
 	protected LearnItemList learnItemList;
+	
 	protected String idDescriptor;
 	protected String text;
-	
-	@ElementCollection
-	protected List<String> translations  = new ArrayList<String>();
+	protected String translations;
 	protected double priority;
 	protected int strength;
 	protected String pictureReference;
@@ -48,8 +47,7 @@ public class LearnItem {
 	}
 
 	public void addTranslation(String translation) {
-		this.translations.add(translation);
-		
+		this.translations+=translation+";";
 	}
 
 	public String getTranslation(){
@@ -57,8 +55,8 @@ public class LearnItem {
 	}
 	
 	public String getTranslation(Integer index) {
-		if(this.translations.size()>index){
-			return translations.get(index);
+		if(this.translations.split(";").length>index){
+			return translations.split(";")[index];
 		}
 		else {
 			return "";
@@ -66,12 +64,12 @@ public class LearnItem {
 	}
 
 	public void removeAlternativeTranslation(String alternativeTranslation) {
-		if (alternativeTranslation == null || !translations.contains(alternativeTranslation)) {
-			throw new IllegalArgumentException("Alternative translation doesn't exist for this Learn Item");
-		} else {
-			this.translations.remove(this.translations.indexOf(alternativeTranslation));
+		//if (alternativeTranslation == null || !translations.contains(alternativeTranslation)) {
+		//	throw new IllegalArgumentException("Alternative translation doesn't exist for this Learn Item");
+		//} else {
+		//	this.translations.remove(this.translations.indexOf(alternativeTranslation));
 
-		}
+		//}
 	}
 
 	public void setStrength(int strength) {
@@ -106,15 +104,17 @@ public class LearnItem {
 		return this.helperItem;
 	}
 
+	@JsonIgnore
 	public LearnItemList getLearnItemsList() {
 		return learnItemList;
 	}
 
+	@JsonIgnore
 	public void setLearnItemsList(LearnItemList learnItemsList) {
 		this.learnItemList = learnItemsList;
 	}
 	
-	public List<String> getTranslations(){
+	public String getTranslations(){
 		return translations;
 	}
 

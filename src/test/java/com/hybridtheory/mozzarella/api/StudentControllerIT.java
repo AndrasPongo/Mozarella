@@ -37,7 +37,7 @@ public class StudentControllerIT extends ApplicationTests {
     private MockMvc mockMvc;
     
     private static String learnitemlistresource = "/students/{ids}/learnitemslists/{learnItemListIds}";
-    private static String learnitemresource = "/students/{ids}/learnitemslists/{learnItemListIds}/learnItems";
+    private static String learnitemresource = "/students/{ids}/learnitemslists/{learnItemListIds}/learnitems";
 
     private static Boolean initializedFlag = false;
     
@@ -60,8 +60,8 @@ public class StudentControllerIT extends ApplicationTests {
             
             learnItemsList.addLearnItem(new Word("exampleword","exampletranslation"));
             learnItemsList.addLearnItem(new Word("exampleword2","exampletranslation2"));
-            learnItemsList.addLearnItem(new Word("exampleword2","exampletranslation2"));
-            learnItemsList.addLearnItem(new Word("exampleword2","exampletranslation2"));
+            learnItemsList.addLearnItem(new Word("exampleword3","exampletranslation2"));
+            learnItemsList.addLearnItem(new Word("exampleword4","exampletranslation2"));
             
             repository.save(student1);
             

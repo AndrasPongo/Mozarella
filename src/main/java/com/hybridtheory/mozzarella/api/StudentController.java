@@ -92,7 +92,12 @@ public class StudentController {
     	}
 		
 		List<LearnItem> learnItemsToReturn = learnItemRepository.getLearnItemsForStudent(studentId, learnItemListIds, new PageRequest(0,numberOfLearnItems));
-    	return new ResponseEntity<List<LearnItem>>(learnItemsToReturn,HttpStatus.OK);						
+    	if(learnItemsToReturn.size()<numberOfLearnItems){
+    		List<LearnItem> newLearnItems = learnItemRepository.getNewLearnItemsForStudent(studentId, learnItemListIds, new PageRequest(0,numberOfLearnItems-learnItemsToReturn.size()));
+    		learnItemsToReturn.addAll(newLearnItems);
+    	}
+		
+		return new ResponseEntity<List<LearnItem>>(learnItemsToReturn,HttpStatus.OK);						
     }
 	
     @RequestMapping(value="/students/{id}/learnitems/{learnItemId}", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)

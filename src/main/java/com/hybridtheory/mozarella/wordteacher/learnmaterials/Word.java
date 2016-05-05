@@ -5,6 +5,10 @@ import javax.persistence.Entity;
 @Entity
 public class Word extends LearnItem implements Comparable<LearnItem> {
 	
+	public Word(){
+		
+	}
+	
 	public Word(String text, String translation) {
 		//TODO: create algorithm for ID creations
 		this.setId("testWord"+Math.random()*1000);

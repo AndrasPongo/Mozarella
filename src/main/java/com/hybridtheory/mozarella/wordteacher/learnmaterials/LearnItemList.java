@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -23,7 +24,7 @@ public class LearnItemList implements Comparable<LearnItemList>, Iterable<LearnI
 	private Integer id;
 	private String name = "";
 	
-	@OneToMany(mappedBy="learnItemList", fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="learnItemList", cascade = { CascadeType.PERSIST, CascadeType.REFRESH }, fetch=FetchType.LAZY)
 	@OrderBy("priority")
 	private SortedSet<LearnItem> learnItems = new TreeSet<LearnItem>();
 	private int numberOfLearnItemsInList = 0;
@@ -67,6 +68,7 @@ public class LearnItemList implements Comparable<LearnItemList>, Iterable<LearnI
 		if (learnItem == null || this.learnItems.contains(learnItem)) {
 			return false;
 		} else {
+			learnItem.setLearnItemsList(this);
 			learnItems.add(learnItem);
 			numberOfLearnItemsInList++;
 			return true;
