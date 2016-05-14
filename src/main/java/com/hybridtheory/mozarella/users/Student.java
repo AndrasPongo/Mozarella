@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -40,6 +41,7 @@ public class Student implements UserDetails {
 	
 	private String name = "";
 	private String password = "";
+	private String salt = "abcd";
 	
 	@JsonIgnore
 	@OneToOne(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY, optional = false)
@@ -51,6 +53,9 @@ public class Student implements UserDetails {
 	
 	@Transient
 	private InputSanitizer inputSanitizer = new InputSanitizer();
+
+	@ElementCollection
+	private List<GrantedAuthority> authorities;
 	
 	public Student(){
 		learnItemManager = new LearnItemsManager(this);
@@ -175,6 +180,10 @@ public class Student implements UserDetails {
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	public String getSalt(){
+		return salt;
 	}
 	
 }

@@ -17,5 +17,4 @@ public interface LearnItemRepository extends JpaRepository<LearnItem,Integer> {
 	@Query("select item from Student s join s.learnItemManager m join m.learnItemsLists l join l.learnItems item where l.id in :listIds and s.id = :studentId and not exists (select r from ResultContainer r where r.learnItem = item)")
 	public List<LearnItem> getNewLearnItemsForStudent(@Param("studentId") Integer studentId, @Param("listIds") List<Integer> learnItemListids, Pageable pageable);
 
-	// 
 }

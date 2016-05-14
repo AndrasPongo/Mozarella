@@ -1,6 +1,7 @@
 package com.hybridtheory.mozzarella.api;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.ResultContainer;
 import com.hybridtheory.mozzarella.persistence.LearnItemRepository;
+import com.hybridtheory.mozzarella.persistence.ResultContainerRepository;
 import com.hybridtheory.mozzarella.persistence.StudentRepository;
 
 @RestController
@@ -36,6 +38,9 @@ public class StudentController {
     
     @Autowired
     private LearnItemRepository learnItemRepository;
+    
+    @Autowired
+    private ResultContainerRepository resultContainerRepository;
 
     @RequestMapping(value="/students", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Student> create(@RequestParam("credentialType") String credentialType, String value) {
@@ -92,7 +97,10 @@ public class StudentController {
     	}
 		
 		List<LearnItem> learnItemsToReturn = learnItemRepository.getLearnItemsForStudent(studentId, learnItemListIds, new PageRequest(0,numberOfLearnItems));
-    	if(learnItemsToReturn.size()<numberOfLearnItems){
+		LOGGER.info("number of learn items already associated with a result container: "+learnItemsToReturn.size());
+		
+		if(learnItemsToReturn.size()<numberOfLearnItems){
+			LOGGER.info("fetching additional learn items");
     		List<LearnItem> newLearnItems = learnItemRepository.getNewLearnItemsForStudent(studentId, learnItemListIds, new PageRequest(0,numberOfLearnItems-learnItemsToReturn.size()));
     		learnItemsToReturn.addAll(newLearnItems);
     	}
@@ -100,10 +108,16 @@ public class StudentController {
 		return new ResponseEntity<List<LearnItem>>(learnItemsToReturn,HttpStatus.OK);						
     }
 	
-    @RequestMapping(value="/students/{id}/learnitems/{learnItemId}", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity postResult(@PathVariable("id") Integer userid, @RequestParam("result") Boolean result, @RequestBody LearnItem learnItem) {
-    	Student toUpdate = studentRepository.findOne(userid);
-    	toUpdate.getLearnItemManager().acceptResult(learnItem, result);
+    @RequestMapping(value="/students/{id}/learnitems/{learnItemId}/results", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity postResult(@PathVariable("id") Integer studentId, @RequestParam("result") Boolean result, @PathVariable("learnItemId") Integer learnItemId) {
+    	ResultContainer resultContainer = resultContainerRepository.getResultContainerForStudentAndLearnItem(learnItemId, studentId).get(0);
+    	if(resultContainer==null){
+    		resultContainer = new ResultContainer(learnItemRepository.findOne(learnItemId));
+    		studentRepository.findOne(studentId).getLearnItemManager().acceptResult(resultContainer, result);
+    		resultContainerRepository.save(resultContainer);
+    	}
+    	
+    	resultContainer.registerResult(result);
     	
     	return new ResponseEntity(HttpStatus.OK);
     }

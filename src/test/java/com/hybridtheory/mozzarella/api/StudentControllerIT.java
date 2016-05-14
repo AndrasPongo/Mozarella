@@ -2,6 +2,7 @@ package com.hybridtheory.mozzarella.api;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -15,9 +16,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.hybridtheory.mozarella.users.Student;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.Word;
+import com.hybridtheory.mozzarella.persistence.ResultContainerRepository;
 import com.hybridtheory.mozzarella.persistence.StudentRepository;
+
+import static org.junit.Assert.*;
 
 public class StudentControllerIT extends ApplicationTests {
 
@@ -27,18 +32,26 @@ public class StudentControllerIT extends ApplicationTests {
     @Autowired
     private StudentRepository repository;
     
+    @Autowired
+    private ResultContainerRepository resultContainerRepository;
+    
     private static Student student1 = new Student();
     private static Student student2 = new Student();
     private static LearnItemList learnItemsList;
     private static LearnItemList learnItemsList2;
     private static String STUDENT1NAME = "Anakin Skywalker";
     private static String STUDENT2NAME = "Qui Gon Jinn";
+    private static LearnItem learnitem1 = new Word("exampleword","exampletranslation");
+    private static LearnItem learnitem2 = new Word("exampleword2","exampletranslation2");
+    private static LearnItem learnitem3 = new Word("exampleword3","exampletranslation3");
+    private static LearnItem learnitem4 = new Word("exampleword4","exampletranslation4");
 
     private MockMvc mockMvc;
     
     private static String learnitemlistresource = "/students/{ids}/learnitemslists/{learnItemListIds}";
     private static String learnitemresource = "/students/{ids}/learnitemslists/{learnItemListIds}/learnitems";
-
+    private static String resultresource = "/students/{id}/learnitems/{learnItemId}/results";
+    
     private static Boolean initializedFlag = false;
     
     @Before
@@ -58,10 +71,10 @@ public class StudentControllerIT extends ApplicationTests {
             student2.setName(STUDENT2NAME);
             student2.associateWithLearnItemsList(learnItemsList);
             
-            learnItemsList.addLearnItem(new Word("exampleword","exampletranslation"));
-            learnItemsList.addLearnItem(new Word("exampleword2","exampletranslation2"));
-            learnItemsList.addLearnItem(new Word("exampleword3","exampletranslation2"));
-            learnItemsList.addLearnItem(new Word("exampleword4","exampletranslation2"));
+            learnItemsList.addLearnItem(learnitem1);
+            learnItemsList.addLearnItem(learnitem2);
+            learnItemsList.addLearnItem(learnitem3);
+            learnItemsList.addLearnItem(learnitem4);
             
             repository.save(student1);
             
@@ -107,6 +120,13 @@ public class StudentControllerIT extends ApplicationTests {
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
         .andExpect(jsonPath("$").isArray())
         .andExpect(jsonPath("$",hasSize(4)));
+    }
+    
+    @Test
+    public void validate_result_added() throws Exception{
+    	mockMvc.perform(post(resultresource,student1.getId(),learnitem1.getId()).param("result", "true"));
+    	assertTrue(resultContainerRepository.getResultContainerForStudentAndLearnItem(student1.getId(),learnitem1.getId()).size()>0);
+    	assertTrue(resultContainerRepository.getResultContainerForStudentAndLearnItem(student1.getId(),learnitem2.getId()).size()==0);
     }
 
 }

@@ -177,20 +177,13 @@ public class LearnItemsManager {
 		return learnItemsList;
 	}
 
-	private ResultContainer getOrCreateResult(LearnItem learnItem){
-		Integer idToFind = learnItem.getId();
-		if(results.stream()
-				.filter(id -> id.equals(idToFind)).count()>0){
-			return results.get(idToFind);
-		} else {
+	private ResultContainer createResult(LearnItem learnItem){
 			ResultContainer newResultContainer = new ResultContainer(learnItem);
 			results.add(newResultContainer);
 			return newResultContainer;
-		}
 	}
 	
-	public void acceptResult(LearnItem learnItem, Boolean isCorrect){
-		ResultContainer toUpdate = getOrCreateResult(learnItem);
+	public void acceptResult(ResultContainer toUpdate, Boolean isCorrect){
 		toUpdate.registerResult(isCorrect);
 	}
 	
