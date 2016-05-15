@@ -1,6 +1,7 @@
 package com.hybridtheory.mozarella.wordteacher.learnmaterials;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -21,11 +22,15 @@ public class ResultContainer {
 	private LearnItem learnItem;
 	
 	@ElementCollection
-	private List<Boolean> previousAnswers;
+	private List<Boolean> previousAnswers = new ArrayList<Boolean>();
 	
 	LocalDateTime timeOfLastAnswer;
 	
 	private Double priority = 0.0;
+	
+	public ResultContainer(){
+		
+	}
 	
 	public ResultContainer(LearnItem learnItem){
 		this.learnItem = learnItem;

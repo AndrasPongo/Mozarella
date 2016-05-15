@@ -1,7 +1,6 @@
 package com.hybridtheory.mozzarella.api;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManager;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.ResultContainer;
 import com.hybridtheory.mozzarella.persistence.LearnItemRepository;
 import com.hybridtheory.mozzarella.persistence.ResultContainerRepository;
@@ -110,14 +110,20 @@ public class StudentController {
 	
     @RequestMapping(value="/students/{id}/learnitems/{learnItemId}/results", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity postResult(@PathVariable("id") Integer studentId, @RequestParam("result") Boolean result, @PathVariable("learnItemId") Integer learnItemId) {
-    	ResultContainer resultContainer = resultContainerRepository.getResultContainerForStudentAndLearnItem(learnItemId, studentId).get(0);
-    	if(resultContainer==null){
+    	List<ResultContainer> resultContainers = resultContainerRepository.getResultContainerForStudentAndLearnItem(learnItemId, studentId);
+    	ResultContainer resultContainer;
+    	if(resultContainers.size()==0){
     		resultContainer = new ResultContainer(learnItemRepository.findOne(learnItemId));
-    		studentRepository.findOne(studentId).getLearnItemManager().acceptResult(resultContainer, result);
+    		Student student = studentRepository.findOne(studentId);
+    		LearnItemsManager manager = student.getLearnItemManager();
+    		manager.acceptResult(resultContainer, result);
     		resultContainerRepository.save(resultContainer);
+    	} else {
+    		resultContainer = resultContainers.get(0);
     	}
     	
     	resultContainer.registerResult(result);
+    	resultContainerRepository.flush();
     	
     	return new ResponseEntity(HttpStatus.OK);
     }

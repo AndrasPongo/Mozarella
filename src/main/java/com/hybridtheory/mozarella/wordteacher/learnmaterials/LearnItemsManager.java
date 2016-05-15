@@ -185,6 +185,9 @@ public class LearnItemsManager {
 	
 	public void acceptResult(ResultContainer toUpdate, Boolean isCorrect){
 		toUpdate.registerResult(isCorrect);
+		if(!results.contains(toUpdate)){
+			results.add(toUpdate);
+		}
 	}
 	
 	public List<LearnItem> getLearnItemsToPractice(List<Integer> learnItemListIds, Integer numberOfLearnItems) {

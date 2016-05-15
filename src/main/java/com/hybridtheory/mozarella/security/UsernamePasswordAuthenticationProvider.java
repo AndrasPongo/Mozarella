@@ -33,7 +33,7 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
 	    if (!student.isEnabled()) {
 	        throw new DisabledException("1001");
 	    }
-	    if (!encoder.matches(password+student.getSalt(), student.getPassword()+student.getSalt())) {
+	    if (!encoder.matches(password+student.getSalt(), student.getPassword())) {
 	        throw new BadCredentialsException("1000");
 	    }
 
