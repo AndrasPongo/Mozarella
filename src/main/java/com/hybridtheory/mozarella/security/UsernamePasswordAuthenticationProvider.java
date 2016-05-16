@@ -10,8 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.hybridtheory.mozarella.persistence.StudentRepository;
 import com.hybridtheory.mozarella.users.Student;
-import com.hybridtheory.mozzarella.persistence.StudentRepository;
 
 public class UsernamePasswordAuthenticationProvider implements AuthenticationProvider {
 	

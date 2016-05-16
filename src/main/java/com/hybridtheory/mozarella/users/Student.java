@@ -59,7 +59,7 @@ public class Student implements UserDetails {
 	
 	public Student(){
 		learnItemManager = new LearnItemsManager(this);
-		pet = new CubeFish();
+		pet = new CubeFish(name+"s pet");
 	}
 	
 	public String getName() {

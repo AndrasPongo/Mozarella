@@ -1,4 +1,4 @@
-package com.hybridtheory.mozzarella.configuration;
+package com.hybridtheory.mozarella.configuration;
 /*package com.hybridtheory.mozzarella.configuration;
 
 import javax.persistence.EntityManagerFactory;

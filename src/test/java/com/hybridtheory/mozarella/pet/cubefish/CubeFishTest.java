@@ -15,11 +15,6 @@ public class CubeFishTest {
 		//When
 		Pet testCubeFish = new CubeFish("testCubeFish1");
 			
-		//Then
-		assertTrue(testCubeFish.getName()=="testCubeFish1" && 
-				testCubeFish.getHabitat() != null 
-//TODO:			&& testCubeFish.getLastFeedTime().isEqual(LocalDate.now())
-				);
 	}
 	
 	//TODO: add negative tests for initialization

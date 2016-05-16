@@ -1,4 +1,4 @@
-package com.hybridtheory.mozzarella.persistence;
+package com.hybridtheory.mozarella.persistence;
 
 import org.springframework.data.repository.CrudRepository;
 

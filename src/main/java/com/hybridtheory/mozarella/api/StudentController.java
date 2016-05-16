@@ -1,4 +1,4 @@
-package com.hybridtheory.mozzarella.api;
+package com.hybridtheory.mozarella.api;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,14 +19,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hybridtheory.mozarella.persistence.LearnItemRepository;
+import com.hybridtheory.mozarella.persistence.ResultContainerRepository;
+import com.hybridtheory.mozarella.persistence.StudentRepository;
 import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManager;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.ResultContainer;
-import com.hybridtheory.mozzarella.persistence.LearnItemRepository;
-import com.hybridtheory.mozzarella.persistence.ResultContainerRepository;
-import com.hybridtheory.mozzarella.persistence.StudentRepository;
 
 @RestController
 public class StudentController {

@@ -15,12 +15,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.hybridtheory.mozarella.persistence.ResultContainerRepository;
+import com.hybridtheory.mozarella.persistence.StudentRepository;
 import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.Word;
-import com.hybridtheory.mozzarella.persistence.ResultContainerRepository;
-import com.hybridtheory.mozzarella.persistence.StudentRepository;
 
 import static org.junit.Assert.*;
 

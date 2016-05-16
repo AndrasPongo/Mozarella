@@ -8,23 +8,41 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
-import com.hybridtheory.mozarella.pet.cubefish.Aquarium;
+import com.hybridtheory.mozarella.wordteacher.InputSanitizer;
 
 @Entity
 public abstract class Pet {
 
 	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	protected Integer id;
-	protected String name = "";
+	protected Integer xp;
 	protected Integer level = 0;
+	
+	protected String name;
+	
+	@Transient
+	private InputSanitizer inputSanitizer = new InputSanitizer();
+	
+	Pet(){
+		
+	}
+	
+	protected Pet(String petName){
+		boolean validName = inputSanitizer.checkPetNameIsValid(petName);
+		
+		if (!validName) {
+			throw new IllegalArgumentException("Invalid name for the Pet");
+		} else {
+			this.name = petName;
+			this.setLastFeedTime(LocalDate.now());
+		}
+	}
+	
 	@ElementCollection
 	protected Map<Integer, String> extras = null;
 	protected LocalDate lastFeedTime = null;
-	
-	@OneToOne(targetEntity=Aquarium.class)
-	protected Habitat ownHabitat = null;
 
 	public void setName(String name) {
 		this.name = name;
@@ -33,11 +51,6 @@ public abstract class Pet {
 	public String getName() {
 		return this.name;
 	}
-	
-	public Habitat getHabitat() {
-		return this.ownHabitat;
-	}
-	
 	
 	public void setLevel() {
 		// TODO Auto-generated method stub

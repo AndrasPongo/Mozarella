@@ -1,4 +1,4 @@
-package com.hybridtheory.mozzarella.persistence;
+package com.hybridtheory.mozarella.persistence;
 
 import javax.naming.AuthenticationException;
 import javax.persistence.EntityNotFoundException;
