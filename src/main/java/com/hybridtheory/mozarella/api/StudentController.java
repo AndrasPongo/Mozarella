@@ -25,8 +25,6 @@ import com.hybridtheory.mozarella.persistence.StudentRepository;
 import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManager;
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.ResultContainer;
 
 @RestController
 public class StudentController {
@@ -97,35 +95,15 @@ public class StudentController {
     	}
 		
 		List<LearnItem> learnItemsToReturn = learnItemRepository.getLearnItemsForStudent(studentId, learnItemListIds, new PageRequest(0,numberOfLearnItems));
-		LOGGER.info("number of learn items already associated with a result container: "+learnItemsToReturn.size());
-		
-		if(learnItemsToReturn.size()<numberOfLearnItems){
-			LOGGER.info("fetching additional learn items");
-    		List<LearnItem> newLearnItems = learnItemRepository.getNewLearnItemsForStudent(studentId, learnItemListIds, new PageRequest(0,numberOfLearnItems-learnItemsToReturn.size()));
-    		learnItemsToReturn.addAll(newLearnItems);
-    	}
 		
 		return new ResponseEntity<List<LearnItem>>(learnItemsToReturn,HttpStatus.OK);						
     }
 	
     @RequestMapping(value="/students/{id}/learnitems/{learnItemId}/results", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity postResult(@PathVariable("id") Integer studentId, @RequestParam("result") Boolean result, @PathVariable("learnItemId") Integer learnItemId) {
-    	List<ResultContainer> resultContainers = resultContainerRepository.getResultContainerForStudentAndLearnItem(learnItemId, studentId);
-    	ResultContainer resultContainer;
-    	if(resultContainers.size()==0){
-    		resultContainer = new ResultContainer(learnItemRepository.findOne(learnItemId));
-    		Student student = studentRepository.findOne(studentId);
-    		LearnItemsManager manager = student.getLearnItemManager();
-    		manager.acceptResult(resultContainer, result);
-    		resultContainerRepository.save(resultContainer);
-    	} else {
-    		resultContainer = resultContainers.get(0);
-    	}
-    	
-    	resultContainer.registerResult(result);
-    	resultContainerRepository.flush();
-    	
-    	return new ResponseEntity(HttpStatus.OK);
+    	LearnItem learnItem = learnItemRepository.getOne(learnItemId);
+    	learnItem.registerResult(studentRepository.findOne(studentId), result);
+    	return new ResponseEntity(HttpStatus.OK);	
     }
     
     private List<Student> getStudentsByIds(List<Integer> ids){

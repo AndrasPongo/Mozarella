@@ -1,15 +1,7 @@
 package com.hybridtheory.mozarella.wordteacher.learnmaterials;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.Iterator;
-
-import org.junit.Test;
-
 public class ResultControllerTest {
-	
+	/*
 	@Test
 	public void returnsRightLearnItemId(){
 	  //given
@@ -41,5 +33,5 @@ public class ResultControllerTest {
 	  //then
 	  assertTrue(resultContainer1.getPriority()>resultContainer2.getPriority());
 	  
-	}
+	}*/
 }

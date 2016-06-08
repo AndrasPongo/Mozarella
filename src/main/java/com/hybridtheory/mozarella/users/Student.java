@@ -85,10 +85,6 @@ public class Student implements UserDetails {
 		pet = new CubeFish(petName);
 	}
 	
-	public List<LearnItem> getLearnItemsToPractice(List<Integer> learnItemListIds, Integer numberOfLearnItems){
-		return learnItemManager.getLearnItemsToPractice(learnItemListIds, numberOfLearnItems);
-	}
-	
 	@Transient
 	public Pet getPet() {
 		return pet;

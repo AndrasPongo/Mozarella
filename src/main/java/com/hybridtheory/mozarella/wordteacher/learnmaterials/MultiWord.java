@@ -8,7 +8,6 @@ public class MultiWord extends LearnItem implements Comparable<LearnItem> {
 		this.setText(text);
 		this.addTranslation(translation);
 		this.setStrength(1);
-		this.setPriority(10);
 	}
 	
 	public int compareTo(LearnItem learnItem) {

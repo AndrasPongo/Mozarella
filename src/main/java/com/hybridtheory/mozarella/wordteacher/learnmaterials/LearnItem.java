@@ -1,5 +1,9 @@
 package com.hybridtheory.mozarella.wordteacher.learnmaterials;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hybridtheory.mozarella.users.Student;
 
 @Entity
 public class LearnItem {
@@ -21,13 +26,21 @@ public class LearnItem {
 	protected String idDescriptor;
 	protected String text;
 	protected String translations;
-	protected double priority;
-	protected int strength;
+	protected Double priority;
+	protected Integer strength;
 	protected String pictureReference;
+	
 	private String helperItem;
 	
+	@ElementCollection
+	private Map<Student,ResultsContainer> results = new HashMap<Student,ResultsContainer>();
+	
+	public LearnItem(){
+		
+	}
+	
 	public int compareTo(LearnItem learnItem) {
-		if (learnItem.getText() == this.text) { 
+		if (learnItem.getText().equals(this.text)) { 
 			return 0;	
 		} else {
 			return -1;
@@ -71,6 +84,17 @@ public class LearnItem {
 
 		//}
 	}
+	
+	public void registerResult(Student student, Boolean result){
+
+			if(results.containsKey(student)){
+				results.get(student).registerResult(result);
+			} else {
+				ResultsContainer container = new ResultsContainer();
+				results.put(student, container);
+			}
+			
+	}
 
 	public void setStrength(int strength) {
 		this.strength = strength;		
@@ -80,11 +104,11 @@ public class LearnItem {
 		return strength;
 	}
 	
-	public void setPriority(int priority) {
+	public void setPriority(Double priority) {
 		this.priority = priority;		
 	}
 	
-	public double getPriority() {
+	public Double getPriority() {
 		return priority;
 	}
 

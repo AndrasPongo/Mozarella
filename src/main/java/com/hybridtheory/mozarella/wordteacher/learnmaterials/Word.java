@@ -15,7 +15,6 @@ public class Word extends LearnItem implements Comparable<LearnItem> {
 		this.setText(text);
 		this.addTranslation(translation);
 		this.setStrength(0);
-		this.setPriority(10);
 	}
 
 

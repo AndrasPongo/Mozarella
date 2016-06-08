@@ -30,14 +30,10 @@ public class LearnItemsManager {
 	private Student owner;
 
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.REFRESH }, fetch = FetchType.LAZY)
-	private List<LearnItemList> learnItemsLists = new ArrayList<LearnItemList>();
+	private List<LearnItemList> learnItemLists = new ArrayList<LearnItemList>();
 
 	@Transient
 	private LearnItemFactory learnItemFactory = new LearnItemFactory();
-
-	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REFRESH }, fetch = FetchType.LAZY)
-	@OrderBy("priority")
-	private List<ResultContainer> results = new ArrayList<ResultContainer>();
 
 	public LearnItemsManager() {
 
@@ -60,8 +56,8 @@ public class LearnItemsManager {
 
 	public LearnItemList createLearnItemsList(String name) {
 		LearnItemList newLearnItemsList = new LearnItemList(name);
-		if (name != null && !learnItemsLists.contains(newLearnItemsList)) {
-			learnItemsLists.add(newLearnItemsList);
+		if (name != null && !learnItemLists.contains(newLearnItemsList)) {
+			learnItemLists.add(newLearnItemsList);
 			return newLearnItemsList;
 		} else {
 			throw new IllegalArgumentException("Invalid input when creating LearnItemsList");
@@ -70,12 +66,12 @@ public class LearnItemsManager {
 
 	public List<LearnItemList> getLearnItemsLists() {
 		// TODO
-		return learnItemsLists;
+		return learnItemLists;
 	}
 
 	// public LearnItemsList getLearnItemsList(LearnItemsList learnItemsList) {
 	public LearnItemList getLearnItemsList(String nameOfList) {
-		for (LearnItemList lit : learnItemsLists) {
+		for (LearnItemList lit : learnItemLists) {
 			if (lit.getName() == nameOfList) {
 				return lit;
 			}
@@ -84,7 +80,7 @@ public class LearnItemsManager {
 	}
 
 	public void createNewLearnItemToLearnItemsList(LearnItemList learnItemsList, String text, String translation) {
-		if (learnItemsList == null || !learnItemsLists.contains(learnItemsList)) {
+		if (learnItemsList == null || !learnItemLists.contains(learnItemsList)) {
 			throw new IllegalArgumentException("Invalid input when creating LearnItemsList");
 		} else {
 			LearnItem newLearnItem = null;
@@ -94,11 +90,10 @@ public class LearnItemsManager {
 	}
 
 	public void addNewLearnItemToLearnItemsList(LearnItemList learnItemsList, LearnItem learnItem) {
-		if (learnItemsList == null || !learnItemsLists.contains(learnItemsList) || learnItem == null) {
+		if (learnItemsList == null || !learnItemLists.contains(learnItemsList) || learnItem == null) {
 			throw new IllegalArgumentException("Invalid input when creating LearnItemsList");
 		} else {
 			learnItemsList.addLearnItem(learnItem);
-			results.add(new ResultContainer(learnItem));
 		}
 	}
 
@@ -143,14 +138,6 @@ public class LearnItemsManager {
 		}
 	}
 
-	public void setPriorityOfLearnItem(LearnItem learnItem, int priority) {
-		if (learnItem != null && priority >= 1 && priority <= 10) {
-			learnItem.setPriority(priority);
-		} else {
-			throw new IllegalArgumentException("Invalid input when creating setting strength for Learn Item");
-		}
-	}
-
 	public void setStrengthOfLearnItem(LearnItem learnItem, int strength) {
 		if (learnItem != null && strength >= 0 && strength <= 10) {
 			learnItem.setStrength(strength);
@@ -166,45 +153,18 @@ public class LearnItemsManager {
 
 	protected List<String> getExistingListNames() {
 
-		return learnItemsLists.stream().map(LearnItemList::getName).collect(Collectors.toList());
+		return learnItemLists.stream().map(LearnItemList::getName).collect(Collectors.toList());
 
 	}
 
 	public LearnItemList addNewLearnItemsList(LearnItemList learnItemsList) {
-		if (!learnItemsLists.contains(learnItemsList)) {
-			learnItemsLists.add(learnItemsList);
+		if (!learnItemLists.contains(learnItemsList)) {
+			learnItemLists.add(learnItemsList);
 		}
 		return learnItemsList;
 	}
-
-	private ResultContainer createResult(LearnItem learnItem){
-			ResultContainer newResultContainer = new ResultContainer(learnItem);
-			results.add(newResultContainer);
-			return newResultContainer;
-	}
 	
-	public void acceptResult(ResultContainer toUpdate, Boolean isCorrect){
-		toUpdate.registerResult(isCorrect);
-		if(!results.contains(toUpdate)){
-			results.add(toUpdate);
-		}
-	}
-	
-	public List<LearnItem> getLearnItemsToPractice(List<Integer> learnItemListIds, Integer numberOfLearnItems) {
-
-		Stream<LearnItem> alreadyPracticedLearnItems = results.stream().filter(result -> result.getPriority() > 5)
-				.map(ResultContainer::getLearnItem)
-				.filter(learnItem -> learnItemListIds.contains(learnItem.getLearnItemsList().getId()))
-				.limit(numberOfLearnItems);
-
-		Stream<LearnItem> newLearnItemsForUser = learnItemsLists.stream()
-				.filter(learnItemList -> learnItemListIds.contains(learnItemList.getId()))
-				.map(learnItemList -> learnItemList.getLearnItems()).flatMap(learnItems -> learnItems.stream())
-				.limit(numberOfLearnItems);
-
-		Stream<LearnItem> learnItemsToReturn = Stream.concat(alreadyPracticedLearnItems, newLearnItemsForUser)
-				.limit(numberOfLearnItems);
-
-		return learnItemsToReturn.collect(Collectors.toList());
+	public void acceptResult(LearnItem learnItem, Boolean isCorrect){
+		learnItem.registerResult(owner,isCorrect);
 	}
 }
