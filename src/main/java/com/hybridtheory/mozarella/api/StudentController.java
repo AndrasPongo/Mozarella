@@ -1,10 +1,10 @@
 package com.hybridtheory.mozarella.api;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,11 +20,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hybridtheory.mozarella.persistence.LearnItemRepository;
-import com.hybridtheory.mozarella.persistence.ResultContainerRepository;
+import com.hybridtheory.mozarella.persistence.StudentItemRecordRepository;
 import com.hybridtheory.mozarella.persistence.StudentRepository;
 import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.StudentItemRecord;
+
+import jersey.repackaged.com.google.common.collect.Lists;
 
 @RestController
 public class StudentController {
@@ -38,7 +41,7 @@ public class StudentController {
     private LearnItemRepository learnItemRepository;
     
     @Autowired
-    private ResultContainerRepository resultContainerRepository;
+    private StudentItemRecordRepository studentItemRecordRepository;
 
     @RequestMapping(value="/students", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Student> create(@RequestParam("credentialType") String credentialType, String value) {
@@ -94,21 +97,31 @@ public class StudentController {
     		return new ResponseEntity<List<LearnItem>>(HttpStatus.BAD_REQUEST);
     	}
 		
-		List<LearnItem> learnItemsToReturn = learnItemRepository.getLearnItemsForStudent(studentId, learnItemListIds, new PageRequest(0,numberOfLearnItems));
-		
+		List<LearnItem> learnItemsToReturn = learnItemRepository.getAllLearnItemsForStudent(studentId, learnItemListIds, new PageRequest(0,numberOfLearnItems));
+    	
 		return new ResponseEntity<List<LearnItem>>(learnItemsToReturn,HttpStatus.OK);						
     }
 	
     @RequestMapping(value="/students/{id}/learnitems/{learnItemId}/results", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity postResult(@PathVariable("id") Integer studentId, @RequestParam("result") Boolean result, @PathVariable("learnItemId") Integer learnItemId) {
-    	LearnItem learnItem = learnItemRepository.getOne(learnItemId);
-    	learnItem.registerResult(studentRepository.findOne(studentId), result);
+    	StudentItemRecord record = studentItemRecordRepository.getStudentItemRecordForStudentAndLearnItemList(studentId, learnItemId);
+    	if(record == null){
+    		Student student = studentRepository.findOne(studentId);
+    		LearnItem learnItem = learnItemRepository.findOne(learnItemId); 
+    		record = new StudentItemRecord(student,learnItem);
+    		record.registerResult(result);
+    		List<StudentItemRecord> recordList = new ArrayList<StudentItemRecord>();
+    		recordList.add(record);
+    		studentItemRecordRepository.save(recordList);
+    	}
+    	record.registerResult(result);
+    	
     	return new ResponseEntity(HttpStatus.OK);	
     }
     
     private List<Student> getStudentsByIds(List<Integer> ids){
     	Iterable<Student> studentsWithIds = studentRepository.findAll(ids);
-    	return StreamSupport.stream(studentsWithIds.spliterator(),false).collect(Collectors.toList());
+    	return Lists.newArrayList(studentsWithIds);
     }
     
     private List<LearnItemList> getLearnItemsListsForUsers(List<Student> students, List<Integer> learnItemsListIds){

@@ -25,7 +25,7 @@ public abstract class Pet {
 	@Transient
 	private InputSanitizer inputSanitizer = new InputSanitizer();
 	
-	Pet(){
+	protected Pet(){
 		
 	}
 	

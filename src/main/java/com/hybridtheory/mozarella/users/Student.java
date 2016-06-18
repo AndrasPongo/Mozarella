@@ -30,6 +30,11 @@ import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManager;
 @Entity
 public class Student implements UserDetails {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	
@@ -58,8 +63,12 @@ public class Student implements UserDetails {
 	private List<GrantedAuthority> authorities;
 	
 	public Student(){
-		learnItemManager = new LearnItemsManager(this);
-		pet = new CubeFish(name+"s pet");
+		if(learnItemManager == null){
+			learnItemManager = new LearnItemsManager();
+		}
+		if(pet == null){
+			 pet = new CubeFish();
+		}
 	}
 	
 	public String getName() {
@@ -69,7 +78,7 @@ public class Student implements UserDetails {
 	public String getPassword() {
 		return this.password;
 	}
-	
+	@JsonIgnore
 	public void initialize(String studentName) {
 		boolean validName = false;
 		validName = inputSanitizer.checkStudentNameIsValid(studentName);
@@ -80,7 +89,7 @@ public class Student implements UserDetails {
 		this.password = "password";
 		learnItemManager = new LearnItemsManager(this);
 	}
-	
+	@JsonIgnore
 	protected void initializePet(String petName) {
 		pet = new CubeFish(petName);
 	}
@@ -91,46 +100,49 @@ public class Student implements UserDetails {
 	}
 
 	@JsonIgnore
+	@OneToOne(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY, optional = false)
 	public List<LearnItemList> getLearnItemLists() {
 		return learnItemManager.getLearnItemsLists();
 	}
-	
+	@JsonIgnore
 	protected LearnItemList getLearnItemListByName(String nameOfList) {
 		return learnItemManager.getLearnItemsList(nameOfList);
 	}
-
+	@JsonIgnore
 	protected LearnItemList addNewLearnItemsList(String name) {
 		return learnItemManager.createLearnItemsList(name);
 	}
-	
+	@JsonIgnore
 	protected LearnItemList addNewLearnItemsList(LearnItemList learnItemsList) {
 		return learnItemManager.addNewLearnItemsList(learnItemsList);
 	}
-
+	
 	public InputSanitizer getInputSanitizer() {
 		return inputSanitizer;
 	}
-
+	
 	public void setInputSanitizer(InputSanitizer inputSanitizer) {
 		this.inputSanitizer = inputSanitizer;
 	}
-
+	
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	@JsonIgnore
 	public void setLearnItemManager(LearnItemsManager learnItemManager) {
 		this.learnItemManager = learnItemManager;
 	}
-	
+	@JsonIgnore
 	protected void addNewLearnItemToExistingList(LearnItemList learnItemsList, LearnItem learnItem) {
 		learnItemManager.addNewLearnItemToLearnItemsList(learnItemsList, learnItem);
 	}
-	
+	@JsonIgnore
 	public void associateWithLearnItemsList(LearnItemList learnItemsList){
 		learnItemManager.addNewLearnItemsList(learnItemsList);
 	}
 
+	@JsonIgnore
+	@OneToOne(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY, optional = false)
 	public LearnItemsManager getLearnItemManager(){
 		return this.learnItemManager;
 	}

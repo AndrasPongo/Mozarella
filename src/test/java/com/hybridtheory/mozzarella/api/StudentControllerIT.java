@@ -1,6 +1,7 @@
 package com.hybridtheory.mozzarella.api;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -15,14 +16,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.hybridtheory.mozarella.persistence.ResultContainerRepository;
+import com.hybridtheory.mozarella.persistence.ResultRepository;
+import com.hybridtheory.mozarella.persistence.SomeEntityRepository;
+import com.hybridtheory.mozarella.persistence.StudentItemRecordRepository;
 import com.hybridtheory.mozarella.persistence.StudentRepository;
 import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.SomeEntity;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.Word;
-
-import static org.junit.Assert.*;
 
 public class StudentControllerIT extends ApplicationTests {
 
@@ -33,7 +35,13 @@ public class StudentControllerIT extends ApplicationTests {
     private StudentRepository repository;
     
     @Autowired
-    private ResultContainerRepository resultContainerRepository;
+    private StudentItemRecordRepository studentItemRecordRepository;
+    
+    @Autowired
+    private ResultRepository resultRepository;
+    
+    @Autowired
+    private SomeEntityRepository someEntityRepository;
     
     private static Student student1 = new Student();
     private static Student student2 = new Student();
@@ -76,7 +84,12 @@ public class StudentControllerIT extends ApplicationTests {
             learnItemsList.addLearnItem(learnitem3);
             learnItemsList.addLearnItem(learnitem4);
             
+            /*for(Integer i = 0; i<1000; i++){
+            	learnItemsList.addLearnItem(new Word("exampleword"+i,"exampletranslation"+i));
+            }*/
+            
             repository.save(student1);
+            //repository.save(student2);
             
             initializedFlag = true;
     	}    
@@ -92,6 +105,11 @@ public class StudentControllerIT extends ApplicationTests {
                 .andExpect(jsonPath("$[0].name").value(STUDENT1NAME))
                 .andExpect(jsonPath("$").isArray())
         		.andExpect(jsonPath("$",hasSize(1)));
+    }
+    
+    @Test
+    public void validate_get_student_again() throws Exception {
+    	mockMvc.perform(get("/students/"+student1.getId())).andExpect(status().isOk());
     }
     
     @Test
@@ -124,7 +142,18 @@ public class StudentControllerIT extends ApplicationTests {
     
     @Test
     public void validate_result_added() throws Exception{
-    	mockMvc.perform(post(resultresource,student1.getId(),learnitem1.getId()).param("result", "true"));
+    	assertTrue(studentItemRecordRepository.getStudentItemRecordForStudentAndLearnItemList(student1.getId(), learnitem1.getId()) == null);
+    	mockMvc.perform(post(resultresource,student1.getId(),learnitem1.getId()).param("result", "true")).andExpect(status().isOk());
+    	assertTrue(studentItemRecordRepository.getStudentItemRecordForStudentAndLearnItemList(student1.getId(), learnitem1.getId()) != null);
+    }
+    
+    @Test
+    public void test(){
+    	SomeEntity entity = new SomeEntity();
+        long start = System.currentTimeMillis();
+        someEntityRepository.save(entity);
+        long end = System.currentTimeMillis();
+        System.out.println("cost time:" + (end - start));
     }
 
 }

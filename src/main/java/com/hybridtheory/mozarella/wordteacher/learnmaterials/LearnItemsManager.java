@@ -3,7 +3,6 @@ package com.hybridtheory.mozarella.wordteacher.learnmaterials;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -12,9 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.OrderBy;
 import javax.persistence.Transient;
 
 import com.hybridtheory.mozarella.users.Student;
@@ -163,8 +160,5 @@ public class LearnItemsManager {
 		}
 		return learnItemsList;
 	}
-	
-	public void acceptResult(LearnItem learnItem, Boolean isCorrect){
-		learnItem.registerResult(owner,isCorrect);
-	}
+
 }

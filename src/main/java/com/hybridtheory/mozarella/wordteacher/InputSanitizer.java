@@ -1,24 +1,19 @@
 package com.hybridtheory.mozarella.wordteacher;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 import org.springframework.util.StringUtils;
 
 
-@Entity
-public class InputSanitizer {
+
+public class InputSanitizer implements Serializable {
 	
-	@Id @GeneratedValue(strategy=GenerationType.AUTO)
-	private Integer id;
-	
-	@ElementCollection
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private List<String> forbiddenWords = new ArrayList<String>();
 
 	public InputSanitizer() {
