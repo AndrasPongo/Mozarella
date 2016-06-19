@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.hybridtheory.mozarella.persistence.ResultRepository;
 import com.hybridtheory.mozarella.persistence.SomeEntityRepository;
 import com.hybridtheory.mozarella.persistence.StudentItemRecordRepository;
 import com.hybridtheory.mozarella.persistence.StudentRepository;
@@ -36,9 +35,6 @@ public class StudentControllerIT extends ApplicationTests {
     
     @Autowired
     private StudentItemRecordRepository studentItemRecordRepository;
-    
-    @Autowired
-    private ResultRepository resultRepository;
     
     @Autowired
     private SomeEntityRepository someEntityRepository;

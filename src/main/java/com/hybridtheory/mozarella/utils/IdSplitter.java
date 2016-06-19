@@ -1,4 +1,4 @@
-package com.hybridtheory.mozarella.api;
+package com.hybridtheory.mozarella.utils;
 
 import java.util.Arrays;
 import java.util.List;

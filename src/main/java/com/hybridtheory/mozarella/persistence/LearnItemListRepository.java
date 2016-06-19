@@ -1,13 +1,16 @@
 package com.hybridtheory.mozarella.persistence;
 
+import java.util.List;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
 
 public interface LearnItemListRepository extends CrudRepository<LearnItemList,Integer> {
 	
-	//TODO: implement this correctly
-	//@Query("SELECT l FROM Learnitemslist l, Student s, where t.title in ?1")
-	//public Iterable<LearnItemsList> findByStudent_Id(List<Integer> ids);
+	public List<LearnItemList> findByLanguage(List<String> fromLanguages, String toLanguage);
 	
 }

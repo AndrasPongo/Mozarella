@@ -15,7 +15,6 @@ public interface LearnItemRepository extends JpaRepository<LearnItem,Integer> {
 	@Query("select distinct i from Student s join s.learnItemManager m join m.learnItemLists l join l.learnItems i, StudentItemRecord r where s.id = :studentId and l.id in:listIds and r.student = s order by r.priority")
 	public List<LearnItem> getPracticedLearnItemsForStudent(@Param("studentId") Integer studentId, @Param("listIds") List<Integer> learnItemListIds,Pageable pageable);
 	
-	//"select distinct i from Student s join s.learnItemManager m join m.learnItemLists l join l.learnItems i left join i.studentWithResults swr where l.id in :listIds and s.id = :studentId and swr = null"
 	@Query("select i from Student s join s.learnItemManager m join m.learnItemLists l join l.learnItems i where s.id = :studentId and l.id in :listIds and not exists (select r from StudentItemRecord r where r.student = s)")
 	public List<LearnItem> getNewItemsForStudent(@Param("studentId") Integer studentId, @Param("listIds") List<Integer> learnItemListids,Pageable pageable);
 	
@@ -27,4 +26,7 @@ public interface LearnItemRepository extends JpaRepository<LearnItem,Integer> {
 		
 		return toReturn;
 	}
+
+	@Query("select i from LearnItemList l join l.learnItems i")
+	public List<LearnItem> getLearnItemsForLearnItemList(Integer id, PageRequest pageRequest);
 }

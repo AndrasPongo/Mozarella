@@ -9,8 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.hybridtheory.mozarella.users.Student;
+import com.hybridtheory.mozarella.wordteacher.teacher.ItemPrioritizer;
 
 @Entity
 public class StudentItemRecord {
@@ -27,10 +31,15 @@ public class StudentItemRecord {
 	@OneToMany(mappedBy="record")
 	private List<Result> results = new LinkedList<Result>();
 	
+	
+	@Transient
+	@Autowired
+	private ItemPrioritizer itemPrioritizer;
+	
 	private static final Integer numberOfStoredResults = 5;
 	private Integer chosenPicture;
 	private Integer strength;
-	private Integer priority;
+	private Double priority;
 	
 	public StudentItemRecord(){
 		
@@ -44,10 +53,12 @@ public class StudentItemRecord {
 	public void registerResult(Boolean wasSuccessful){
 		Result r = new Result(wasSuccessful, this);
 		results.add(r);
+		recalculatePriority();
 	}
 	
-	private void recaluclatePriority(){
-		//TODO: use a separate class for this purpose 
+	private void recalculatePriority(){
+		//this.priority = itemPrioritizer.assignPriority(results);
+		//can't inject itemPrioritizer, probably because this entity is not in the appcontext
 	}
 
 	public LearnItem getLearnItem() {
@@ -78,7 +89,7 @@ public class StudentItemRecord {
 		return strength;
 	}
 
-	public Integer getPriority() {
+	public Double getPriority() {
 		return priority;
 	}
 }

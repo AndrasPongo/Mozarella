@@ -1,7 +1,9 @@
 package com.hybridtheory.mozarella.wordteacher.learnmaterials;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -11,10 +13,12 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Transient;
 
+import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.InputSanitizer;
 
 @Entity
@@ -22,7 +26,19 @@ public class LearnItemList implements Comparable<LearnItemList>, Iterable<LearnI
 	
 	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
+	
+	@ManyToMany
+	private List<Student> contributors = new ArrayList<Student>();
+	
+	private Boolean isPublic;
+	
+	private String fromLanguage;
+	
+	private String toLanguage;
+	
 	private String name = "";
+	
+	private String description;
 	
 	@OneToMany(mappedBy="learnItemList", cascade = { CascadeType.PERSIST, CascadeType.REFRESH }, fetch=FetchType.LAZY)
 	@OrderBy("priority")
@@ -125,6 +141,30 @@ public class LearnItemList implements Comparable<LearnItemList>, Iterable<LearnI
 	
 	public Collection<LearnItem> getLearnItems(){
 		return learnItems;
+	}
+
+	public List<Student> getContributors() {
+		return contributors;
+	}
+
+	public void setContributors(List<Student> contributors) {
+		this.contributors = contributors;
+	}
+
+	public Boolean getIsPublic() {
+		return isPublic;
+	}
+
+	public void setIsPublic(Boolean isPublic) {
+		this.isPublic = isPublic;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 }
