@@ -1,4 +1,4 @@
-package com.hybridtheory.mozarella.persistence;
+package com.hybridtheory.mozarella.persistence.repository;
 
 import java.util.List;
 

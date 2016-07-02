@@ -1,4 +1,4 @@
-package com.hybridtheory.mozarella.persistence;
+package com.hybridtheory.mozarella.persistence.repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +12,10 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.hybridtheory.mozarella.persistence.LearnItemListRepositoryCustom;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
 
-public class LearnItemListRepositoryImpl implements LearnItemListRepository {
+public class LearnItemListRepositoryImpl implements LearnItemListRepositoryCustom {
 
 	@Autowired
 	LearnItemListRepository learnItemListRepository;
@@ -22,7 +23,7 @@ public class LearnItemListRepositoryImpl implements LearnItemListRepository {
 	@PersistenceContext
     private EntityManager entityManager;
 	
-	public List<LearnItemList> findByLanguage(List<String> fromLanguages, String toLanguage) {
+	public List<LearnItemList> findBasedOnLanguage(List<String> fromLanguages, String toLanguage) {
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		
 		CriteriaQuery<LearnItemList> criteria = builder.createQuery(LearnItemList.class);

@@ -1,7 +1,18 @@
 package com.hybridtheory.mozarella.users;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 public class StudentFactory {
-	public static Student createStudent(String credentialType, String value){
+	
+	@Autowired
+	PasswordEncoder encoder;
+	
+	@Value("${jwt.secret}") //the same value can be used as for the jwt secret
+	String salt;
+	
+	public Student createStudent(CredentialType credentialType, String value){
 		
 		Student newStudent = new Student();
 		
@@ -19,8 +30,10 @@ public class StudentFactory {
 		return newStudent;
 	}
 	
-	private static Student giveHashedPasswordForStudent(Student Student, String password){
-		//TODO: create a hash, a salt, and give them to the user
-		return Student;
+	private Student giveHashedPasswordForStudent(Student student, String password){
+		String hashedPassword = encoder.encode(password+salt);
+		student.setPassword(hashedPassword);
+		
+		return student;
 	}
 }

@@ -48,6 +48,8 @@ public class Student implements UserDetails {
 	private String password = "";
 	private String salt = "abcd";
 	
+	private String role;
+	
 	@JsonIgnore
 	@OneToOne(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY, optional = false)
 	private LearnItemsManager learnItemManager;
@@ -69,8 +71,13 @@ public class Student implements UserDetails {
 		if(pet == null){
 			 pet = new CubeFish();
 		}
+		role = "user";
 	}
 	
+	public Student(Integer id2, String username, String token, List<GrantedAuthority> authorityList) {
+		// TODO Auto-generated constructor stub
+	}
+
 	public String getName() {
 		return this.name;
 	}
@@ -190,8 +197,27 @@ public class Student implements UserDetails {
 		return false;
 	}
 	
+	public String getRole(){
+		return role;
+	}
+	
 	public String getSalt(){
 		return salt;
 	}
+
+	public void setUsername(String name) {
+		this.name = name;
+	}
 	
+	public void setId(Integer id){
+		this.id = id;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+	
+	public void setPassword(String password){
+		this.password = password;
+	}
 }
