@@ -16,9 +16,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.hybridtheory.mozarella.persistence.SomeEntityRepository;
-import com.hybridtheory.mozarella.persistence.StudentItemRecordRepository;
-import com.hybridtheory.mozarella.persistence.StudentRepository;
+import com.hybridtheory.mozarella.persistence.repository.SomeEntityRepository;
+import com.hybridtheory.mozarella.persistence.repository.StudentItemRecordRepository;
+import com.hybridtheory.mozarella.persistence.repository.StudentRepository;
 import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
@@ -52,9 +52,9 @@ public class StudentControllerIT extends ApplicationTests {
 
     private MockMvc mockMvc;
     
-    private static String learnitemlistresource = "/students/{ids}/learnitemslists/{learnItemListIds}";
-    private static String learnitemresource = "/students/{ids}/learnitemslists/{learnItemListIds}/learnitems";
-    private static String resultresource = "/students/{id}/learnitems/{learnItemId}/results";
+    private static String learnitemlistresource = "/api/students/{ids}/learnitemslists/{learnItemListIds}";
+    private static String learnitemresource = "/api/students/{ids}/learnitemslists/{learnItemListIds}/learnitems";
+    private static String resultresource = "/api/students/{id}/learnitems/{learnItemId}/results";
     
     private static Boolean initializedFlag = false;
     

@@ -11,17 +11,16 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 	
     public JwtAuthenticationFilter(AuthenticationManager manager) {
         super("/api/**");
+        RequestMatcher matcher = new AntPathRequestMatcher("/api/**");
+        setRequiresAuthenticationRequestMatcher(matcher);
         this.setAuthenticationManager(manager);
-    }
-
-    @Override
-    protected boolean requiresAuthentication(HttpServletRequest request, HttpServletResponse response) {
-        return true;
     }
 
     @Override
@@ -34,7 +33,6 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
         }
 
         String authToken = header.substring(7);
-
         JwtAuthenticationToken authRequest = new JwtAuthenticationToken(authToken);
 
         return getAuthenticationManager().authenticate(authRequest);
@@ -45,8 +43,6 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
             throws IOException, ServletException {
         super.successfulAuthentication(request, response, chain, authResult);
 
-        // As this authentication is in HTTP header, after success we need to continue the request normally
-        // and return the response as if the resource was not secured at all
         chain.doFilter(request, response);
     }
 }

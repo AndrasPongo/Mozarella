@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.hybridtheory.mozarella.persistence.LearnItemListRepository;
+import com.hybridtheory.mozarella.persistence.repository.LearnItemListRepository;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.Word;
@@ -36,10 +36,10 @@ public class LearnItemListControllerIT extends ApplicationTests {
 
     private MockMvc mockMvc;
     
-    private static String learnitemlistsresource = "/learnitemlists";
-    private static String learnitemlistresource = "/learnitemlists/{id}";
-    private static String learnitemresource = "/learnitemlists/{id}/learnitems";
-    private static String resultresource = "/students/{id}/learnitems/{learnItemId}/results";
+    private static String learnitemlistsresource = "/api/learnitemlists";
+    private static String learnitemlistresource = "/api/learnitemlists/{id}";
+    private static String learnitemresource = "/api/learnitemlists/{id}/learnitems";
+    private static String resultresource = "/api/students/{id}/learnitems/{learnItemId}/results";
     
     private static final String LEARNITEMLIST1NAME = "learnItemList1";
     
