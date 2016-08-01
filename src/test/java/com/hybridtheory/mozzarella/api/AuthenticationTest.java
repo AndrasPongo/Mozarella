@@ -1,7 +1,9 @@
 package com.hybridtheory.mozzarella.api;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.apache.commons.codec.binary.Base64;
@@ -11,6 +13,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -34,20 +37,21 @@ public class AuthenticationTest extends ApplicationTests {
     private static String learnitemlistresource = "/api/learnitemlists/{id}";
     
     private static String userPswd = "somePassword";
-    private static String userName = "Anakin Skywalker";
+    private static String userName = "Anakin Skywalker63";
     
-    private static String jwtToken;
+    private String jwtToken;
     
     @Before
     public void setup() {
     	mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+    			.apply(SecurityMockMvcConfigurers.springSecurity())
                 .build();
 
     }  
     
     @Test
     public void t1_validate_cant_access_resource_before_authentication() throws Exception{
-    	mockMvc.perform(get(learnitemlistresource))
+    	mockMvc.perform(get(learnitemlistresource,1))
     	.andExpect(status().isUnauthorized());
     }
       
@@ -66,8 +70,18 @@ public class AuthenticationTest extends ApplicationTests {
     
     @Test
     public void t3_validate_can_access_resource_with_token() throws Exception{
-    	mockMvc.perform(get(learnitemlistresource)
-    	.header("Authorization", jwtToken))
+    	String basicDigestHeaderValue = "Basic " + new String(Base64.encodeBase64((userName+":"+userPswd).getBytes()));
+    	
+    	MvcResult result = this.mockMvc.perform(post(loginresource)
+				.header("Authorization", basicDigestHeaderValue)
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andReturn();
+	
+    	jwtToken = result.getResponse().getContentAsString();
+    	
+    	mockMvc.perform(get(learnitemlistresource,1)
+    	.header("Authorization", "Bearer "+jwtToken))
     	.andExpect(status().isOk());
     }
 

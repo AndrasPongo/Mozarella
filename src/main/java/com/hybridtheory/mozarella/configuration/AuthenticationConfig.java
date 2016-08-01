@@ -13,12 +13,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import com.hybridtheory.mozzarella.authentication.JwtAuthenticationFilter;
 import com.hybridtheory.mozzarella.authentication.JwtAuthenticationProvider;
 import com.hybridtheory.mozzarella.authentication.JwtUtil;
 import com.hybridtheory.mozzarella.authentication.RestAuthenticationEntryPoint;
+import com.hybridtheory.mozzarella.authentication.RestAuthenticationSuccessHandler;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled=true)
@@ -28,12 +30,6 @@ public class AuthenticationConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	AuthenticationManager authenticationManager;
-	
-  
-		/*@Bean
-	  public MethodSecurityService methodSecurityService() {
-	    return new MethodSecurityServiceImpl()
-	  }*/
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -42,21 +38,22 @@ public class AuthenticationConfig extends WebSecurityConfigurerAdapter {
             .csrf().disable()
             .authorizeRequests()
             .antMatchers("/login**").permitAll()
-            .antMatchers("/registration**").permitAll()
+            .antMatchers("/register**").permitAll()
             .antMatchers("/static/**").permitAll()
-            .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
-            .antMatchers("/**").access("hasRole('ROLE_USER')")
+            .antMatchers("/admin/**").authenticated()//.access("hasRole('ROLE_ADMIN')")
+            .antMatchers("/**").authenticated()//.access("hasRole('ROLE_USER')")
         .and()
 	        .exceptionHandling()
 	        .authenticationEntryPoint(authenticationEntryPoint())
         .and()
             .addFilterBefore(authenticationFilter(),BasicAuthenticationFilter.class)
+            .authenticationProvider(authenticationProvider())
             .authorizeRequests()
             .antMatchers("/login**").permitAll()
-            .antMatchers("/registration**").permitAll()
+            .antMatchers("/register**").permitAll()
             .antMatchers("/static/**").permitAll()
-            .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
-            .antMatchers("/**").access("hasRole('ROLE_USER')")
+            .antMatchers("/admin/**").authenticated()//.access("hasRole('ROLE_ADMIN')")
+            .antMatchers("/**").authenticated()//.access("hasRole('ROLE_USER')")
          .and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             ;
@@ -81,7 +78,16 @@ public class AuthenticationConfig extends WebSecurityConfigurerAdapter {
   
   @Bean
   JwtAuthenticationFilter authenticationFilter(){
-	  return new JwtAuthenticationFilter(authenticationManager);
+	  try {
+		return new JwtAuthenticationFilter(super.authenticationManagerBean(), successHandler());
+	} catch (Exception e) {
+		return new JwtAuthenticationFilter(null,successHandler());
+	}
+  }
+  
+  @Bean
+  AuthenticationSuccessHandler successHandler(){
+	  return new RestAuthenticationSuccessHandler();
   }
   
   @Bean 

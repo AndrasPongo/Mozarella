@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hybridtheory.mozarella.persistence.LearnItemListRepositoryCustom;
+import com.hybridtheory.mozarella.persistence.repository.LearnItemListRepository;
 import com.hybridtheory.mozarella.persistence.repository.LearnItemRepository;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
@@ -27,7 +28,10 @@ public class LearnItemListController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(StudentController.class);
 	
 	@Autowired
-    private LearnItemListRepositoryCustom learnItemListRepository;
+    private LearnItemListRepositoryCustom learnItemListRepositoryCustom;
+	
+	@Autowired
+    private LearnItemListRepository learnItemListRepository;
 	
 	@Autowired
     private LearnItemRepository learnItemRepository;
@@ -35,12 +39,12 @@ public class LearnItemListController {
     @RequestMapping(value="/api/learnitemlists", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Iterable<LearnItemList>> getLearnItemLists(@RequestParam("fromLanguages") List<String> fromLanguages, @RequestParam("toLanguage") String toLanguage) {
     	Iterable<LearnItemList> lists;
-    	lists = learnItemListRepository.findBasedOnLanguage(fromLanguages,toLanguage);
+    	lists = learnItemListRepositoryCustom.findBasedOnLanguage(fromLanguages,toLanguage);
     	
     	return new ResponseEntity<Iterable<LearnItemList>>(lists,HttpStatus.OK);
     }
 	
-    @RequestMapping(value="/api/learnitemlists/{id}", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value="/api/learnitemlists/{id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<LearnItemList> getLearnItemList(@PathVariable("id") Integer id) {
     	return new ResponseEntity<LearnItemList>(learnItemListRepository.findOne(id),HttpStatus.OK);
     }

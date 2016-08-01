@@ -7,20 +7,26 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 	
-    public JwtAuthenticationFilter(AuthenticationManager manager) {
+	@Autowired
+	AuthenticationSuccessHandler successHandler;
+	
+    public JwtAuthenticationFilter(AuthenticationManager manager, AuthenticationSuccessHandler successHandler) {
         super("/api/**");
         RequestMatcher matcher = new AntPathRequestMatcher("/api/**");
         setRequiresAuthenticationRequestMatcher(matcher);
         this.setAuthenticationManager(manager);
+        this.setAuthenticationSuccessHandler(successHandler);
     }
 
     @Override
@@ -35,6 +41,8 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
         String authToken = header.substring(7);
         JwtAuthenticationToken authRequest = new JwtAuthenticationToken(authToken);
 
+        AuthenticationManager manager = getAuthenticationManager();
+        
         return getAuthenticationManager().authenticate(authRequest);
     }
 

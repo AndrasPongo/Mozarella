@@ -14,7 +14,7 @@ import com.hybridtheory.mozarella.wordteacher.teacher.ItemPrioritizerImpl1;
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan(basePackages={"com.hybridtheory.mozarella"})
+@ComponentScan(basePackages={"com.hybridtheory.mozarella","com.hybridtheory.mozarella"})
 @EnableJpaRepositories(basePackages={"com.hybridtheory.mozarella.persistence"})
 public class Config{
 

@@ -16,13 +16,13 @@ public class StudentFactory {
 		
 		Student newStudent = new Student();
 		
-		if(credentialType.equals(CredentialType.USERNAMEPASSWORD.toString())){
+		if(credentialType.equals(CredentialType.USERNAMEPASSWORD)){
 			newStudent.setName(value.split(",")[0]);
-			giveHashedPasswordForStudent(newStudent,value);
-		} else if(credentialType.equals(CredentialType.FACEBOOK.toString())){
+			giveHashedPasswordForStudent(newStudent,value.split(",")[1]);
+		} else if(credentialType.equals(CredentialType.FACEBOOK)){
 			//TODO set facebookid with value
 			//TODO: come up with a way to generate a name for the user
-		} else if(credentialType.equals(CredentialType.GOOGLE.toString())){
+		} else if(credentialType.equals(CredentialType.GOOGLE)){
 			//TODO set googleid with value
 			//TODO: come up with a way to generate a name for the user
 		}
@@ -31,7 +31,7 @@ public class StudentFactory {
 	}
 	
 	private Student giveHashedPasswordForStudent(Student student, String password){
-		String hashedPassword = encoder.encode(password+salt);
+		String hashedPassword = encoder.encode(password);
 		student.setPassword(hashedPassword);
 		
 		return student;

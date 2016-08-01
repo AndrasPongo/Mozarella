@@ -1,5 +1,7 @@
 package com.hybridtheory.mozarella.api;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -18,7 +20,9 @@ import com.hybridtheory.mozarella.users.StudentFactory;
 import com.hybridtheory.mozzarella.authentication.JwtUtil;
 import com.hybridtheory.mozzarella.authentication.UsernamePasswordDecoder;
 
-@RestController("/login")
+
+
+@RestController
 public class LoginController {
 
 	@Autowired
@@ -36,21 +40,20 @@ public class LoginController {
 	@Autowired
 	PasswordEncoder encoder;
 	
-	@Value("${jwt.secret}") //the same value can be used as for the jwt secret
-	String salt;
-	
     @RequestMapping(value="/login", method=RequestMethod.POST)
     public ResponseEntity<String> usernamePasswordLogin(@RequestHeader("Authorization") String authHeader) {
     	String[] decoded = UsernamePasswordDecoder.decodeUserNamePassword(authHeader);
     	String username = decoded[0];
     	String password = decoded[1];
     	
-    	Student student = studentRepository.findByName(username);
-    	if(student==null || !student.getPassword().equals(encoder.encode(password+salt))){
+    	Student student = null;
+    	student = getStudentFromRepo(username, student);
+    	
+    	if(student==null || !encoder.matches(password, student.getPassword())){
     		return new ResponseEntity<String>("unauthorized access",HttpStatus.UNAUTHORIZED);
     	}
     	
-    	return new ResponseEntity<String>("successful authentication",HttpStatus.OK);
+    	return new ResponseEntity<String>(jwtUtil.generateToken(student),HttpStatus.OK);
     }
     
     @RequestMapping(value="/register", method=RequestMethod.POST)
@@ -59,7 +62,8 @@ public class LoginController {
     	String username = decoded[0];
     	String password = decoded[1];
     	
-    	Student student = studentRepository.findByName(username);
+    	Student student = null;
+    	student = getStudentFromRepo(username, student);
     	
     	if(student==null){
     		student = studentFactory.createStudent(CredentialType.USERNAMEPASSWORD, username+","+password);
@@ -70,5 +74,13 @@ public class LoginController {
     	
     	return new ResponseEntity<String>(jwtUtil.generateToken(student),HttpStatus.OK);
     }
+
+	private Student getStudentFromRepo(String username, Student student) {
+		List<Student> studentsWithName = studentRepository.findByName(username);
+    	if(studentsWithName.size()>0){
+    		student = studentsWithName.get(0);
+    	}
+		return student;
+	}
 	
 }
