@@ -6,6 +6,7 @@ import java.util.List;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
 
+//TODO: Use a statistics class instead. The stats should be updated in a separate thread when results are returned (e.g. newResultsEvent)
 public class StudentProgressTracker {
 	private Student owner;
 	
@@ -21,6 +22,7 @@ public class StudentProgressTracker {
 		return this.owner;
 	}
 	
+	//TODO: handle such things through repositories
 	private List<String> returnLearntWordsOfStudent() {
 		List<String> alreadyLearntWords = new ArrayList<String>();
 		List<LearnItemList> learnItemListsOfStudent = this.owner.getLearnItemLists();
@@ -34,6 +36,7 @@ public class StudentProgressTracker {
 		return alreadyLearntWords;		
 	}
 	
+	//TODO: this should be updated when there is a new result, and only queried later
 	public int returnLearntWordsCountOfStudent() {
 		List<String> alreadyLearntWords = returnLearntWordsOfStudent();
 		if (alreadyLearntWords == null) {
@@ -42,7 +45,7 @@ public class StudentProgressTracker {
 		return alreadyLearntWords.size();
 	}
 	
-	
+	//TODO: repositories
 	public int returnWordsOfCertainStrength(LearnItemList learnItemsList, int strength) {
 	int count = 0;
 		for(LearnItem li : learnItemsList) {

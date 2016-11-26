@@ -98,8 +98,8 @@ public class LearnItemsManagerTest {
 		Student testStudent1 = new Student();
 		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
 		LearnItemList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
-		LearnItemFactory learnItemFactory = new LearnItemFactory();
-		LearnItem learnItem = learnItemFactory.createLearnItem("testword", "xyz");
+
+		LearnItem learnItem = new LearnItem("testword", "xyz");
 		
 		//When
 		learnItemsManager.addNewLearnItemToLearnItemsList(existingLearnItemsList, learnItem);
@@ -120,10 +120,12 @@ public class LearnItemsManagerTest {
 		LearnItem learnItem = learnItemsManager.getLearnItemFromList(existingLearnItemsList, "testword");
 		
 		//Then
-		assertTrue(learnItem.getText() == "testword" && learnItem.getTranslation() == "xyz");
+		assertTrue(learnItem.getText().equals("testword") && learnItem.getTranslation().equals("xyz"));
 	}
 	
-	@Test
+	/* Getting a learnItem from a list is not the learnItemsManager's responsibility
+	 * 
+	 * @Test
 	public void learnItemsManager_getValidMultiWordFromExistingList() {
 		//Given
 		Student testStudent1 = new Student();
@@ -135,8 +137,8 @@ public class LearnItemsManagerTest {
 		LearnItem learnItem = learnItemsManager.getLearnItemFromList(existingLearnItemsList, "test multi word");
 		
 		//Then
-		assertTrue(learnItem.getText() == "test multi word" && learnItem.getTranslation() == "abc xyz");
-	}
+		assertTrue(learnItem.getText(),equals("test multi word") && learnItem.getTranslation().equals("abc xyz"));
+	}*/
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void learnItemsManager_addNewValidWordToNotExistingList() {
@@ -203,8 +205,9 @@ public class LearnItemsManagerTest {
 		learnItemsManager.setStrengthOfLearnItem(learnItem, 11);
 	}
 	
+	/* this would be an integration test, not a unit test 
 	@Test(expected = IllegalArgumentException.class)
 	public void learnItemsToPracticeAreOrderedByPriority() {
-		//TODO: figure out if this can be tested
-	}
+		
+	} */
 }

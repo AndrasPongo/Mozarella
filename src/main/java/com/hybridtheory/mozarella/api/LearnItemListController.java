@@ -1,6 +1,7 @@
 package com.hybridtheory.mozarella.api;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,17 +37,26 @@ public class LearnItemListController {
 	@Autowired
     private LearnItemRepository learnItemRepository;
 
-    @RequestMapping(value="/api/learnitemlists", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Iterable<LearnItemList>> getLearnItemLists(@RequestParam("fromLanguages") List<String> fromLanguages, @RequestParam("toLanguage") String toLanguage) {
+    @RequestMapping(value="/api/learnitemlists", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Iterable<LearnItemList>> getLearnItemLists(@RequestParam(value="fromLanguages", required = false) List<String> fromLanguages, @RequestParam(value="toLanguage", required=false) String toLanguage) {
+    	//TODO: implement pagination
     	Iterable<LearnItemList> lists;
-    	lists = learnItemListRepositoryCustom.findBasedOnLanguage(fromLanguages,toLanguage);
+    	if(fromLanguages != null && toLanguage != null){
+    		lists = learnItemListRepositoryCustom.findBasedOnLanguage(fromLanguages,toLanguage);
+    	} else {
+    		lists = learnItemListRepository.findAll();
+    	}
     	
     	return new ResponseEntity<Iterable<LearnItemList>>(lists,HttpStatus.OK);
     }
 	
     @RequestMapping(value="/api/learnitemlists/{id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<LearnItemList> getLearnItemList(@PathVariable("id") Integer id) {
-    	return new ResponseEntity<LearnItemList>(learnItemListRepository.findOne(id),HttpStatus.OK);
+    public ResponseEntity<Iterable<LearnItemList>> getLearnItemList(@PathVariable("id") Integer id) {
+    	LearnItemList list = learnItemListRepository.findOne(id);
+    	List<LearnItemList> result = new ArrayList<LearnItemList>();
+    	result.add(list);
+    	
+    	return new ResponseEntity<Iterable<LearnItemList>>(result,HttpStatus.OK);
     }
     
     @RequestMapping(value="/api/learnitemlists/{id}/learnitems", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)

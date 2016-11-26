@@ -4,7 +4,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.Word;
 
 public class LearnItemsListTest {
 
@@ -87,7 +86,7 @@ public class LearnItemsListTest {
 		//Given
 		boolean success = false;
 		LearnItemList learnItemList = new LearnItemList("testList1");
-		LearnItem testLearnItem = new Word("testword", "xyz");
+		LearnItem testLearnItem = new LearnItem("testword", "xyz");
 		int originalLearnItemNumber = learnItemList.getNumberOfLearnItemsInList();
 		
 		//When
@@ -116,7 +115,7 @@ public class LearnItemsListTest {
 		//Given
 		boolean success = false;
 		LearnItemList learnItemList = new LearnItemList("testList1");
-		LearnItem testLearnItem = new Word("testword", "xyz");
+		LearnItem testLearnItem = new LearnItem("testword", "xyz");
 		learnItemList.addLearnItem(testLearnItem);
 		int originalLearnItemNumber = learnItemList.getNumberOfLearnItemsInList();
 		
@@ -131,7 +130,7 @@ public class LearnItemsListTest {
 	public void learnItemsList_getExistingLearnItem() {
 		//Given
 		LearnItemList learnItemList = new LearnItemList("testList1");
-		LearnItem testLearnItem = new Word("testword", "xyz");
+		LearnItem testLearnItem = new LearnItem("testword", "xyz");
 		learnItemList.addLearnItem(testLearnItem);
 		
 		//When
@@ -148,7 +147,7 @@ public class LearnItemsListTest {
 		//Given
 		boolean success = false;
 		LearnItemList learnItemList = new LearnItemList("testList1");
-		LearnItem testLearnItem = new Word("testword", "xyz");
+		LearnItem testLearnItem = new LearnItem("testword", "xyz");
 		learnItemList.addLearnItem(testLearnItem);
 		int originalLearnItemNumber = learnItemList.getNumberOfLearnItemsInList();
 		
@@ -181,7 +180,7 @@ public class LearnItemsListTest {
 		int originalLearnItemNumber = learnItemList.getNumberOfLearnItemsInList();
 		
 		//When
-		success = learnItemList.removeLearnItem(new Word("notexisting", "xyz"));
+		success = learnItemList.removeLearnItem(new LearnItem("notexisting", "xyz"));
 
 		//Then
 		assertTrue(success == false && learnItemList.getNumberOfLearnItemsInList() == originalLearnItemNumber);

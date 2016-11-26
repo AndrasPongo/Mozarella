@@ -4,11 +4,13 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.*;
-import com.hybridtheory.mozarella.wordteacher.teacher.Teacher;
 
 public class WordEvaluationTest {
 
-	@Test
+	//Removed. This tested teacher, which doesn't exist anymore, plus the solutions
+	//are evaluated by the frontend to avoid sending the data back and forth
+	
+	/*@Test
 	public void testEvaluations_answerIsCorrect() {
 		//Given
 		Teacher teacher = new Teacher();
@@ -30,6 +32,6 @@ public class WordEvaluationTest {
 				
 		//Then
 		assertTrue(!teacher.Evaluate(testword, "_xyz_"));
-	}	
+	}	*/
 	
 }

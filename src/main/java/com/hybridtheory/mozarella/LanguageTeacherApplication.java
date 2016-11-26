@@ -11,17 +11,16 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @SpringBootApplication
-@ComponentScan({"com.hybridtheory.mozarella.configuration"})
+@ComponentScan({"com.hybridtheory.mozarella.configuration.general","com.hybridtheory.mozarella.configuration.authentication"})
 public class LanguageTeacherApplication {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(LanguageTeacherApplication.class);
-	//private static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);;
 
 	public static void main(String[] args) {
 		
-		LOGGER.info("Starting LanguageTeacherApplication");
+		LOGGER.info("Starting LanguageTeacherApplication1");
 		ApplicationContext context = SpringApplication.run(LanguageTeacherApplication.class, args);
 		
-	}
+	} 
 
 }

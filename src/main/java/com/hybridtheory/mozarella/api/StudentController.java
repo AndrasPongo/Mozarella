@@ -66,72 +66,10 @@ public class StudentController {
     public ResponseEntity<List<Student>> getStudents(@PathVariable("ids") String ids) {
     	return new ResponseEntity<List<Student>>(getStudentsByIds(IdSplitter.getIds(ids)),HttpStatus.OK);
     }
-   
-    @RequestMapping(value="/students/{ids}/learnitemslists/", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<List<LearnItemList>> getLearnItemsLists(@PathVariable("ids") String ids) {
-        return getLearnItemsLists(ids, "");
-    }
-    
-    @RequestMapping(value="/students/{ids}/learnitemslists/{learnItemListIds}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<List<LearnItemList>> getLearnItemsLists(@PathVariable("ids") String ids, @PathVariable("learnItemListIds") String learnItemsListIds) {
-    	List<Integer> learnItemListIdInts = IdSplitter.getIds(learnItemsListIds);
-    	List<Integer> idInts = IdSplitter.getIds(ids);
-    	
-    	List<LearnItemList> learnItemsLists = getLearnItemsListsForUsers(getStudentsByIds(idInts),learnItemListIdInts);
-    	
-    	return new ResponseEntity<List<LearnItemList>>(learnItemsLists,HttpStatus.OK);
-    }
-    
-    
-	@RequestMapping(value="/students/{ids}/learnitemslists/{learnItemListIds}/learnitems", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<List<LearnItem>> getLearnItems(@PathVariable("ids") String ids, 
-    		@PathVariable("learnItemListIds") String learnItemsListIds, @RequestParam("number") Integer numberOfLearnItems) {
-    	
-		List<Integer> learnItemListIds = IdSplitter.getIds(learnItemsListIds);
-		List<Integer> studentIds = IdSplitter.getIds(ids);
-    	
-		Integer studentId;
-		
-    	if(studentIds.size()==1){
-    		studentId = studentIds.get(0);
-    	} else {
-    		return new ResponseEntity<List<LearnItem>>(HttpStatus.BAD_REQUEST);
-    	}
-		
-		List<LearnItem> learnItemsToReturn = learnItemRepository.getAllLearnItemsForStudent(studentId, learnItemListIds, new PageRequest(0,numberOfLearnItems));
-    	
-		return new ResponseEntity<List<LearnItem>>(learnItemsToReturn,HttpStatus.OK);						
-    }
-	
-    @RequestMapping(value="/students/{id}/learnitems/{learnItemId}/results", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity postResult(@PathVariable("id") Integer studentId, @RequestParam("result") Boolean result, @PathVariable("learnItemId") Integer learnItemId) {
-    	StudentItemRecord record = studentItemRecordRepository.getStudentItemRecordForStudentAndLearnItemList(studentId, learnItemId);
-    	if(record == null){
-    		Student student = studentRepository.findOne(studentId);
-    		LearnItem learnItem = learnItemRepository.findOne(learnItemId); 
-    		record = new StudentItemRecord(student,learnItem);
-    		record.registerResult(result);
-    		List<StudentItemRecord> recordList = new ArrayList<StudentItemRecord>();
-    		recordList.add(record);
-    		studentItemRecordRepository.save(recordList);
-    	}
-    	record.registerResult(result);
-    	
-    	return new ResponseEntity(HttpStatus.OK);	
-    }
     
     private List<Student> getStudentsByIds(List<Integer> ids){
     	Iterable<Student> studentsWithIds = studentRepository.findAll(ids);
     	return Lists.newArrayList(studentsWithIds);
     }
-    
-    private List<LearnItemList> getLearnItemsListsForUsers(List<Student> students, List<Integer> learnItemsListIds){
-    	//TODO WRONG! navie implementation, causes additional queries for each student, unacceptably slow
-    	//create a method in learnitemlistrepository that queries by userid insted
-    	return students.stream()
-                .map(Student::getLearnItemLists)
-                .flatMap(list -> list.stream())
-                .filter(learnItemList->learnItemsListIds.size()==0 || learnItemsListIds.contains(learnItemList.getId()))
-                .collect(Collectors.toList());
-    }
+
 }

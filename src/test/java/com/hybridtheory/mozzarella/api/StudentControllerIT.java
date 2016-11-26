@@ -23,7 +23,6 @@ import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.SomeEntity;
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.Word;
 
 public class StudentControllerIT extends ApplicationTests {
 
@@ -45,16 +44,12 @@ public class StudentControllerIT extends ApplicationTests {
     private static LearnItemList learnItemsList2;
     private static String STUDENT1NAME = "Anakin Skywalker";
     private static String STUDENT2NAME = "Qui Gon Jinn";
-    private static LearnItem learnitem1 = new Word("exampleword","exampletranslation");
-    private static LearnItem learnitem2 = new Word("exampleword2","exampletranslation2");
-    private static LearnItem learnitem3 = new Word("exampleword3","exampletranslation3");
-    private static LearnItem learnitem4 = new Word("exampleword4","exampletranslation4");
+    private static LearnItem learnitem1 = new LearnItem("exampleword","exampletranslation");
+    private static LearnItem learnitem2 = new LearnItem("exampleword2","exampletranslation2");
+    private static LearnItem learnitem3 = new LearnItem("exampleword3","exampletranslation3");
+    private static LearnItem learnitem4 = new LearnItem("exampleword4","exampletranslation4");
 
     private MockMvc mockMvc;
-    
-    private static String learnitemlistresource = "/api/students/{ids}/learnitemslists/{learnItemListIds}";
-    private static String learnitemresource = "/api/students/{ids}/learnitemslists/{learnItemListIds}/learnitems";
-    private static String resultresource = "/api/students/{id}/learnitems/{learnItemId}/results";
     
     private static Boolean initializedFlag = false;
     
@@ -116,31 +111,6 @@ public class StudentControllerIT extends ApplicationTests {
                 content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
         .andExpect(jsonPath("$").isArray())
         .andExpect(jsonPath("$",hasSize(Math.toIntExact(repository.count()))));
-    }
-    
-    @Test
-    public void validate_get_learnitemsLists() throws Exception{
-    	mockMvc.perform(get(learnitemlistresource,student1.getId(),learnItemsList.getId()+","+learnItemsList2.getId()))
-    	.andExpect(status().isOk())
-        .andExpect(
-                content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-        .andExpect(jsonPath("$").isArray());
-    }
-    
-    @Test
-    public void validate_get_learnitems() throws Exception{
-    	mockMvc.perform(get(learnitemresource,student1.getId(),learnItemsList.getId()+","+learnItemsList2.getId()).param("number", "100"))
-    	.andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-        .andExpect(jsonPath("$").isArray())
-        .andExpect(jsonPath("$",hasSize(4)));
-    }
-    
-    @Test
-    public void validate_result_added() throws Exception{
-    	assertTrue(studentItemRecordRepository.getStudentItemRecordForStudentAndLearnItemList(student1.getId(), learnitem1.getId()) == null);
-    	mockMvc.perform(post(resultresource,student1.getId(),learnitem1.getId()).param("result", "true")).andExpect(status().isOk());
-    	assertTrue(studentItemRecordRepository.getStudentItemRecordForStudentAndLearnItemList(student1.getId(), learnitem1.getId()) != null);
     }
     
     @Test

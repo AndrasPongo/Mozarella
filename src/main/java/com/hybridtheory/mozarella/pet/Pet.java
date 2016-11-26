@@ -1,6 +1,5 @@
 package com.hybridtheory.mozarella.pet;
 
-import java.time.LocalDate;
 import java.util.Map;
 
 import javax.persistence.ElementCollection;
@@ -36,13 +35,11 @@ public abstract class Pet {
 			throw new IllegalArgumentException("Invalid name for the Pet");
 		} else {
 			this.name = petName;
-			this.setLastFeedTime(LocalDate.now());
 		}
 	}
 	
 	@ElementCollection
 	protected Map<Integer, String> extras = null;
-	protected LocalDate lastFeedTime = null;
 
 	public void setName(String name) {
 		this.name = name;
@@ -74,13 +71,6 @@ public abstract class Pet {
 	public void addPoints(int points) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	public void setLastFeedTime(LocalDate lastFeedTime) {	
-	}
-	
-	public LocalDate getLastFeedTime() {
-		return null;
 	}
 
 	

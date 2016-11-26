@@ -3,10 +3,8 @@ package com.hybridtheory.mozarella.api;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,13 +18,8 @@ import com.hybridtheory.mozarella.users.StudentFactory;
 import com.hybridtheory.mozzarella.authentication.JwtUtil;
 import com.hybridtheory.mozzarella.authentication.UsernamePasswordDecoder;
 
-
-
 @RestController
 public class LoginController {
-
-	@Autowired
-	AuthenticationManager authenticationManager;
 	
 	@Autowired
 	private StudentRepository studentRepository;

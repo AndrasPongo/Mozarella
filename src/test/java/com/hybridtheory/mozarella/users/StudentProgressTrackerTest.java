@@ -1,13 +1,6 @@
 package com.hybridtheory.mozarella.users;
 
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemFactory;
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
-
+/*we don't use studentprogresstracker because of the inefficiency
 public class StudentProgressTrackerTest {
 	
 	@Test
@@ -37,8 +30,8 @@ public class StudentProgressTrackerTest {
 		//Given
 		Student student = new Student();
 		LearnItemList learnItemsList = student.addNewLearnItemsList("testLearnItemsList");
-		LearnItemFactory learnItemFactory = new LearnItemFactory();
-		LearnItem learnItem = learnItemFactory.createLearnItem("testword", "xyz");
+
+		LearnItem learnItem = new LearnItem("testword", "xyz");
 		student.addNewLearnItemToExistingList(learnItemsList, learnItem);
 		
 		StudentProgressTracker studentProgressTracker = new StudentProgressTracker(student);
@@ -56,8 +49,7 @@ public class StudentProgressTrackerTest {
 		//Given
 		Student student = new Student();
 		LearnItemList learnItemsList = student.addNewLearnItemsList("testLearnItemsList");
-		LearnItemFactory learnItemFactory = new LearnItemFactory();
-		LearnItem learnItem = learnItemFactory.createLearnItem("testword", "xyz");
+		LearnItem learnItem = new LearnItem("testword", "xyz");
 		student.addNewLearnItemToExistingList(learnItemsList, learnItem);
 		student.getLearnItemListByName("testLearnItemsList").getLearnItem("testword").setStrength(1);
 		
@@ -69,4 +61,4 @@ public class StudentProgressTrackerTest {
 		//Then
 		assertTrue(learntItemsCount==1);
 	}
-}
+} */

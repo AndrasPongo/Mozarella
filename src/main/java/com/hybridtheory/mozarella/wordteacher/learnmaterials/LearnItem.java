@@ -1,5 +1,9 @@
 package com.hybridtheory.mozarella.wordteacher.learnmaterials;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,7 +13,7 @@ import javax.persistence.ManyToOne;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class LearnItem {
+public class LearnItem implements Comparable<LearnItem> {
 	
 	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
@@ -20,23 +24,27 @@ public class LearnItem {
 	
 	protected String idDescriptor;
 	protected String text;
-	protected String translations;
+	
+	@ElementCollection
+	protected List<String> translations;
 	protected Double priority;
-	protected Integer strength;
+	protected Integer strength=0;
 	protected String pictureReference;
 	
 	private String helperItem;
 	
 	public LearnItem(){
-		
 	}
 	
-	public int compareTo(LearnItem learnItem) {
-		if (learnItem.getText().equals(this.text)) { 
-			return 0;	
-		} else {
-			return -1;
-		}
+	public LearnItem(String text, String translation){
+		this.text = text;
+		this.translations = new ArrayList<String>();
+		this.translations.add(translation);
+	}
+	
+	public LearnItem(String text, List<String> translations){
+		this.text = text;
+		this.translations = translations;
 	}
 	
 	public void setId(String idDescriptor) {
@@ -52,7 +60,7 @@ public class LearnItem {
 	}
 
 	public void addTranslation(String translation) {
-		this.translations+=translation+";";
+		this.translations.add(translation);
 	}
 
 	public String getTranslation(){
@@ -60,27 +68,14 @@ public class LearnItem {
 	}
 	
 	public String getTranslation(Integer index) {
-		if(this.translations.split(";").length>index){
-			return translations.split(";")[index];
-		}
-		else {
-			return "";
-		}
-	}
-
-	public void removeAlternativeTranslation(String alternativeTranslation) {
-		//if (alternativeTranslation == null || !translations.contains(alternativeTranslation)) {
-		//	throw new IllegalArgumentException("Alternative translation doesn't exist for this Learn Item");
-		//} else {
-		//	this.translations.remove(this.translations.indexOf(alternativeTranslation));
-
-		//}
+		return translations.get(index);
 	}
 
 	public void setStrength(int strength) {
 		this.strength = strength;		
 	}
 
+	@JsonIgnore
 	public int getStrength() {
 		return strength;
 	}
@@ -119,12 +114,17 @@ public class LearnItem {
 		this.learnItemList = learnItemsList;
 	}
 	
-	public String getTranslations(){
+	public List<String> getTranslations(){
 		return translations;
 	}
 
 	public Integer getId() {
 		return id;
+	}
+	
+	@Override
+	public int compareTo(LearnItem other){
+		return this.text.compareTo(other.text);
 	}
 
 }

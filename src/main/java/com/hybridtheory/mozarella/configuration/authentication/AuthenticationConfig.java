@@ -1,4 +1,4 @@
-package com.hybridtheory.mozarella.configuration;
+package com.hybridtheory.mozarella.configuration.authentication;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -80,19 +80,14 @@ public class AuthenticationConfig extends WebSecurityConfigurerAdapter {
   JwtAuthenticationFilter authenticationFilter(){
 	  try {
 		return new JwtAuthenticationFilter(super.authenticationManagerBean(), successHandler());
-	} catch (Exception e) {
+	  } catch (Exception e) {
 		return new JwtAuthenticationFilter(null,successHandler());
-	}
+	  }
   }
   
   @Bean
   AuthenticationSuccessHandler successHandler(){
 	  return new RestAuthenticationSuccessHandler();
-  }
-  
-  @Bean 
-  JwtUtil jwtUtil(){
-	  return new JwtUtil();
   }
   
 }

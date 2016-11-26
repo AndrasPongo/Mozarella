@@ -31,16 +31,16 @@ public class LearnItemList implements Comparable<LearnItemList>, Iterable<LearnI
 	private List<Student> contributors = new ArrayList<Student>();
 	
 	private Boolean isPublic;
-	
+
 	private String fromLanguage;
-	
+
 	private String toLanguage;
-	
+
 	private String name = "";
-	
+
 	private String description;
 	
-	@OneToMany(mappedBy="learnItemList", cascade = { CascadeType.PERSIST, CascadeType.REFRESH }, fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="learnItemList", cascade = { CascadeType.ALL }, fetch=FetchType.LAZY)
 	@OrderBy("priority")
 	private SortedSet<LearnItem> learnItems = new TreeSet<LearnItem>();
 	private int numberOfLearnItemsInList = 0;

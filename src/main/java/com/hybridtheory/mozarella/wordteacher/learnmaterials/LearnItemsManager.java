@@ -26,11 +26,8 @@ public class LearnItemsManager {
 	@OneToOne(mappedBy = "learnItemManager")
 	private Student owner;
 
-	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.REFRESH }, fetch = FetchType.LAZY)
+	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	private List<LearnItemList> learnItemLists = new ArrayList<LearnItemList>();
-
-	@Transient
-	private LearnItemFactory learnItemFactory = new LearnItemFactory();
 
 	public LearnItemsManager() {
 
@@ -69,7 +66,7 @@ public class LearnItemsManager {
 	// public LearnItemsList getLearnItemsList(LearnItemsList learnItemsList) {
 	public LearnItemList getLearnItemsList(String nameOfList) {
 		for (LearnItemList lit : learnItemLists) {
-			if (lit.getName() == nameOfList) {
+			if (lit.getName().equals(nameOfList)) {
 				return lit;
 			}
 		}
@@ -81,7 +78,7 @@ public class LearnItemsManager {
 			throw new IllegalArgumentException("Invalid input when creating LearnItemsList");
 		} else {
 			LearnItem newLearnItem = null;
-			newLearnItem = learnItemFactory.createLearnItem(text, translation);
+			newLearnItem = new LearnItem(text, translation);
 			learnItemsList.addLearnItem(newLearnItem);
 		}
 	}

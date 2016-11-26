@@ -31,7 +31,6 @@ public class StudentItemRecord {
 	@OneToMany(mappedBy="record")
 	private List<Result> results = new LinkedList<Result>();
 	
-	
 	@Transient
 	@Autowired
 	private ItemPrioritizer itemPrioritizer;
