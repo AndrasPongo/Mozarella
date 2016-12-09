@@ -1,6 +1,7 @@
 package com.hybridtheory.mozarella.configuration.authentication;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -15,6 +16,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import com.hybridtheory.mozzarella.authentication.JwtAuthenticationFilter;
 import com.hybridtheory.mozzarella.authentication.JwtAuthenticationProvider;
@@ -40,6 +44,7 @@ public class AuthenticationConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/login**").permitAll()
             .antMatchers("/register**").permitAll()
             .antMatchers("/static/**").permitAll()
+            .antMatchers("/usernameavailable").permitAll()
             .antMatchers("/admin/**").authenticated()//.access("hasRole('ROLE_ADMIN')")
             .antMatchers("/**").authenticated()//.access("hasRole('ROLE_USER')")
         .and()
@@ -49,11 +54,6 @@ public class AuthenticationConfig extends WebSecurityConfigurerAdapter {
             .addFilterBefore(authenticationFilter(),BasicAuthenticationFilter.class)
             .authenticationProvider(authenticationProvider())
             .authorizeRequests()
-            .antMatchers("/login**").permitAll()
-            .antMatchers("/register**").permitAll()
-            .antMatchers("/static/**").permitAll()
-            .antMatchers("/admin/**").authenticated()//.access("hasRole('ROLE_ADMIN')")
-            .antMatchers("/**").authenticated()//.access("hasRole('ROLE_USER')")
          .and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             ;
@@ -61,11 +61,28 @@ public class AuthenticationConfig extends WebSecurityConfigurerAdapter {
     
     public void configure(WebSecurity web) throws Exception {
         web
-            .ignoring()
+        	.ignoring()
+        	.antMatchers("/api/students")
             .antMatchers("/login")
             .antMatchers("/registration");
     }
-  
+    
+	@Bean
+	public FilterRegistrationBean corsFilter() {
+		
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		CorsConfiguration config = new CorsConfiguration();
+		config.setAllowCredentials(true);
+		config.addAllowedOrigin("http://localhost:3000");
+		config.addAllowedHeader("*");
+		config.addAllowedMethod("*");
+		source.registerCorsConfiguration("/**", config);
+		FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
+		bean.setOrder(0);
+		return bean;
+	}
+    
+    
   @Bean
   AuthenticationProvider authenticationProvider(){
 	  return new JwtAuthenticationProvider();

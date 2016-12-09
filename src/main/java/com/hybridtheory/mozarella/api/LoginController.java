@@ -1,14 +1,22 @@
 package com.hybridtheory.mozarella.api;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hybridtheory.mozarella.persistence.repository.StudentRepository;
@@ -20,6 +28,8 @@ import com.hybridtheory.mozzarella.authentication.UsernamePasswordDecoder;
 
 @RestController
 public class LoginController {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(StudentController.class);
 	
 	@Autowired
 	private StudentRepository studentRepository;
@@ -75,5 +85,19 @@ public class LoginController {
     	}
 		return student;
 	}
+	
+    @RequestMapping(value="/usernameavailable", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Iterable<Boolean>> listStudents(@RequestParam("name") Optional<String> username) {
+    	LOGGER.info("/usernamefree controller method call"+new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date()));
+    	ArrayList<Boolean> studentFound = new ArrayList<Boolean>();
+    	
+    	if(username.isPresent()){
+    		studentFound.add(studentRepository.findByName(username.get())!=null);
+    	} else {
+    		studentFound.add(false);
+    	}
+    	
+    	return new ResponseEntity<Iterable<Boolean>>(studentFound, HttpStatus.OK);   		
+    }
 	
 }

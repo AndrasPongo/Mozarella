@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -56,9 +57,16 @@ public class StudentController {
     }
     
     @RequestMapping(value="/students", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Iterable<Student>> listStudents() {
+    public ResponseEntity<Iterable<Student>> listStudents(@RequestParam("name") Optional<String> username) {
     	LOGGER.info("/students controller method call"+new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date()));
-    	Iterable<Student> studentsFound = studentRepository.findAll();
+    	Iterable<Student> studentsFound;
+    	
+    	if(username.isPresent()){
+    		studentsFound = studentRepository.findByName(username.get());
+    	} else {
+    		studentsFound = studentRepository.findAll();
+    	}
+    	
     	return new ResponseEntity<Iterable<Student>>(studentsFound, HttpStatus.OK);   		
     }
     

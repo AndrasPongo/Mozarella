@@ -94,13 +94,20 @@ public class StudentControllerIT extends ApplicationTests {
                 .andExpect(
                         content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(jsonPath("$[0].name").value(STUDENT1NAME))
-                .andExpect(jsonPath("$").isArray())
-        		.andExpect(jsonPath("$",hasSize(1)));
+                .andExpect(jsonPath("$").isArray());
     }
     
     @Test
     public void validate_get_student_again() throws Exception {
     	mockMvc.perform(get("/students/"+student1.getId())).andExpect(status().isOk());
+    }
+    
+    @Test
+    public void validate_get_student_by_name() throws Exception {
+    	mockMvc.perform(get("/students").param("name", STUDENT1NAME))
+    	.andExpect(status().isOk())
+    	.andExpect(jsonPath("$[0].name").value(STUDENT1NAME))
+        .andExpect(jsonPath("$").isArray());
     }
     
     @Test
