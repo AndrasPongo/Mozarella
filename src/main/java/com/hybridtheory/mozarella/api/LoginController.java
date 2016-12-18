@@ -89,15 +89,16 @@ public class LoginController {
     @RequestMapping(value="/usernameavailable", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Iterable<Boolean>> listStudents(@RequestParam("name") Optional<String> username) {
     	LOGGER.info("/usernamefree controller method call"+new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date()));
-    	ArrayList<Boolean> studentFound = new ArrayList<Boolean>();
+    	Boolean available = true;
     	
     	if(username.isPresent()){
-    		studentFound.add(studentRepository.findByName(username.get())!=null);
-    	} else {
-    		studentFound.add(false);
+    		available = studentRepository.findByName(username.get()).size() == 0;
     	}
     	
-    	return new ResponseEntity<Iterable<Boolean>>(studentFound, HttpStatus.OK);   		
+    	List<Boolean> result = new ArrayList<Boolean>();
+    	result.add(available);
+    	
+    	return new ResponseEntity<Iterable<Boolean>>(result, HttpStatus.OK);   		
     }
 	
 }

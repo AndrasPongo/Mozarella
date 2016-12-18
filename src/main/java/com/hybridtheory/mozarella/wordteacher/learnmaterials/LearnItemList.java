@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.InputSanitizer;
 
@@ -42,6 +43,7 @@ public class LearnItemList implements Comparable<LearnItemList>, Iterable<LearnI
 	
 	@OneToMany(mappedBy="learnItemList", cascade = { CascadeType.ALL }, fetch=FetchType.LAZY)
 	@OrderBy("priority")
+	@JsonIgnore
 	private SortedSet<LearnItem> learnItems = new TreeSet<LearnItem>();
 	private int numberOfLearnItemsInList = 0;
 	
@@ -139,6 +141,7 @@ public class LearnItemList implements Comparable<LearnItemList>, Iterable<LearnI
 		return id;
 	}
 	
+	@JsonIgnore
 	public Collection<LearnItem> getLearnItems(){
 		return learnItems;
 	}

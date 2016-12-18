@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -29,6 +30,24 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
         this.setAuthenticationSuccessHandler(successHandler);
     }
 
+    @Override
+    protected boolean requiresAuthentication(HttpServletRequest request, HttpServletResponse response) {
+    	
+    	if(request.getMethod().equals("OPTIONS")){
+    		return false;
+    	}
+    	
+    	if(!request.getServletPath().contains("api")){
+    		return false;
+    	}
+    	
+    	if(request.getServletPath().endsWith("students") && request.getMethod().equals("POST")){
+    		return false;
+    	}
+    	
+    	return true;
+    }
+    
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 

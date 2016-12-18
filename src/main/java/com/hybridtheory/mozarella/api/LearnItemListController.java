@@ -2,6 +2,7 @@ package com.hybridtheory.mozarella.api;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,14 +39,13 @@ public class LearnItemListController {
     private LearnItemRepository learnItemRepository;
 
     @RequestMapping(value="/api/learnitemlists", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Iterable<LearnItemList>> getLearnItemLists(@RequestParam(value="fromLanguages", required = false) List<String> fromLanguages, @RequestParam(value="toLanguage", required=false) String toLanguage) {
+    public ResponseEntity<Iterable<LearnItemList>> getLearnItemLists(@RequestParam(value="fromLanguages") Optional<List<String>> fromLanguages, 
+    																@RequestParam(value="toLanguage") Optional<String> toLanguage,
+    																@RequestParam("pagenumber") Integer pageNumber, 
+    																@RequestParam("pagesize") Integer pageSize) {
     	//TODO: implement pagination
     	Iterable<LearnItemList> lists;
-    	if(fromLanguages != null && toLanguage != null){
-    		lists = learnItemListRepositoryCustom.findBasedOnLanguage(fromLanguages,toLanguage);
-    	} else {
-    		lists = learnItemListRepository.findAll();
-    	}
+    	lists = learnItemListRepositoryCustom.findBasedOnLanguage(fromLanguages,toLanguage,new PageRequest(pageNumber,pageSize));
     	
     	return new ResponseEntity<Iterable<LearnItemList>>(lists,HttpStatus.OK);
     }
@@ -65,9 +65,16 @@ public class LearnItemListController {
     }
     
     @RequestMapping(value="/api/learnitemlists/{id}/learnitems", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity addItems(@RequestBody List<LearnItem> learnItemsToPersist) {
+    public ResponseEntity<Object> addItems(@RequestBody List<LearnItem> learnItemsToPersist) {
     	learnItemRepository.save(learnItemsToPersist);
     	
-    	return new ResponseEntity(HttpStatus.OK);
+    	return new ResponseEntity<Object>(HttpStatus.OK);
+    }
+    
+    @RequestMapping(value="/api/learnitemlists", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> saveLearnItemList(@RequestBody LearnItemList learnItemListToPersist) {
+    	learnItemListRepository.save(learnItemListToPersist);
+    	
+    	return new ResponseEntity<Object>(HttpStatus.OK);
     }
 }

@@ -46,7 +46,7 @@ public class AuthenticationConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/static/**").permitAll()
             .antMatchers("/usernameavailable").permitAll()
             .antMatchers("/admin/**").authenticated()//.access("hasRole('ROLE_ADMIN')")
-            .antMatchers("/**").authenticated()//.access("hasRole('ROLE_USER')")
+            //.antMatchers("/**").authenticated()//.access("hasRole('ROLE_USER')")
         .and()
 	        .exceptionHandling()
 	        .authenticationEntryPoint(authenticationEntryPoint())

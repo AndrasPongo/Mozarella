@@ -12,14 +12,11 @@ public class StudentFactory {
 	@Value("${jwt.secret}") //the same value can be used as for the jwt secret
 	String salt;
 	
-	public Student createStudent(CredentialType credentialType, String value){
+	public Student createStudent(CredentialType credentialType, String... values){
 		
 		Student newStudent = new Student();
 		
-		if(credentialType.equals(CredentialType.USERNAMEPASSWORD)){
-			newStudent.setName(value.split(",")[0]);
-			giveHashedPasswordForStudent(newStudent,value.split(",")[1]);
-		} else if(credentialType.equals(CredentialType.FACEBOOK)){
+		if(credentialType.equals(CredentialType.FACEBOOK)){
 			//TODO set facebookid with value
 			//TODO: come up with a way to generate a name for the user
 		} else if(credentialType.equals(CredentialType.GOOGLE)){
@@ -28,6 +25,10 @@ public class StudentFactory {
 		}
 		
 		return newStudent;
+	}
+	
+	public Student createStudent(Student student){
+		return giveHashedPasswordForStudent(student, student.getPassword());
 	}
 	
 	private Student giveHashedPasswordForStudent(Student student, String password){

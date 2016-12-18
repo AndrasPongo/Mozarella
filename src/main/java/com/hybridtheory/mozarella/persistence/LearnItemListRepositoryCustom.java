@@ -1,11 +1,13 @@
 package com.hybridtheory.mozarella.persistence;
 
 import java.util.List;
+import java.util.Optional;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
 
 public interface LearnItemListRepositoryCustom {
-	public List<LearnItemList> findBasedOnLanguage(List<String> fromLanguages, String toLanguage);
+	public Page<LearnItemList> findBasedOnLanguage(Optional<List<String>> fromLanguages, Optional<String> toLanguage, Pageable pageable);
 }

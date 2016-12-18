@@ -1,7 +1,7 @@
 package com.hybridtheory.mozzarella.api;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hybridtheory.mozarella.persistence.repository.LearnItemListRepository;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
@@ -28,6 +29,7 @@ public class LearnItemListControllerIT extends ApplicationTests {
 
 	private static LearnItemList learnItemsList;
 	private static LearnItemList learnItemsList2;
+	private static LearnItemList learnItemsListToSave;
 	private static LearnItem learnitem1 = new LearnItem("exampleword", "exampletranslation");
 	private static LearnItem learnitem2 = new LearnItem("exampleword2", "exampletranslation2");
 	private static LearnItem learnitem3 = new LearnItem("exampleword3", "exampletranslation3");
@@ -39,7 +41,8 @@ public class LearnItemListControllerIT extends ApplicationTests {
 	private static String learnitemlistresource = "/api/learnitemlists/{id}";
 	private static String learnitemresource = "/api/learnitemlists/{id}/learnitems";
 	private static String resultresource = "/api/students/{id}/learnitems/{learnItemId}/results";
-
+	
+	private static String TOSAVENAME = "tosavename";
 	private static final String LEARNITEMLIST1NAME = "learnItemList1";
 
 	private static Boolean initializedFlag = false;
@@ -57,6 +60,8 @@ public class LearnItemListControllerIT extends ApplicationTests {
 			learnItemsList.addLearnItem(learnitem2);
 			learnItemsList.addLearnItem(learnitem3);
 			learnItemsList.addLearnItem(learnitem4);
+			
+			learnItemsListToSave = new LearnItemList(TOSAVENAME);
 
 			repository.save(learnItemsList);
 			repository.save(learnItemsList2);
@@ -66,10 +71,25 @@ public class LearnItemListControllerIT extends ApplicationTests {
 	}
 
 	@Test
-	public void validate_get_learnitemlists() throws Exception {
+	public void validate_create_learnitemlists() throws Exception {
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonInString = mapper.writeValueAsString(learnItemsListToSave);
+		
+		mockMvc.perform(post(learnitemlistsresource).contentType(MediaType.APPLICATION_JSON).content(jsonInString))
+		.andExpect(status().isOk());
+	}
+	
+	@Test
+	public void validate_get_learnitemlist() throws Exception {
 		mockMvc.perform(get(learnitemlistresource,learnItemsList.getId())).andExpect(status().isOk())
 		.andExpect(jsonPath("$").isArray()).andExpect(jsonPath("$", hasSize(1)))
 		.andExpect(jsonPath("$[0].name").value(LEARNITEMLIST1NAME));
+	}
+	
+	@Test
+	public void validate_get_all_learnitemlists() throws Exception {
+		mockMvc.perform(get(learnitemlistsresource,learnItemsList.getId())).andExpect(status().isOk())
+		.andExpect(jsonPath("$").isArray());
 	}
 
 	/*@Test

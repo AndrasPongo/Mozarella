@@ -1,20 +1,18 @@
 package com.hybridtheory.mozarella.api;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,10 +22,8 @@ import com.hybridtheory.mozarella.persistence.repository.LearnItemRepository;
 import com.hybridtheory.mozarella.persistence.repository.StudentItemRecordRepository;
 import com.hybridtheory.mozarella.persistence.repository.StudentRepository;
 import com.hybridtheory.mozarella.users.Student;
+import com.hybridtheory.mozarella.users.StudentFactory;
 import com.hybridtheory.mozarella.utils.IdSplitter;
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.StudentItemRecord;
 
 import jersey.repackaged.com.google.common.collect.Lists;
 
@@ -44,19 +40,17 @@ public class StudentController {
     
     @Autowired
     private StudentItemRecordRepository studentItemRecordRepository;
+    
+    @Autowired
+    private StudentFactory studentFactory;
 
-    @RequestMapping(value="/students", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Student> create(@RequestParam("credentialType") String credentialType, String value) {
-
-        Student newStudent = new Student();
-        newStudent.setName(value);
-        
-        studentRepository.save(newStudent);
-
-        return new ResponseEntity<Student>(newStudent, HttpStatus.OK);
+    @RequestMapping(value="/api/students", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity create(@RequestBody Student student) {
+        studentRepository.save(studentFactory.createStudent(student));
+        return new ResponseEntity(HttpStatus.CREATED);
     }
     
-    @RequestMapping(value="/students", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value="/api/students", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Iterable<Student>> listStudents(@RequestParam("name") Optional<String> username) {
     	LOGGER.info("/students controller method call"+new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date()));
     	Iterable<Student> studentsFound;
@@ -70,7 +64,7 @@ public class StudentController {
     	return new ResponseEntity<Iterable<Student>>(studentsFound, HttpStatus.OK);   		
     }
     
-    @RequestMapping(value="/students/{ids}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value="/api/students/{ids}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<Student>> getStudents(@PathVariable("ids") String ids) {
     	return new ResponseEntity<List<Student>>(getStudentsByIds(IdSplitter.getIds(ids)),HttpStatus.OK);
     }
