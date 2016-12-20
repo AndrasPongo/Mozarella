@@ -29,6 +29,20 @@ public class LearnItemListRepositoryImpl implements LearnItemListRepositoryCusto
     private EntityManager entityManager;
 	
 	public Page<LearnItemList> findBasedOnLanguage(Optional<List<String>> fromLanguages, Optional<String> toLanguage, Pageable pageable) {
+		
+		Query query = createQuery(fromLanguages,toLanguage);
+		
+		List<LearnItemList> list = query.getResultList();
+		int totalRows = query.getResultList().size();
+		
+		 query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
+		 query.setMaxResults(pageable.getPageSize());
+		
+		Page<LearnItemList> page = new PageImpl<LearnItemList>(query.getResultList(), pageable, totalRows);
+	    return page;
+	}
+	
+	private Query createQuery(Optional<List<String>> fromLanguages, Optional<String> toLanguage){
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		
 		CriteriaQuery<LearnItemList> criteria = builder.createQuery(LearnItemList.class);
@@ -45,15 +59,7 @@ public class LearnItemListRepositoryImpl implements LearnItemListRepositoryCusto
 		criteria.select(learnItemListRoot);
 		criteria.where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
 		
-		Query query = entityManager.createQuery( criteria );
-		List<LearnItemList> list = query.getResultList();
-		int totalRows = query.getResultList().size();
-		
-		 query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
-		 query.setMaxResults(pageable.getPageSize());
-		
-		Page<LearnItemList> page = new PageImpl<LearnItemList>(query.getResultList(), pageable, totalRows);
-	    return page;
+		return entityManager.createQuery( criteria );
 	}
 
 }
