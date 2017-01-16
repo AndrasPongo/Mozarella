@@ -27,6 +27,6 @@ public interface LearnItemRepository extends JpaRepository<LearnItem,Integer> {
 		return toReturn;
 	}
 
-	@Query("select i from LearnItemList l join l.learnItems i")
-	public List<LearnItem> getLearnItemsForLearnItemList(Integer id, PageRequest pageRequest);
+	@Query("select i from LearnItemList l join l.learnItems i where l.id = :id")
+	public List<LearnItem> getLearnItemsForLearnItemList(@Param("id")Integer id, Pageable pageable);
 }

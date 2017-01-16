@@ -51,6 +51,7 @@ public class LearnItemListController {
     	
     	HttpHeaders headers = new HttpHeaders();
         headers.add("X-total-count", Long.toString(lists.getTotalElements()));
+        headers.add("Access-Control-Expose-Headers", "X-total-count");
     	
     	ResponseEntity<Iterable<LearnItemList>> result = new ResponseEntity<Iterable<LearnItemList>>(lists,headers,HttpStatus.OK);
     	
@@ -67,8 +68,13 @@ public class LearnItemListController {
     }
     
     @RequestMapping(value="/api/learnitemlists/{id}/learnitems", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<List<LearnItem>> getItems(@PathVariable("id") Integer id, @RequestParam("pagenumber") Integer pageNumber, @RequestParam("pagesize") Integer pageSize) {
-    	return new ResponseEntity<List<LearnItem>>(learnItemRepository.getLearnItemsForLearnItemList(id, new PageRequest(pageNumber,pageSize)),HttpStatus.OK);
+    public ResponseEntity<List<LearnItem>> getItems(@PathVariable("id") Integer id, @RequestParam("pagenumber") Optional<Integer> pageNumber, @RequestParam("pagesize") Optional<Integer> pageSize) {
+    	if(pageNumber.isPresent() && pageSize.isPresent()){
+    		return new ResponseEntity<List<LearnItem>>(learnItemRepository.getLearnItemsForLearnItemList(id, new PageRequest(pageNumber.get(),pageSize.get())),HttpStatus.OK);
+    	} else {
+    		//TODO: implement useful logic here
+        	return new ResponseEntity<List<LearnItem>>(learnItemRepository.findAll(new PageRequest(0,10)).getContent(),HttpStatus.OK);
+    	}
     }
     
     @RequestMapping(value="/api/learnitemlists/{id}/learnitems", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -79,9 +85,9 @@ public class LearnItemListController {
     }
     
     @RequestMapping(value="/api/learnitemlists", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> saveLearnItemList(@RequestBody LearnItemList learnItemListToPersist) {
-    	learnItemListRepository.save(learnItemListToPersist);
+    public ResponseEntity<LearnItemList> saveLearnItemList(@RequestBody LearnItemList learnItemListToPersist) {
+    	LearnItemList savedLearnItemList = learnItemListRepository.save(learnItemListToPersist);
     	
-    	return new ResponseEntity<Object>(HttpStatus.OK);
+    	return new ResponseEntity<LearnItemList>(savedLearnItemList,HttpStatus.OK);
     }
 }
