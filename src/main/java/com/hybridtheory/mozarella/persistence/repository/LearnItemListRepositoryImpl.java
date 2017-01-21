@@ -20,6 +20,9 @@ import org.springframework.data.domain.Pageable;
 import com.hybridtheory.mozarella.persistence.LearnItemListRepositoryCustom;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class LearnItemListRepositoryImpl implements LearnItemListRepositoryCustom {
 
 	@Autowired
@@ -39,6 +42,7 @@ public class LearnItemListRepositoryImpl implements LearnItemListRepositoryCusto
 		 query.setMaxResults(pageable.getPageSize());
 		
 		Page<LearnItemList> page = new PageImpl<LearnItemList>(query.getResultList(), pageable, totalRows);
+		
 	    return page;
 	}
 	

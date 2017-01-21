@@ -45,7 +45,7 @@ public class LearnItemList implements Comparable<LearnItemList>, Iterable<LearnI
 	@OrderBy("priority")
 	@JsonIgnore
 	private SortedSet<LearnItem> learnItems = new TreeSet<LearnItem>();
-	private int numberOfLearnItemsInList = 0;
+	private int numberOfLearnItems = 0;
 	
 	@Transient
 	private InputSanitizer inputSanitizer = new InputSanitizer();
@@ -79,7 +79,7 @@ public class LearnItemList implements Comparable<LearnItemList>, Iterable<LearnI
 	}
 	
 	public int getNumberOfLearnItemsInList() {
-		return this.numberOfLearnItemsInList;
+		return this.numberOfLearnItems;
 	}
 	
 	public Boolean addLearnItem(LearnItem learnItem) {
@@ -88,7 +88,7 @@ public class LearnItemList implements Comparable<LearnItemList>, Iterable<LearnI
 		} else {
 			learnItem.setLearnItemsList(this);
 			learnItems.add(learnItem);
-			numberOfLearnItemsInList++;
+			numberOfLearnItems++;
 			return true;
 		}
 	}
@@ -113,14 +113,14 @@ public class LearnItemList implements Comparable<LearnItemList>, Iterable<LearnI
 			return false;
 		} else {
 			learnItems.remove(learnItem);
-			numberOfLearnItemsInList--;
+			numberOfLearnItems--;
 			return true;
 		}
 	}
 
 	@Override
 	public int compareTo(LearnItemList learnItemsList) {
-		if (learnItemsList.getName() == this.name) {
+		if (learnItemsList.getName().equals(this.name)) {
 			return 0;	
 		} else {
 			return -1;

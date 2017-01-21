@@ -2,6 +2,7 @@ package com.hybridtheory.mozarella.persistence.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,5 +29,8 @@ public interface LearnItemRepository extends JpaRepository<LearnItem,Integer> {
 	}
 
 	@Query("select i from LearnItemList l join l.learnItems i where l.id = :id")
-	public List<LearnItem> getLearnItemsForLearnItemList(@Param("id")Integer id, Pageable pageable);
+	public Page<LearnItem> getLearnItemsForLearnItemList(@Param("id")Integer id, Pageable pageable);
+	
+	@Query("select count(i) from LearnItemList l join l.learnItems i where l.id = :id")
+	public Integer getNumberOfLearnItemsForLearnItemList(@Param("id")Integer id);
 }
