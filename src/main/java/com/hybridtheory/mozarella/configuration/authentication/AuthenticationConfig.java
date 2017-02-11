@@ -41,12 +41,10 @@ public class AuthenticationConfig extends WebSecurityConfigurerAdapter {
             .authenticationProvider(authenticationProvider())
             .csrf().disable()
             .authorizeRequests()
-            .antMatchers("/login**").permitAll()
             .antMatchers("/register**").permitAll()
             .antMatchers("/static/**").permitAll()
             .antMatchers("/usernameavailable").permitAll()
             .antMatchers("/admin/**").authenticated()//.access("hasRole('ROLE_ADMIN')")
-            //.antMatchers("/**").authenticated()//.access("hasRole('ROLE_USER')")
         .and()
 	        .exceptionHandling()
 	        .authenticationEntryPoint(authenticationEntryPoint())
@@ -62,8 +60,6 @@ public class AuthenticationConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web
         	.ignoring()
-        	.antMatchers("/api/students")
-            .antMatchers("/login")
             .antMatchers("/registration");
     }
     

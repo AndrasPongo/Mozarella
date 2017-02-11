@@ -69,7 +69,7 @@ public class LoginController {
     	student = getStudentFromRepo(username, student);
     	
     	if(student==null){
-    		student = studentFactory.createStudent(CredentialType.USERNAMEPASSWORD, username+","+password);
+    		student = studentFactory.createStudent(CredentialType.USERNAMEPASSWORD, username,password);
     		studentRepository.save(student);
     	} else {
     		return new ResponseEntity<String>(jwtUtil.generateToken(student),HttpStatus.BAD_REQUEST);

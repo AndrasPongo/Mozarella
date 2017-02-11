@@ -85,12 +85,6 @@ public class LearnItemListControllerIT extends ApplicationTests {
 		.andExpect(jsonPath("$").isArray()).andExpect(jsonPath("$", hasSize(1)))
 		.andExpect(jsonPath("$[0].name").value(LEARNITEMLIST1NAME));
 	}
-	
-	@Test
-	public void validate_get_all_learnitemlists() throws Exception {
-		mockMvc.perform(get(learnitemlistsresource,learnItemsList.getId())).andExpect(status().isOk())
-		.andExpect(jsonPath("$").isArray());
-	}
 
 	/*@Test
 	public void validate_get_learnitemlist() throws Exception {

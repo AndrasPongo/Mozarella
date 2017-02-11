@@ -22,6 +22,9 @@ public class StudentFactory {
 		} else if(credentialType.equals(CredentialType.GOOGLE)){
 			//TODO set googleid with value
 			//TODO: come up with a way to generate a name for the user
+		} else if(credentialType.equals(CredentialType.USERNAMEPASSWORD)){
+			newStudent.setName(values[0]);
+			giveHashedPasswordForStudent(newStudent, values[1]);
 		}
 		
 		return newStudent;

@@ -89,7 +89,7 @@ public class StudentControllerIT extends ApplicationTests {
     @Test
     public void validate_get_student() throws Exception {
 
-        mockMvc.perform(get("api/students/"+student1.getId()))
+        mockMvc.perform(get("/api/students/"+student1.getId()))
                 .andExpect(status().isOk())
                 .andExpect(
                         content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
@@ -99,12 +99,12 @@ public class StudentControllerIT extends ApplicationTests {
     
     @Test
     public void validate_get_student_again() throws Exception {
-    	mockMvc.perform(get("api/students/"+student1.getId())).andExpect(status().isOk());
+    	mockMvc.perform(get("/api/students/"+student1.getId())).andExpect(status().isOk());
     }
     
     @Test
     public void validate_get_student_by_name() throws Exception {
-    	mockMvc.perform(get("api/students").param("name", STUDENT1NAME))
+    	mockMvc.perform(get("/api/students").param("name", STUDENT1NAME))
     	.andExpect(status().isOk())
     	.andExpect(jsonPath("$[0].name").value(STUDENT1NAME))
         .andExpect(jsonPath("$").isArray());
@@ -112,7 +112,7 @@ public class StudentControllerIT extends ApplicationTests {
     
     @Test
     public void validate_get_multiple_students() throws Exception{
-        mockMvc.perform(get("api/students"))
+        mockMvc.perform(get("/api/students"))
         .andExpect(status().isOk())
         .andExpect(
                 content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))

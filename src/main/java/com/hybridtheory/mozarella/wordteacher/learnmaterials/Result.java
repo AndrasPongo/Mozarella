@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.hybridtheory.mozarella.users.Student;
+
 @Entity
 public class Result{
 	
@@ -18,7 +20,7 @@ public class Result{
 	@ManyToOne
 	private StudentItemRecord record;
 	
-	public Result(Boolean wasSuccessful, StudentItemRecord record){
+	public Result(Boolean wasSuccessful, Student student, LearnItem learnItem){
 		this.wasSuccessful = wasSuccessful;
 		this.record = record;
 	}

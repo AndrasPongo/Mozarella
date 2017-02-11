@@ -37,11 +37,11 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
     		return false;
     	}
     	
-    	if(!request.getServletPath().contains("api")){
+    	if(!request.getRequestURL().toString().contains("api")){
     		return false;
     	}
     	
-    	if(request.getServletPath().endsWith("students") && request.getMethod().equals("POST")){
+    	if(request.getRequestURL().toString().endsWith("students") && request.getMethod().equals("POST")){
     		return false;
     	}
     	

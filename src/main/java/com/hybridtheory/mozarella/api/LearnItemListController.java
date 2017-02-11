@@ -1,7 +1,5 @@
 package com.hybridtheory.mozarella.api;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -56,7 +54,7 @@ public class LearnItemListController {
         headers.add("X-total-count", Long.toString(lists.getTotalElements()));
         headers.add("Access-Control-Expose-Headers", "X-total-count");
     	
-    	ResponseEntity<Iterable<LearnItemList>> result = new ResponseEntity<Iterable<LearnItemList>>(lists,headers,HttpStatus.OK);
+    	ResponseEntity<Iterable<LearnItemList>> result = new ResponseEntity<Iterable<LearnItemList>>(lists.getContent(),headers,HttpStatus.OK);
     	
     	LOGGER.debug("end of learnItemLists call");
     	

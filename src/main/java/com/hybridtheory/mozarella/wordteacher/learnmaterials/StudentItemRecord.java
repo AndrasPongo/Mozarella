@@ -31,10 +31,6 @@ public class StudentItemRecord {
 	@OneToMany(mappedBy="record")
 	private List<Result> results = new LinkedList<Result>();
 	
-	@Transient
-	@Autowired
-	private ItemPrioritizer itemPrioritizer;
-	
 	private static final Integer numberOfStoredResults = 5;
 	private Integer chosenPicture;
 	private Integer strength;
@@ -50,14 +46,8 @@ public class StudentItemRecord {
 	}
 	
 	public void registerResult(Boolean wasSuccessful){
-		Result r = new Result(wasSuccessful, this);
+		Result r = new Result(wasSuccessful, student, learnItem);
 		results.add(r);
-		recalculatePriority();
-	}
-	
-	private void recalculatePriority(){
-		//this.priority = itemPrioritizer.assignPriority(results);
-		//can't inject itemPrioritizer, probably because this entity is not in the appcontext
 	}
 
 	public LearnItem getLearnItem() {

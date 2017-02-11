@@ -18,7 +18,7 @@ import com.hybridtheory.mozzarella.authentication.JwtUtil;
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan(basePackages={"com.hybridtheory.mozarella.api,com.hybridtheory.mozarella.persistence"})
+@ComponentScan(basePackages={"com.hybridtheory.mozarella.api,com.hybridtheory.mozarella.persistence,com.hybridtheory.mozarella.eventhandling"})
 @EnableJpaRepositories(basePackages={"com.hybridtheory.mozarella.persistence"})
 public class Config{
 
