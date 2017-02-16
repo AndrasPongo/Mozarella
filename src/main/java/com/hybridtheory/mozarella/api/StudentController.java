@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hybridtheory.mozarella.eventhandling.EventEmitter;
 import com.hybridtheory.mozarella.eventhandling.result.NewResultAvailableEvent;
-import com.hybridtheory.mozarella.eventhandling.result.ResultEventEmitter;
 import com.hybridtheory.mozarella.persistence.repository.LearnItemRepository;
 import com.hybridtheory.mozarella.persistence.repository.StudentItemRecordRepository;
 import com.hybridtheory.mozarella.persistence.repository.StudentRepository;
@@ -48,7 +48,7 @@ public class StudentController {
     private StudentFactory studentFactory;
     
     @Autowired
-    private ResultEventEmitter em;
+    private EventEmitter em;
 
     @RequestMapping(value="/api/students", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity create(@RequestBody Student student) {
@@ -78,7 +78,7 @@ public class StudentController {
     @RequestMapping(value="/api/students/{id}/results", method=RequestMethod.POST)
     public ResponseEntity<List<Student>> postResult(@PathVariable("id") String id, @RequestBody Result result) {
     
-    	em.notifyObservers(new NewResultAvailableEvent(result));
+    	em.publish(new NewResultAvailableEvent(result));
     	
     	return new ResponseEntity(HttpStatus.CREATED);
     }

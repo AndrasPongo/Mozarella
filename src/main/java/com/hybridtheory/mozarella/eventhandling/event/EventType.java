@@ -1,5 +1,5 @@
 package com.hybridtheory.mozarella.eventhandling.event;
 
-public interface Event {
-	
+public enum EventType {
+	STUDENTREGISTERED, NEWRESULT;
 }
