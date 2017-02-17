@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import org.springframework.stereotype.Component;
+
 import com.hybridtheory.mozarella.eventhandling.event.Event;
 
 public class EventEmitter{

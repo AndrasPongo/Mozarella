@@ -7,7 +7,7 @@ import com.hybridtheory.mozarella.eventhandling.result.StudentRegisteredEvent;
 
 @Component
 public class StudentRegisteredEventListener implements EventListener {
-
+	
 	@Override
 	public void beNotifiedOfEvent(Event e) {
 		StudentRegisteredEvent studentRegisteredEvent = (StudentRegisteredEvent) e;

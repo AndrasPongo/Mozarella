@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import com.hybridtheory.mozarella.users.Student;
 
@@ -16,13 +16,17 @@ public class Result{
 	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	private Boolean wasSuccessful;
+	private Student student;
 	
-	@ManyToOne
-	private StudentItemRecord record;
+	@OneToOne
+	private LearnItem learnItem;
+	private LocalDateTime time;
 	
 	public Result(Boolean wasSuccessful, Student student, LearnItem learnItem){
 		this.wasSuccessful = wasSuccessful;
-		this.record = record;
+		this.student = student;
+		this.learnItem = learnItem;
+		this.time = LocalDateTime.now();
 	}
 	
 	public Result(){
@@ -37,6 +41,18 @@ public class Result{
 
 	public Boolean getWasSuccessful() {
 		return wasSuccessful;
+	}
+
+	public Student getStudent() {
+		return student;
+	}
+
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+
+	public LearnItem getLearnItem() {
+		return learnItem;
 	}
 	
 }

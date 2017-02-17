@@ -28,9 +28,6 @@ public class StudentItemRecord {
 	@ManyToOne
 	private Student student;
 	
-	@OneToMany(mappedBy="record")
-	private List<Result> results = new LinkedList<Result>();
-	
 	private static final Integer numberOfStoredResults = 5;
 	private Integer chosenPicture;
 	private Integer strength;
@@ -44,11 +41,6 @@ public class StudentItemRecord {
 		this.learnItem = learnItem;
 		this.student = student;
 	}
-	
-	public void registerResult(Boolean wasSuccessful){
-		Result r = new Result(wasSuccessful, student, learnItem);
-		results.add(r);
-	}
 
 	public LearnItem getLearnItem() {
 		return learnItem;
@@ -56,10 +48,6 @@ public class StudentItemRecord {
 
 	public Student getStudent() {
 		return student;
-	}
-
-	public List<Result> getResults() {
-		return results;
 	}
 
 	public static Integer getNumberofstoredresults() {
@@ -80,5 +68,9 @@ public class StudentItemRecord {
 
 	public Double getPriority() {
 		return priority;
+	}
+
+	public void setPriority(Double priority) {
+		this.priority = priority;
 	}
 }

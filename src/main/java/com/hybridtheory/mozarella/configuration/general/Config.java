@@ -11,7 +11,11 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import com.hybridtheory.mozarella.eventhandling.CachedThreadPoolEventEmitter;
+import com.hybridtheory.mozarella.eventhandling.EventEmitter;
 import com.hybridtheory.mozarella.users.StudentFactory;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.LatestResultsBasedPriorityCalculator;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.PriorityCalculator;
 import com.hybridtheory.mozarella.wordteacher.teacher.ItemPrioritizer;
 import com.hybridtheory.mozarella.wordteacher.teacher.ItemPrioritizerImpl1;
 import com.hybridtheory.mozzarella.authentication.JwtUtil;
@@ -50,5 +54,16 @@ public class Config{
                 registry.addMapping("/**");
             }
         };
+    }
+    
+    @Bean
+    public EventEmitter emitter(){
+    	System.out.println("creating the eventEmitter bean");
+    	return new CachedThreadPoolEventEmitter();
+    }
+    
+    @Bean 
+    PriorityCalculator priorityCalculator(){
+    	return new LatestResultsBasedPriorityCalculator(3);
     }
 }

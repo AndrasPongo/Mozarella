@@ -76,7 +76,7 @@ public class StudentController {
     }
     
     @RequestMapping(value="/api/students/{id}/results", method=RequestMethod.POST)
-    public ResponseEntity<List<Student>> postResult(@PathVariable("id") String id, @RequestBody Result result) {
+    public ResponseEntity postResult(@PathVariable("id") String id, @RequestBody Result result) {
     
     	em.publish(new NewResultAvailableEvent(result));
     	
