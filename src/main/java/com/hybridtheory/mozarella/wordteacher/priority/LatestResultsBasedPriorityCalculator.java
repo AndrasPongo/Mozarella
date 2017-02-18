@@ -1,4 +1,4 @@
-package com.hybridtheory.mozarella.wordteacher.learnmaterials;
+package com.hybridtheory.mozarella.wordteacher.priority;
 
 import java.util.List;
 
@@ -7,6 +7,8 @@ import org.springframework.data.domain.PageRequest;
 
 import com.hybridtheory.mozarella.persistence.repository.ResultRepository;
 import com.hybridtheory.mozarella.users.Student;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.Result;
 
 //TODO: test this
 //possible performance improvement: don't rely on the database, pass old result to the frontend and back
@@ -21,15 +23,15 @@ public class LatestResultsBasedPriorityCalculator implements PriorityCalculator 
 	}
 
 	@Override
-	public Integer calculatePriority(Student student, LearnItem learnItem) {
+	public Double calculatePriority(Student student, LearnItem learnItem) {
 		List<Result> lastResults = resultRepository.getLastResultsForStudentAndLearnItem(student.getId(), learnItem.getId(), new PageRequest(0,numberOfResultsToConsider));
 		
-		Integer prio = 0;
+		Double prio = 0.0;
 		Integer i=0;
 		
 		for(Result result : lastResults){
-			if(result.getWasSuccessful()){
-				prio += ((numberOfResultsToConsider-i)/numberOfResultsToConsider);
+			if(!result.getWasSuccessful()){
+				prio += ((Double.valueOf(numberOfResultsToConsider-i))/Double.valueOf(numberOfResultsToConsider));
 			}
 			
 			i+=1;
