@@ -9,8 +9,4 @@ public class CachedThreadPoolEventEmitter extends EventEmitter {
 		super(Executors.newCachedThreadPool());
 	}
 	
-	public ExecutorService getExecutorService(){
-		return (ExecutorService) super.executor;
-	}
-	
 }

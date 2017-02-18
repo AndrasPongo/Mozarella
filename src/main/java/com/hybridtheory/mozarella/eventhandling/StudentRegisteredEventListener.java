@@ -11,7 +11,6 @@ public class StudentRegisteredEventListener implements EventListener {
 	@Override
 	public void beNotifiedOfEvent(Event e) {
 		StudentRegisteredEvent studentRegisteredEvent = (StudentRegisteredEvent) e;
-		System.out.println("Received student registered event! Student's name is: "+studentRegisteredEvent.getRegisteredStudent().getRole());
 	}
 
 }

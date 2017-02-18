@@ -40,8 +40,7 @@ public class LearnItemListControllerIT extends ApplicationTests {
 	private static String learnitemlistsresource = "/api/learnitemlists";
 	private static String learnitemlistresource = "/api/learnitemlists/{id}";
 	private static String learnitemresource = "/api/learnitemlists/{id}/learnitems";
-	private static String resultresource = "/api/students/{id}/learnitems/{learnItemId}/results";
-	
+
 	private static String TOSAVENAME = "tosavename";
 	private static final String LEARNITEMLIST1NAME = "learnItemList1";
 
@@ -85,13 +84,5 @@ public class LearnItemListControllerIT extends ApplicationTests {
 		.andExpect(jsonPath("$").isArray()).andExpect(jsonPath("$", hasSize(1)))
 		.andExpect(jsonPath("$[0].name").value(LEARNITEMLIST1NAME));
 	}
-
-	/*@Test
-	public void validate_get_learnitemlist() throws Exception {
-		mockMvc.perform(get(learnitemlistresource, learnItemsList.getId())).andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-				.andExpect(jsonPath("$").isArray()).andExpect(jsonPath("$", hasSize(1)))
-				.andExpect(jsonPath("$[0].name").value(LEARNITEMLIST1NAME));
-	}*/
 
 }

@@ -14,6 +14,7 @@ import com.hybridtheory.mozarella.persistence.repository.StudentItemRecordReposi
 import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.Result;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.StudentItemRecord;
 import com.hybridtheory.mozarella.wordteacher.priority.PriorityCalculator;
 
 @Component
@@ -50,14 +51,28 @@ public class NewResultAvailableEventListener implements EventListener {
 		Student student = result.getStudent();
 		LearnItem learnItem = result.getLearnItem();
 		
-		LOGGER.debug("new result available for student "+student.getId()+" and learnItem "+learnItem.getId());
+		LOGGER.debug("processing new result for student "+student.getId()+" and learnItem "+learnItem.getId()+" STARTED");
 		
 		//1. persist the result
 		resultRepository.save(result);
 		
 		//2. assign a new priority to the learnItem, and save it
-		Double priority = priorityCalculator.calculatePriority(student, learnItem);
+		handleStudentItemRecord(student, learnItem);
 		
+		LOGGER.debug("processing new result for student "+student.getId()+" and learnItem "+learnItem.getId()+" ENDED");
+	}
+	
+	public void handleStudentItemRecord(Student student, LearnItem learnItem){
+		
+		Double priority = priorityCalculator.calculatePriority(student, learnItem);
+		StudentItemRecord studentItemRecord = studentItemRecordRepository.getStudentItemRecordForStudentAndLearnItemList(student.getId(), learnItem.getId());
+		
+		if(studentItemRecord==null){
+			studentItemRecord = new StudentItemRecord(student,learnItem);
+		}
+		
+		studentItemRecord.setPriority(priority);
+		studentItemRecordRepository.save(studentItemRecord);
 	}
 
 }

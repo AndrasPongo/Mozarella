@@ -20,12 +20,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.hybridtheory.mozarella.pet.Pet;
 import com.hybridtheory.mozarella.pet.cubefish.CubeFish;
-import com.hybridtheory.mozarella.wordteacher.InputSanitizer;
+import com.hybridtheory.mozarella.serialization.AuthorityDeserializer;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemsManager;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemManager;
 
 @Entity
 public class Student implements UserDetails {
@@ -52,21 +53,19 @@ public class Student implements UserDetails {
 	
 	@JsonIgnore
 	@OneToOne(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY, optional = false)
-	private LearnItemsManager learnItemManager;
+	private LearnItemManager learnItemManager;
 	
 	@JsonIgnore
 	@OneToOne(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY, optional = false)
 	private Pet pet;
-	
-	@Transient
-	private InputSanitizer inputSanitizer = new InputSanitizer();
 
 	@ElementCollection
+	@JsonDeserialize(using = AuthorityDeserializer.class)
 	private List<GrantedAuthority> authorities;
 	
 	public Student(){
 		if(learnItemManager == null){
-			learnItemManager = new LearnItemsManager();
+			learnItemManager = new LearnItemManager();
 		}
 		if(pet == null){
 			 pet = new CubeFish();
@@ -85,18 +84,15 @@ public class Student implements UserDetails {
 	public String getPassword() {
 		return this.password;
 	}
-	@JsonIgnore
+
 	public void initialize(String studentName) {
 		boolean validName = false;
-		validName = inputSanitizer.checkStudentNameIsValid(studentName);
-		if (!validName) {
-			throw new IllegalArgumentException("Invalid name for Student");
-		}
+
 		this.name = studentName;
 		this.password = "password";
-		learnItemManager = new LearnItemsManager(this);
+		learnItemManager = new LearnItemManager(this);
 	}
-	@JsonIgnore
+
 	protected void initializePet(String petName) {
 		pet = new CubeFish(petName);
 	}
@@ -106,51 +102,43 @@ public class Student implements UserDetails {
 		return pet;
 	}
 
-	@JsonIgnore
+
 	@OneToOne(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY, optional = false)
 	public List<LearnItemList> getLearnItemLists() {
 		return learnItemManager.getLearnItemsLists();
 	}
-	@JsonIgnore
+
 	protected LearnItemList getLearnItemListByName(String nameOfList) {
 		return learnItemManager.getLearnItemsList(nameOfList);
 	}
-	@JsonIgnore
+
 	protected LearnItemList addNewLearnItemsList(String name) {
 		return learnItemManager.createLearnItemsList(name);
 	}
-	@JsonIgnore
+
 	protected LearnItemList addNewLearnItemsList(LearnItemList learnItemsList) {
 		return learnItemManager.addNewLearnItemsList(learnItemsList);
-	}
-	
-	public InputSanitizer getInputSanitizer() {
-		return inputSanitizer;
-	}
-	
-	public void setInputSanitizer(InputSanitizer inputSanitizer) {
-		this.inputSanitizer = inputSanitizer;
 	}
 	
 	public void setName(String name) {
 		this.name = name;
 	}
-	@JsonIgnore
-	public void setLearnItemManager(LearnItemsManager learnItemManager) {
+
+	public void setLearnItemManager(LearnItemManager learnItemManager) {
 		this.learnItemManager = learnItemManager;
 	}
-	@JsonIgnore
+
 	protected void addNewLearnItemToExistingList(LearnItemList learnItemsList, LearnItem learnItem) {
 		learnItemManager.addNewLearnItemToLearnItemsList(learnItemsList, learnItem);
 	}
-	@JsonIgnore
+
 	public void associateWithLearnItemsList(LearnItemList learnItemsList){
 		learnItemManager.addNewLearnItemsList(learnItemsList);
 	}
 
-	@JsonIgnore
+
 	@OneToOne(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY, optional = false)
-	public LearnItemsManager getLearnItemManager(){
+	public LearnItemManager getLearnItemManager(){
 		return this.learnItemManager;
 	}
 	

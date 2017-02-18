@@ -1,5 +1,6 @@
 package com.hybridtheory.mozarella.wordteacher.learnmaterials;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,7 +18,7 @@ import javax.persistence.Transient;
 import com.hybridtheory.mozarella.users.Student;
 
 @Entity
-public class LearnItemsManager {
+public class LearnItemManager implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,15 +29,17 @@ public class LearnItemsManager {
 
 	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	private List<LearnItemList> learnItemLists = new ArrayList<LearnItemList>();
+	
+	private static final long serialVersionUID = 7526471291622776147L;
 
-	public LearnItemsManager() {
+	public LearnItemManager() {
 
 	}
 
 	// TODO: Is this good design? Like this every user will have their own
 	// LearnItemManager, which will raise the need towards the User object to
 	// know about this Manager itself. Not sure if this is necessary...
-	public LearnItemsManager(Student student) {
+	public LearnItemManager(Student student) {
 		if (student != null) {
 			this.owner = student;
 		} else {

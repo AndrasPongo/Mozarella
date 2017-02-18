@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.springframework.stereotype.Component;
@@ -15,9 +16,9 @@ import com.hybridtheory.mozarella.eventhandling.event.Event;
 public class EventEmitter{
 
 	private Map<String,List<EventListener>> listeners = new HashMap<String,List<EventListener>>();
-	protected Executor executor = Executors.newCachedThreadPool();
+	protected ExecutorService executor = Executors.newCachedThreadPool();
 	
-	protected EventEmitter(Executor executor){
+	protected EventEmitter(ExecutorService executor){
 		this.executor = executor;
 	}
 	
@@ -41,5 +42,9 @@ public class EventEmitter{
 			listeners.put(eventClass.toString(),listenersThatListenToIt);
 		}
 		
+	}
+	
+	public ExecutorService getExecutorService(){
+		return executor;
 	}
 }

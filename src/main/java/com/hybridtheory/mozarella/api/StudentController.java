@@ -46,9 +46,6 @@ public class StudentController {
     
     @Autowired
     private StudentFactory studentFactory;
-    
-    @Autowired
-    private EventEmitter em;
 
     @RequestMapping(value="/api/students", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity create(@RequestBody Student student) {
@@ -73,14 +70,6 @@ public class StudentController {
     @RequestMapping(value="/api/students/{ids}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<Student>> getStudents(@PathVariable("ids") String ids) {
     	return new ResponseEntity<List<Student>>(getStudentsByIds(IdSplitter.getIds(ids)),HttpStatus.OK);
-    }
-    
-    @RequestMapping(value="/api/students/{id}/results", method=RequestMethod.POST)
-    public ResponseEntity postResult(@PathVariable("id") String id, @RequestBody Result result) {
-    
-    	em.publish(new NewResultAvailableEvent(result));
-    	
-    	return new ResponseEntity(HttpStatus.CREATED);
     }
     
     private List<Student> getStudentsByIds(List<Integer> ids){

@@ -58,7 +58,6 @@ public class Config{
     
     @Bean
     public EventEmitter emitter(){
-    	System.out.println("creating the eventEmitter bean");
     	return new CachedThreadPoolEventEmitter();
     }
     

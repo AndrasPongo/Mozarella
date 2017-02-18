@@ -13,7 +13,7 @@ public class LearnItemsManagerTest {
 		Student testStudent1 = new Student();
 		
 		//When
-		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
+		LearnItemManager learnItemsManager = new LearnItemManager(testStudent1);
 		
 		//Then
 		assertTrue(learnItemsManager.getOwner() == testStudent1);
@@ -24,14 +24,14 @@ public class LearnItemsManagerTest {
 		//Given
 		
 		//When & Then
-		new LearnItemsManager(null);
+		new LearnItemManager(null);
 	}
 	
 	@Test
 	public void learnItemsManager_createLearnItemsListWithValidName() {
 		//Given
 		Student testStudent1 = new Student();
-		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
+		LearnItemManager learnItemsManager = new LearnItemManager(testStudent1);
 
 		//When
 		LearnItemList newLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
@@ -45,7 +45,7 @@ public class LearnItemsManagerTest {
 	public void learnItemsManager_createLearnItemsListWithNull() {
 		//Given
 		Student testStudent1 = new Student();
-		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
+		LearnItemManager learnItemsManager = new LearnItemManager(testStudent1);
 
 		//When & Then
 		learnItemsManager.createLearnItemsList(null);
@@ -55,7 +55,7 @@ public class LearnItemsManagerTest {
 	public void learnItemsManager_createAlreadyExistingLearnItemsList() {
 		//Given
 		Student testStudent1 = new Student();
-		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
+		LearnItemManager learnItemsManager = new LearnItemManager(testStudent1);
 		learnItemsManager.createLearnItemsList("testLearnItemsList");
 
 		//When & Then
@@ -66,7 +66,7 @@ public class LearnItemsManagerTest {
 	public void learnItemsManager_addNewValidWordToExistingList() {
 		//Given
 		Student testStudent1 = new Student();
-		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
+		LearnItemManager learnItemsManager = new LearnItemManager(testStudent1);
 		LearnItemList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
 		
 		//When
@@ -81,7 +81,7 @@ public class LearnItemsManagerTest {
 	public void learnItemsManager_addNewValidMultiWordToExistingList() {
 		//Given
 		Student testStudent1 = new Student();
-		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
+		LearnItemManager learnItemsManager = new LearnItemManager(testStudent1);
 		LearnItemList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
 		
 		//When
@@ -96,7 +96,7 @@ public class LearnItemsManagerTest {
 	public void learnItemsManager_addNewValidLearnItemToExistingList() {
 		//Given
 		Student testStudent1 = new Student();
-		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
+		LearnItemManager learnItemsManager = new LearnItemManager(testStudent1);
 		LearnItemList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
 
 		LearnItem learnItem = new LearnItem("testword", "xyz");
@@ -112,7 +112,7 @@ public class LearnItemsManagerTest {
 	public void learnItemsManager_getValidWordFromExistingList() {
 		//Given
 		Student testStudent1 = new Student();
-		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
+		LearnItemManager learnItemsManager = new LearnItemManager(testStudent1);
 		LearnItemList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
 		learnItemsManager.createNewLearnItemToLearnItemsList(existingLearnItemsList, "testword", "xyz");
 
@@ -144,7 +144,7 @@ public class LearnItemsManagerTest {
 	public void learnItemsManager_addNewValidWordToNotExistingList() {
 		//Given
 		Student testStudent1 = new Student();
-		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
+		LearnItemManager learnItemsManager = new LearnItemManager(testStudent1);
 		
 		//When & Then
 		learnItemsManager.createNewLearnItemToLearnItemsList(null, "testword", "xyz");
@@ -154,7 +154,7 @@ public class LearnItemsManagerTest {
 	public void learnItemsManager_addNewValidMultiWordToNotExistingList() {
 		//Given
 		Student testStudent1 = new Student();
-		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
+		LearnItemManager learnItemsManager = new LearnItemManager(testStudent1);
 		
 		//When & Then
 		learnItemsManager.createNewLearnItemToLearnItemsList(null, "test multi word", "abc xyz");
@@ -164,7 +164,7 @@ public class LearnItemsManagerTest {
 	public void learnItemsManager_removeValidWordFromValidList() {
 		//Given
 		Student testStudent1 = new Student();
-		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
+		LearnItemManager learnItemsManager = new LearnItemManager(testStudent1);
 		LearnItemList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
 		learnItemsManager.createNewLearnItemToLearnItemsList(existingLearnItemsList, "testword", "xyz");
 		LearnItem learnItem = learnItemsManager.getLearnItemFromList(existingLearnItemsList, "testword");
@@ -180,7 +180,7 @@ public class LearnItemsManagerTest {
 	public void learnItemsManager_setStrengthOfLearnItem_valid() {
 		//Given
 		Student testStudent1 = new Student();
-		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
+		LearnItemManager learnItemsManager = new LearnItemManager(testStudent1);
 		LearnItemList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
 		learnItemsManager.createNewLearnItemToLearnItemsList(existingLearnItemsList, "testword", "xyz");
 		LearnItem learnItem = learnItemsManager.getLearnItemFromList(existingLearnItemsList, "testword");
@@ -196,7 +196,7 @@ public class LearnItemsManagerTest {
 	public void learnItemsManager_setStrengthOfLearnItem_invalid() {
 		//Given
 		Student testStudent1 = new Student();
-		LearnItemsManager learnItemsManager = new LearnItemsManager(testStudent1);
+		LearnItemManager learnItemsManager = new LearnItemManager(testStudent1);
 		LearnItemList existingLearnItemsList = learnItemsManager.createLearnItemsList("testLearnItemsList");
 		learnItemsManager.createNewLearnItemToLearnItemsList(existingLearnItemsList, "testword", "xyz");
 		LearnItem learnItem = learnItemsManager.getLearnItemFromList(existingLearnItemsList, "testword");

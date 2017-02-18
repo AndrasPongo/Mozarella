@@ -1,5 +1,6 @@
 package com.hybridtheory.mozarella.wordteacher.learnmaterials;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,9 @@ import javax.persistence.ManyToOne;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class LearnItem implements Comparable<LearnItem> {
+public class LearnItem implements Comparable<LearnItem>, Serializable {
+	
+	private static final long serialVersionUID = 7526471111622776111L;
 	
 	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
@@ -26,7 +29,7 @@ public class LearnItem implements Comparable<LearnItem> {
 	protected String text;
 	
 	@ElementCollection
-	protected List<String> translations;
+	protected List<String> translations = new ArrayList<String>();
 	protected Double priority;
 	protected Integer strength=0;
 	protected String pictureReference;
@@ -46,10 +49,6 @@ public class LearnItem implements Comparable<LearnItem> {
 		this.text = text;
 		this.translations = translations;
 	}
-	
-	public void setId(String idDescriptor) {
-		this.idDescriptor = idDescriptor;		
-	}
 
 	public void setText(String text) {
 		this.text = text;		
@@ -67,7 +66,12 @@ public class LearnItem implements Comparable<LearnItem> {
 		return getTranslation(0);
 	}
 	
+	@JsonIgnore
 	public String getTranslation(Integer index) {
+		if(translations.size()<index+1){
+			return null;
+		}
+		
 		return translations.get(index);
 	}
 
@@ -125,6 +129,10 @@ public class LearnItem implements Comparable<LearnItem> {
 	@Override
 	public int compareTo(LearnItem other){
 		return this.text.compareTo(other.text);
+	}
+
+	public void setId(Integer id) {
+		this.id=id;
 	}
 
 }

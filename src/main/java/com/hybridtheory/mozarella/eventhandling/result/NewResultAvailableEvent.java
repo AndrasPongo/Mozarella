@@ -1,7 +1,6 @@
 package com.hybridtheory.mozarella.eventhandling.result;
 
 import com.hybridtheory.mozarella.eventhandling.event.Event;
-import com.hybridtheory.mozarella.eventhandling.event.EventType;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.Result;
 
 public class NewResultAvailableEvent implements Event{
