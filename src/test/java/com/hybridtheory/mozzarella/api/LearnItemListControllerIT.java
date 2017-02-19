@@ -70,7 +70,7 @@ public class LearnItemListControllerIT extends ApplicationTests {
 	}
 
 	@Test
-	public void validate_create_learnitemlists() throws Exception {
+	public void validateCreateLearnItemLists() throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonInString = mapper.writeValueAsString(learnItemsListToSave);
 		
@@ -79,7 +79,7 @@ public class LearnItemListControllerIT extends ApplicationTests {
 	}
 	
 	@Test
-	public void validate_get_learnitemlist() throws Exception {
+	public void validateGetLearnItemList() throws Exception {
 		mockMvc.perform(get(learnitemlistresource,learnItemsList.getId())).andExpect(status().isOk())
 		.andExpect(jsonPath("$").isArray()).andExpect(jsonPath("$", hasSize(1)))
 		.andExpect(jsonPath("$[0].name").value(LEARNITEMLIST1NAME));

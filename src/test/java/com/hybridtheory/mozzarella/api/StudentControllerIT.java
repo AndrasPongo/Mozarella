@@ -2,6 +2,7 @@ package com.hybridtheory.mozzarella.api;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -16,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.hybridtheory.mozarella.persistence.repository.LearnItemListRepository;
 import com.hybridtheory.mozarella.persistence.repository.SomeEntityRepository;
 import com.hybridtheory.mozarella.persistence.repository.StudentItemRecordRepository;
 import com.hybridtheory.mozarella.persistence.repository.StudentRepository;
@@ -34,6 +36,9 @@ public class StudentControllerIT extends ApplicationTests {
     
     @Autowired
     private StudentItemRecordRepository studentItemRecordRepository;
+    
+    @Autowired
+    private LearnItemListRepository learnItemListRepository;
     
     @Autowired
     private SomeEntityRepository someEntityRepository;
@@ -61,9 +66,16 @@ public class StudentControllerIT extends ApplicationTests {
     	if(!initializedFlag){
             
             learnItemsList = new LearnItemList("learnItemList1");
+            learnItemListRepository.save(learnItemsList);
+            
             learnItemsList2 = new LearnItemList("learnItemList2");
+            learnItemListRepository.save(learnItemsList2);
             
             student1.setName(STUDENT1NAME);
+            //TODO: we only associate with already persisted learnItemLists!
+            //check for the id in the controller method!
+            
+            //as for this method, call for "persist manually"
             student1.associateWithLearnItemsList(learnItemsList);
             student1.associateWithLearnItemsList(learnItemsList2);
             
@@ -87,7 +99,7 @@ public class StudentControllerIT extends ApplicationTests {
     }
 
     @Test
-    public void validate_get_student() throws Exception {
+    public void validateGetStudent() throws Exception {
 
         mockMvc.perform(get("/api/students/"+student1.getId()))
                 .andExpect(status().isOk())
@@ -98,12 +110,12 @@ public class StudentControllerIT extends ApplicationTests {
     }
     
     @Test
-    public void validate_get_student_again() throws Exception {
+    public void validateGetStudentAgain() throws Exception {
     	mockMvc.perform(get("/api/students/"+student1.getId())).andExpect(status().isOk());
     }
     
     @Test
-    public void validate_get_student_by_name() throws Exception {
+    public void validateGetStudentsByName() throws Exception {
     	mockMvc.perform(get("/api/students").param("name", STUDENT1NAME))
     	.andExpect(status().isOk())
     	.andExpect(jsonPath("$[0].name").value(STUDENT1NAME))
@@ -111,13 +123,18 @@ public class StudentControllerIT extends ApplicationTests {
     }
     
     @Test
-    public void validate_get_multiple_students() throws Exception{
+    public void validateGetMultipleStudents() throws Exception{
         mockMvc.perform(get("/api/students"))
         .andExpect(status().isOk())
         .andExpect(
                 content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
         .andExpect(jsonPath("$").isArray())
         .andExpect(jsonPath("$",hasSize(Math.toIntExact(repository.count()))));
+    }
+    
+    @Test
+    public void validateGetLearnableLearnItems() throws Exception{
+        fail("not implemented");
     }
     
     @Test

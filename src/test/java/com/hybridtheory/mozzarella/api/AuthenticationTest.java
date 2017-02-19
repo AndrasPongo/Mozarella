@@ -53,13 +53,13 @@ public class AuthenticationTest extends AuthenticationApplicationTests {
     }  
     
     @Test
-    public void t1_validate_cant_access_resource_before_authentication() throws Exception{
+    public void validateCantAccessResourceBeforeAuthentication() throws Exception{
     	 mockMvc.perform(get(learnitemlistresource,1))
     	.andExpect(status().isUnauthorized());
     }
       
     @Test
-    public void t2_validate_register_with_username_password() throws Exception{
+    public void test1ValidateRegisterWithUsernamePassword() throws Exception{
     	userName = userName+repository.count();
     	
     	String basicDigestHeaderValue = "Basic " + new String(Base64.encodeBase64((userName+":"+userPswd).getBytes()));
@@ -76,7 +76,7 @@ public class AuthenticationTest extends AuthenticationApplicationTests {
     }
     
     @Test
-    public void t3_validate_can_access_resource_with_token() throws Exception{
+    public void test2ValidateCanAccessResourceWithToken() throws Exception{
     	String basicDigestHeaderValue = "Basic " + new String(Base64.encodeBase64((userName+":"+userPswd).getBytes()));
     	
     	MvcResult result = this.mockMvc.perform(post(loginresource)

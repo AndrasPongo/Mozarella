@@ -1,8 +1,5 @@
 package com.hybridtheory.mozarella.users;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
 
@@ -20,29 +17,6 @@ public class StudentProgressTracker {
 	
 	public Student getOwner() {
 		return this.owner;
-	}
-	
-	//TODO: handle such things through repositories
-	private List<String> returnLearntWordsOfStudent() {
-		List<String> alreadyLearntWords = new ArrayList<String>();
-		List<LearnItemList> learnItemListsOfStudent = this.owner.getLearnItemLists();
-		for(LearnItemList learnItemsList : learnItemListsOfStudent) {
-			for(LearnItem learnItem : learnItemsList) {
-				if (learnItem.getStrength() > 0) {
-					alreadyLearntWords.add(learnItem.getText());
-				}
-			}
-	    }
-		return alreadyLearntWords;		
-	}
-	
-	//TODO: this should be updated when there is a new result, and only queried later
-	public int returnLearntWordsCountOfStudent() {
-		List<String> alreadyLearntWords = returnLearntWordsOfStudent();
-		if (alreadyLearntWords == null) {
-			return 0;
-		}
-		return alreadyLearntWords.size();
 	}
 	
 	//TODO: repositories

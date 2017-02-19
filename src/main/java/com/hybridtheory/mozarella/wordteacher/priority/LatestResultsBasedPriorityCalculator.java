@@ -10,7 +10,6 @@ import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.Result;
 
-//TODO: test this
 //possible performance improvement: don't rely on the database, pass old result to the frontend and back
 public class LatestResultsBasedPriorityCalculator implements PriorityCalculator {
 	

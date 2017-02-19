@@ -1,6 +1,7 @@
 package com.hybridtheory.mozarella.api;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -8,6 +9,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +20,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hybridtheory.mozarella.eventhandling.EventEmitter;
-import com.hybridtheory.mozarella.eventhandling.result.NewResultAvailableEvent;
 import com.hybridtheory.mozarella.persistence.repository.LearnItemRepository;
 import com.hybridtheory.mozarella.persistence.repository.StudentItemRecordRepository;
 import com.hybridtheory.mozarella.persistence.repository.StudentRepository;
 import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.users.StudentFactory;
 import com.hybridtheory.mozarella.utils.IdSplitter;
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.Result;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 
 import jersey.repackaged.com.google.common.collect.Lists;
 
@@ -70,6 +70,15 @@ public class StudentController {
     @RequestMapping(value="/api/students/{ids}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<Student>> getStudents(@PathVariable("ids") String ids) {
     	return new ResponseEntity<List<Student>>(getStudentsByIds(IdSplitter.getIds(ids)),HttpStatus.OK);
+    }
+    
+    @RequestMapping(value="/api/students/{studentid}/learnitemlists/{listid}/learnitems", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<LearnItem>> getLearnItemsToLearn(@PathVariable("studentid") Integer studentId, @PathVariable("studentid") Integer listId, @RequestParam("count") Integer count) {
+    	List<Integer> listIds = new ArrayList<>(); //repo is for multiple ids, but in practice we only send one
+    	listIds.add(listId);
+    	List<LearnItem> learnItems = learnItemRepository.getAllLearnItemsForStudent(studentId, listIds, new PageRequest(0, count));
+    	
+    	return new ResponseEntity<>(learnItems, HttpStatus.OK);
     }
     
     private List<Student> getStudentsByIds(List<Integer> ids){

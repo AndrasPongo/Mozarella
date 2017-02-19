@@ -66,7 +66,7 @@ public class ResultControllerIT extends ApplicationTests {
 	    }
 	    
 	    @Test
-	    public void validate_new_result_is_stored() throws Exception{
+	    public void validateNewResultIsStored() throws Exception{
 	    	
 	    	//given
 	    	Student student = new Student();

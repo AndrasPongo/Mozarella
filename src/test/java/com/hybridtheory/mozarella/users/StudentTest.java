@@ -19,43 +19,6 @@ public class StudentTest {
 				
 		//Then
 		assertTrue(student.getName().equals("testStudent1"));
-	}	
-
-	@Test
-	public void testStudent_learnItemsManagerCreation() {
-		//Given
-	
-		//When
-		Student student = new Student();
-				
-		//Then
-		assertTrue(student.getLearnItemManager() != null);
-	}
-	
-	@Test
-	public void testStudent_addAndGetNewLearnItemsList() {
-		//Given
-		LearnItemList learnItemsList = new LearnItemList("testLearnItemList");
-		//When
-		Student student = new Student();
-		student.addNewLearnItemsList(learnItemsList);
-				
-		//Then
-		assertTrue(student.getLearnItemLists().contains(learnItemsList));
-	}
-	
-	@Test
-	public void testStudent_addAndGetNewLearnItemToExistingList() {
-		//Given
-		LearnItem learnItem = new LearnItem("testword", "xyz");
-	
-		//When
-		Student student = new Student();
-		LearnItemList learnItemsList = student.addNewLearnItemsList("testList1");
-		student.addNewLearnItemToExistingList(learnItemsList, learnItem);
-				
-		//Then
-		assertTrue(student.getLearnItemListByName("testList1") != null);
 	}
 	
 	@Test

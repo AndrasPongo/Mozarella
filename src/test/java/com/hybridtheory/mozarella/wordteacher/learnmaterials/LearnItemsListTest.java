@@ -84,62 +84,30 @@ public class LearnItemsListTest {
 	@Test
 	public void learnItemsList_addValidLearnItem() {
 		//Given
-		boolean success = false;
 		LearnItemList learnItemList = new LearnItemList("testList1");
 		LearnItem testLearnItem = new LearnItem("testword", "xyz");
-		int originalLearnItemNumber = learnItemList.getNumberOfLearnItemsInList();
+		Integer originalLearnItemNumber = learnItemList.getNumberOfLearnItemsInList();
 		
 		//When
-		success = learnItemList.addLearnItem(testLearnItem);
+		learnItemList.addLearnItem(testLearnItem);
 		
 		//Then
-		assertTrue(success == true && learnItemList.getNumberOfLearnItemsInList() == originalLearnItemNumber+1);
-	}
-	
-	@Test
-	public void learnItemsList_addInvalidLearnItem() {
-		//Given
-		boolean success = false;
-		LearnItemList learnItemList = new LearnItemList("testList1");
-		int originalLearnItemNumber = learnItemList.getNumberOfLearnItemsInList();
-		
-		//When
-		success = learnItemList.addLearnItem(null);
-		
-		//Then
-		assertTrue(success == false && learnItemList.getNumberOfLearnItemsInList() == originalLearnItemNumber);
+		assertTrue(learnItemList.getNumberOfLearnItemsInList() == originalLearnItemNumber+1);
 	}
 	
 	@Test
 	public void learnItemsList_addAlreadyExistingLearnItem() {
 		//Given
-		boolean success = false;
 		LearnItemList learnItemList = new LearnItemList("testList1");
 		LearnItem testLearnItem = new LearnItem("testword", "xyz");
 		learnItemList.addLearnItem(testLearnItem);
 		int originalLearnItemNumber = learnItemList.getNumberOfLearnItemsInList();
 		
 		//When
-		success = learnItemList.addLearnItem(testLearnItem);
-		
-		//Then
-		assertTrue(success == false && learnItemList.getNumberOfLearnItemsInList() == originalLearnItemNumber);
-	}
-	
-	@Test
-	public void learnItemsList_getExistingLearnItem() {
-		//Given
-		LearnItemList learnItemList = new LearnItemList("testList1");
-		LearnItem testLearnItem = new LearnItem("testword", "xyz");
 		learnItemList.addLearnItem(testLearnItem);
 		
-		//When
-		LearnItem learnItem = learnItemList.getLearnItem("testword");
-		
 		//Then
-		assertTrue(learnItem.getText() == "testword" && 
-				learnItem.getTranslation() == "xyz" && 
-				learnItemList.getNumberOfLearnItemsInList() == 1);
+		assertTrue(learnItemList.getNumberOfLearnItemsInList() == originalLearnItemNumber);
 	}
 
 	@Test
@@ -156,20 +124,6 @@ public class LearnItemsListTest {
 		
 		//Then
 		assertTrue(success == true && learnItemList.getNumberOfLearnItemsInList() == originalLearnItemNumber-1);
-	}
-	
-	@Test
-	public void learnItemsList_removeNullLearnItem() {
-		//Given
-		boolean success = false;
-		LearnItemList learnItemList = new LearnItemList("testList1");
-		int originalLearnItemNumber = learnItemList.getNumberOfLearnItemsInList();
-		
-		//When
-		success = learnItemList.removeLearnItem(null);
-
-		//Then
-		assertTrue(success == false && learnItemList.getNumberOfLearnItemsInList() == originalLearnItemNumber);
 	}
 	
 	@Test

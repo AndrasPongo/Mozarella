@@ -1,9 +1,11 @@
 package com.hybridtheory.mozarella.wordteacher.learnmaterials;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -23,13 +25,16 @@ import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.InputSanitizer;
 
 @Entity
-public class LearnItemList implements Comparable<LearnItemList>, Iterable<LearnItem> {
+public class LearnItemList implements Iterable<LearnItem> {
 	
 	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	
 	@ManyToMany
-	private List<Student> contributors = new ArrayList<Student>();
+	private List<Student> contributors = new ArrayList<>();
+	
+	@ManyToMany
+	private Set<Student> students = new HashSet<>();
 	
 	private Boolean isPublic;
 
@@ -81,56 +86,6 @@ public class LearnItemList implements Comparable<LearnItemList>, Iterable<LearnI
 	public int getNumberOfLearnItemsInList() {
 		return this.numberOfLearnItems;
 	}
-	
-	public Boolean addLearnItem(LearnItem learnItem) {
-		if (learnItem == null || this.learnItems.contains(learnItem)) {
-			return false;
-		} else {
-			learnItem.setLearnItemsList(this);
-			learnItems.add(learnItem);
-			numberOfLearnItems++;
-			return true;
-		}
-	}
-	
-	
-	public LearnItem getLearnItem(String text) {
-		//TODO: at this point it became apparent that we need to separate the check for the text and the translation. Will do. For now... CHEAT
-		if (!inputSanitizer.checkIfLearnItemInputsAreValid(text, "translationThatCircumventsTheSanitizer")) {
-			return null;
-		} else {
-			for (LearnItem li : learnItems) {
-				if (li.getText()==text) {
-					return li;
-				}
-			}
-		}
-		return null;
-	}
-	
-	protected boolean removeLearnItem(LearnItem learnItem) {
-		if (learnItem == null || !this.learnItems.contains(learnItem)) {
-			return false;
-		} else {
-			learnItems.remove(learnItem);
-			numberOfLearnItems--;
-			return true;
-		}
-	}
-
-	@Override
-	public int compareTo(LearnItemList learnItemsList) {
-		if (learnItemsList.getName().equals(this.name)) {
-			return 0;	
-		} else {
-			return -1;
-		}
-	}	
-	
-	@Override
-	public boolean equals(Object other) {
-		return other instanceof LearnItemList && this.name.equals(((LearnItemList)(other)).name);
-	}
 
 	@Override
 	public Iterator<LearnItem> iterator() {
@@ -139,11 +94,6 @@ public class LearnItemList implements Comparable<LearnItemList>, Iterable<LearnI
 
 	public Integer getId() {
 		return id;
-	}
-	
-	@JsonIgnore
-	public Collection<LearnItem> getLearnItems(){
-		return learnItems;
 	}
 
 	public List<Student> getContributors() {
@@ -168,6 +118,30 @@ public class LearnItemList implements Comparable<LearnItemList>, Iterable<LearnI
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		return other instanceof LearnItemList && this.id.equals(((LearnItemList)(other)).id);
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	public void addLearnItem(LearnItem learnitem) {
+		if(learnItems.add(learnitem)){
+			numberOfLearnItems+=1;
+		}
+	}
+
+	public boolean removeLearnItem(LearnItem testLearnItem) {
+		Boolean wasSuccessful = learnItems.remove(testLearnItem);
+		if(wasSuccessful){
+			numberOfLearnItems-=1;
+		}
+		return wasSuccessful;
 	}
 	
 }

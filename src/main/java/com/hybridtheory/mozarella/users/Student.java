@@ -2,7 +2,10 @@ package com.hybridtheory.mozarella.users;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,6 +15,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
@@ -24,9 +28,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.hybridtheory.mozarella.pet.Pet;
 import com.hybridtheory.mozarella.pet.cubefish.CubeFish;
 import com.hybridtheory.mozarella.serialization.AuthorityDeserializer;
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemManager;
 
 @Entity
 public class Student implements UserDetails {
@@ -52,8 +54,8 @@ public class Student implements UserDetails {
 	private String role;
 	
 	@JsonIgnore
-	@OneToOne(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY, optional = false)
-	private LearnItemManager learnItemManager;
+	@ManyToMany(mappedBy="students")
+	private Set<LearnItemList> learnItemLists = new HashSet<>(); 
 	
 	@JsonIgnore
 	@OneToOne(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY, optional = false)
@@ -64,9 +66,6 @@ public class Student implements UserDetails {
 	private List<GrantedAuthority> authorities;
 	
 	public Student(){
-		if(learnItemManager == null){
-			learnItemManager = new LearnItemManager();
-		}
 		if(pet == null){
 			 pet = new CubeFish();
 		}
@@ -85,14 +84,6 @@ public class Student implements UserDetails {
 		return this.password;
 	}
 
-	public void initialize(String studentName) {
-		boolean validName = false;
-
-		this.name = studentName;
-		this.password = "password";
-		learnItemManager = new LearnItemManager(this);
-	}
-
 	protected void initializePet(String petName) {
 		pet = new CubeFish(petName);
 	}
@@ -101,45 +92,9 @@ public class Student implements UserDetails {
 	public Pet getPet() {
 		return pet;
 	}
-
-
-	@OneToOne(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY, optional = false)
-	public List<LearnItemList> getLearnItemLists() {
-		return learnItemManager.getLearnItemsLists();
-	}
-
-	protected LearnItemList getLearnItemListByName(String nameOfList) {
-		return learnItemManager.getLearnItemsList(nameOfList);
-	}
-
-	protected LearnItemList addNewLearnItemsList(String name) {
-		return learnItemManager.createLearnItemsList(name);
-	}
-
-	protected LearnItemList addNewLearnItemsList(LearnItemList learnItemsList) {
-		return learnItemManager.addNewLearnItemsList(learnItemsList);
-	}
 	
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public void setLearnItemManager(LearnItemManager learnItemManager) {
-		this.learnItemManager = learnItemManager;
-	}
-
-	protected void addNewLearnItemToExistingList(LearnItemList learnItemsList, LearnItem learnItem) {
-		learnItemManager.addNewLearnItemToLearnItemsList(learnItemsList, learnItem);
-	}
-
-	public void associateWithLearnItemsList(LearnItemList learnItemsList){
-		learnItemManager.addNewLearnItemsList(learnItemsList);
-	}
-
-
-	@OneToOne(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY, optional = false)
-	public LearnItemManager getLearnItemManager(){
-		return this.learnItemManager;
 	}
 	
 	@Override
@@ -207,5 +162,19 @@ public class Student implements UserDetails {
 	
 	public void setPassword(String password){
 		this.password = password;
+	}
+
+	public void associateWithLearnItemsList(LearnItemList learnItemsList) {
+		learnItemLists.add(learnItemsList);
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		return other instanceof Student && this.id.equals(((Student)(other)).id);
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 }
