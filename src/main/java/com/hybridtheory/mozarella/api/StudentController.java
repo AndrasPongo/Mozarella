@@ -73,7 +73,7 @@ public class StudentController {
     }
     
     @RequestMapping(value="/api/students/{studentid}/learnitemlists/{listid}/learnitems", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<List<LearnItem>> getLearnItemsToLearn(@PathVariable("studentid") Integer studentId, @PathVariable("studentid") Integer listId, @RequestParam("count") Integer count) {
+    public ResponseEntity<List<LearnItem>> getLearnItemsToLearn(@PathVariable("studentid") Integer studentId, @PathVariable("listid") Integer listId, @RequestParam("count") Integer count) {
     	List<Integer> listIds = new ArrayList<>(); //repo is for multiple ids, but in practice we only send one
     	listIds.add(listId);
     	List<LearnItem> learnItems = learnItemRepository.getAllLearnItemsForStudent(studentId, listIds, new PageRequest(0, count));

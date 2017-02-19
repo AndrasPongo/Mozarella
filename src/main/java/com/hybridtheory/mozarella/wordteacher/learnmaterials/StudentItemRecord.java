@@ -1,20 +1,14 @@
 package com.hybridtheory.mozarella.wordteacher.learnmaterials;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Transient;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.hybridtheory.mozarella.users.Student;
-import com.hybridtheory.mozarella.wordteacher.teacher.ItemPrioritizer;
 
 @Entity
 public class StudentItemRecord {
@@ -33,6 +27,8 @@ public class StudentItemRecord {
 	private Integer strength;
 	private Double priority;
 	
+	private LocalDateTime lastModified;
+	
 	public StudentItemRecord(){
 		
 	}
@@ -40,6 +36,8 @@ public class StudentItemRecord {
 	public StudentItemRecord(Student student, LearnItem learnItem){
 		this.learnItem = learnItem;
 		this.student = student;
+		
+		lastModified = LocalDateTime.now();
 	}
 
 	public LearnItem getLearnItem() {
@@ -72,5 +70,11 @@ public class StudentItemRecord {
 
 	public void setPriority(Double priority) {
 		this.priority = priority;
+		lastModified = LocalDateTime.now();
 	}
+
+	public LocalDateTime getLastModified() {
+		return lastModified;
+	}
+	
 }

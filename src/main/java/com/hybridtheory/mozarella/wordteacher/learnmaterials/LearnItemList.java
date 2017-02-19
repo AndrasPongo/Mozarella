@@ -33,7 +33,7 @@ public class LearnItemList implements Iterable<LearnItem> {
 	@ManyToMany
 	private List<Student> contributors = new ArrayList<>();
 	
-	@ManyToMany
+	@ManyToMany(mappedBy="learnItemLists")
 	private Set<Student> students = new HashSet<>();
 	
 	private Boolean isPublic;
@@ -130,16 +130,24 @@ public class LearnItemList implements Iterable<LearnItem> {
 		return Objects.hash(id);
 	}
 
-	public void addLearnItem(LearnItem learnitem) {
-		if(learnItems.add(learnitem)){
+	//TODO unit test
+	public void addLearnItem(LearnItem learnItem) {
+		if(learnItems.add(learnItem)){
 			numberOfLearnItems+=1;
+			learnItem.setLearnItemsList(this);
 		}
 	}
+	
+	public void addStudent(Student student){
+		this.students.add(student);
+	}
 
-	public boolean removeLearnItem(LearnItem testLearnItem) {
-		Boolean wasSuccessful = learnItems.remove(testLearnItem);
+	//TODO unit test
+	public boolean removeLearnItem(LearnItem learnItem) {
+		Boolean wasSuccessful = learnItems.remove(learnItem);
 		if(wasSuccessful){
 			numberOfLearnItems-=1;
+			learnItem.setLearnItemsList(null);
 		}
 		return wasSuccessful;
 	}

@@ -54,10 +54,15 @@ public class Student implements UserDetails {
 	private String role;
 	
 	@JsonIgnore
-	@ManyToMany(mappedBy="students")
+	@ManyToMany
 	private Set<LearnItemList> learnItemLists = new HashSet<>(); 
 	
+	public Set<LearnItemList> getLearnItemLists() {
+		return learnItemLists;
+	}
+
 	@JsonIgnore
+	@Transient
 	@OneToOne(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY, optional = false)
 	private Pet pet;
 
@@ -88,7 +93,6 @@ public class Student implements UserDetails {
 		pet = new CubeFish(petName);
 	}
 	
-	@Transient
 	public Pet getPet() {
 		return pet;
 	}
@@ -165,7 +169,9 @@ public class Student implements UserDetails {
 	}
 
 	public void associateWithLearnItemsList(LearnItemList learnItemsList) {
-		learnItemLists.add(learnItemsList);
+		if(learnItemLists.add(learnItemsList)){
+			learnItemsList.addStudent(this);
+		}
 	}
 	
 	@Override
