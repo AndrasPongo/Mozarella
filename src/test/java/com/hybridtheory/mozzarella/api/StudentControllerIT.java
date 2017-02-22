@@ -2,18 +2,28 @@ package com.hybridtheory.mozzarella.api;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.lang.reflect.Field;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hybridtheory.mozarella.api.ResultController;
+import com.hybridtheory.mozarella.eventhandling.EventEmitter;
 import com.hybridtheory.mozarella.persistence.repository.LearnItemListRepository;
 import com.hybridtheory.mozarella.persistence.repository.SomeEntityRepository;
 import com.hybridtheory.mozarella.persistence.repository.StudentItemRecordRepository;
@@ -21,12 +31,15 @@ import com.hybridtheory.mozarella.persistence.repository.StudentRepository;
 import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.Result;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.SomeEntity;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class StudentControllerIT extends ApplicationTests {
 
     private static final String studentsResource = "/api/students/";
-
+    private static String resultresource = "/api/results";
+    
 	@Autowired
     private WebApplicationContext webApplicationContext;
     
@@ -42,16 +55,17 @@ public class StudentControllerIT extends ApplicationTests {
     @Autowired
     private SomeEntityRepository someEntityRepository;
     
+    @Autowired
+    private ResultController resultController;
+    
     private static Student student1 = new Student();
     private static Student student2 = new Student();
     private static LearnItemList learnItemsList;
     private static LearnItemList learnItemsList2;
     private static String STUDENT1NAME = "Anakin Skywalker";
     private static String STUDENT2NAME = "Qui Gon Jinn";
-    private static LearnItem learnitem1 = new LearnItem("exampleword","exampletranslation");
-    private static LearnItem learnitem2 = new LearnItem("exampleword2","exampletranslation2");
-    private static LearnItem learnitem3 = new LearnItem("exampleword3","exampletranslation3");
-    private static LearnItem learnitem4 = new LearnItem("exampleword4","exampletranslation4");
+    private static LearnItem learnItem = new LearnItem("someexpression","translation");
+    private static LearnItem learnItem2 = new LearnItem("exampleword2","exampletranslation2");
 
     private MockMvc mockMvc;
     
@@ -66,11 +80,8 @@ public class StudentControllerIT extends ApplicationTests {
             
             learnItemsList = new LearnItemList("learnItemList1");
             
-            learnItemsList.addLearnItem(new LearnItem("someexpression","translation"));
-            learnItemsList.addLearnItem(new LearnItem("someexpression3","translation2"));
-            
-            LearnItem learnItem1 = new LearnItem("someexpression","translation");
-            LearnItem learnItem2 = new LearnItem("someexpression","translation");
+            learnItemsList.addLearnItem(learnItem);
+            learnItemsList.addLearnItem(learnItem2);
             		
             learnItemListRepository.save(learnItemsList);
             
@@ -141,7 +152,7 @@ public class StudentControllerIT extends ApplicationTests {
     }
     
     @Test
-    public void validateGetLearnableLearnItems() throws Exception{
+    public void test1ValidateGetLearnableLearnItems() throws Exception{
     	
     	String path = "/api/students/"+student2.getId()+"/learnitemlists/"+learnItemsList.getId()+"/learnitems";
     	System.out.println(learnItemsList.getNumberOfLearnItemsInList());
@@ -155,18 +166,37 @@ public class StudentControllerIT extends ApplicationTests {
     }
     
     @Test
-    public void validateCantGetLearnableLearnItemsAgain() throws Exception{
+    public void test2ValidateCantGetLearnableLearnItemsAgain() throws Exception{
     	
     	String path = "/api/students/"+student2.getId()+"/learnitemlists/"+learnItemsList.getId()+"/learnitems";
     	System.out.println(learnItemsList.getNumberOfLearnItemsInList());
     	
+    	Result result = new Result(true, student2, learnItem);
+    	
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonInString = mapper.writeValueAsString(result);
+		
+		//when
+		mockMvc.perform(post(resultresource).contentType(MediaType.APPLICATION_JSON).content(jsonInString))
+		.andExpect(status().isOk());
+		
+		Field f = resultController.getClass().getDeclaredField("eventEmitter");
+		f.setAccessible(true);
+		EventEmitter emitter = (EventEmitter) f.get(resultController);
+		
+		ExecutorService executorService = emitter.getExecutorService();
+		executorService.shutdown();
+		
+		executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+		
+    	
     	mockMvc.perform(get(path).param("count", "10"))
         .andExpect(status().isOk())
         .andExpect(
-                content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+               content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
         .andExpect(jsonPath("$").isArray())
-        .andExpect(jsonPath("$",hasSize(Math.toIntExact(0))));
-    }
+        .andExpect(jsonPath("$",hasSize(Math.toIntExact(1))));
+    } 
     
     @Test
     public void test(){

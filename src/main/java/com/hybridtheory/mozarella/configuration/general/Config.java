@@ -11,7 +11,6 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import com.hybridtheory.mozarella.eventhandling.CachedThreadPoolEventEmitter;
 import com.hybridtheory.mozarella.eventhandling.EventEmitter;
 import com.hybridtheory.mozarella.users.StudentFactory;
 import com.hybridtheory.mozarella.wordteacher.priority.LatestResultsBasedPriorityCalculator;
@@ -58,7 +57,7 @@ public class Config{
     
     @Bean
     public EventEmitter emitter(){
-    	return new CachedThreadPoolEventEmitter();
+    	return new EventEmitter();
     }
     
     @Bean 

@@ -16,13 +16,16 @@ import com.hybridtheory.mozarella.eventhandling.event.Event;
 public class EventEmitter{
 
 	private Map<String,List<EventListener>> listeners = new HashMap<String,List<EventListener>>();
-	protected ExecutorService executor = Executors.newCachedThreadPool();
+	protected ExecutorService executor;
 	
-	protected EventEmitter(ExecutorService executor){
-		this.executor = executor;
+	public EventEmitter(){
 	}
 	
 	public void publish(Event e) {
+		if(executor==null || executor.isTerminated()){
+			executor = Executors.newCachedThreadPool();
+		}
+		
 		listeners.get(e.getClass().toString()).stream().forEach(listener->{
 			executor.execute(()->{listener.beNotifiedOfEvent(e);});
 		});

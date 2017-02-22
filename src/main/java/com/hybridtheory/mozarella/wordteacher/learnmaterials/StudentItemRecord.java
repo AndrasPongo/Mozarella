@@ -1,6 +1,6 @@
 package com.hybridtheory.mozarella.wordteacher.learnmaterials;
 
-import java.time.LocalDateTime;
+import org.joda.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,14 +30,14 @@ public class StudentItemRecord {
 	private LocalDateTime lastModified;
 	
 	public StudentItemRecord(){
-		
+		lastModified = LocalDateTime.now();
 	}
 	
 	public StudentItemRecord(Student student, LearnItem learnItem){
+		this();
+		
 		this.learnItem = learnItem;
 		this.student = student;
-		
-		lastModified = LocalDateTime.now();
 	}
 
 	public LearnItem getLearnItem() {

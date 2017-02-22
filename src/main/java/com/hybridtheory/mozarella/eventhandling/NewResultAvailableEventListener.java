@@ -45,21 +45,26 @@ public class NewResultAvailableEventListener implements EventListener {
 	@Override
 	public void beNotifiedOfEvent(Event e) {
 		
-		NewResultAvailableEvent event = (NewResultAvailableEvent) e;
-		
-		Result result = event.getResult();
-		Student student = result.getStudent();
-		LearnItem learnItem = result.getLearnItem();
-		
-		LOGGER.debug("processing new result for student "+student.getId()+" and learnItem "+learnItem.getId()+" STARTED");
-		
-		//1. persist the result
-		resultRepository.save(result);
-		
-		//2. assign a new priority to the learnItem, and save it
-		handleStudentItemRecord(student, learnItem);
-		
-		LOGGER.debug("processing new result for student "+student.getId()+" and learnItem "+learnItem.getId()+" ENDED");
+		try{
+			NewResultAvailableEvent event = (NewResultAvailableEvent) e;
+			
+			Result result = event.getResult();
+			Student student = result.getStudent();
+			LearnItem learnItem = result.getLearnItem();
+			
+			LOGGER.debug("processing new result for student "+student.getId()+" and learnItem "+learnItem.getId()+" STARTED");
+			
+			//1. persist the result
+			resultRepository.save(result);
+			
+			//2. assign a new priority to the learnItem, and save it
+			handleStudentItemRecord(student, learnItem);
+			
+			LOGGER.debug("processing new result for student "+student.getId()+" and learnItem "+learnItem.getId()+" ENDED");
+		} catch(Exception ex){
+			LOGGER.error(ex.toString());
+		}
+
 	}
 	
 	public void handleStudentItemRecord(Student student, LearnItem learnItem){

@@ -33,75 +33,77 @@ import com.hybridtheory.mozarella.wordteacher.learnmaterials.StudentItemRecord;
 
 public class ResultControllerIT extends ApplicationTests {
 
-	    @Autowired
-	    private WebApplicationContext webApplicationContext;
-	    
-	    @Autowired
-	    private StudentRepository studentRepository;
-	    
-	    @Autowired
-	    private LearnItemRepository learnItemRepository;
-	    
-	    @Autowired
-	    private ResultController resultController;
-	    
-	    @Autowired
-	    private StudentItemRecordRepository studentItemRecordRepository;
-	    
-	    @Autowired ResultRepository resultRepository;
-	    
-	    private MockMvc mockMvc;
-	    private static Boolean initializedFlag = false;
-	    
-	    private static String resultresource = "/api/results";
-	    
-	    @Before
-	    public void setup() {
-	    	mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-	                .build();
-	    	
-	    	if(!initializedFlag){
-	            
-	    	}    
-	    }
-	    
-	    @Test
-	    public void validateNewResultIsStored() throws Exception{
-	    	
-	    	//given
-	    	Student student = new Student();
-	    	studentRepository.save(student);
-	    	
-	    	LearnItem learnItem = new LearnItem();
-	    	learnItemRepository.save(learnItem);
-	    	
-	    	Result resultToSave = new Result(true,student,learnItem);
-	    	
-			ObjectMapper mapper = new ObjectMapper();
-			String jsonInString = mapper.writeValueAsString(resultToSave);
-			
-			//when
-			mockMvc.perform(post(resultresource).contentType(MediaType.APPLICATION_JSON).content(jsonInString))
-			.andExpect(status().isOk());
-			
-			Field f = resultController.getClass().getDeclaredField("eventEmitter");
-			f.setAccessible(true);
-			EventEmitter emitter = (EventEmitter) f.get(resultController);
-			
-			ExecutorService executorService = emitter.getExecutorService();
-			executorService.shutdown();
-			
-			executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-			
-			List<Result> latestResults = resultRepository.getLastResultsForStudentAndLearnItem(student.getId(), learnItem.getId(), new PageRequest(0,5));
-			StudentItemRecord studentItemRecord = studentItemRecordRepository.getStudentItemRecordForStudentAndLearnItemList(student.getId(), learnItem.getId());
-			
-			//then
-			assertEquals(latestResults.size(),1);
-			assertEquals(latestResults.get(0).getStudent().getId(),resultToSave.getStudent().getId());
-			assertEquals(latestResults.get(0).getLearnItem().getId(),resultToSave.getLearnItem().getId());
-			
-			assertTrue(studentItemRecord!=null);
-			assertTrue(studentItemRecord.getPriority()!=null);
-	    }
+	@Autowired
+	private WebApplicationContext webApplicationContext;
+
+	@Autowired
+	private StudentRepository studentRepository;
+
+	@Autowired
+	private LearnItemRepository learnItemRepository;
+
+	@Autowired
+	private ResultController resultController;
+
+	@Autowired
+	private StudentItemRecordRepository studentItemRecordRepository;
+
+	@Autowired
+	ResultRepository resultRepository;
+
+	private MockMvc mockMvc;
+	private static Boolean initializedFlag = false;
+
+	private static String resultresource = "/api/results";
+
+	@Before
+	public void setup() {
+		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+
+		if (!initializedFlag) {
+
+		}
+	}
+
+	@Test
+	public void validateNewResultIsStored() throws Exception {
+
+		// given
+		Student student = new Student();
+		studentRepository.save(student);
+
+		LearnItem learnItem = new LearnItem();
+		learnItemRepository.save(learnItem);
+
+		Result resultToSave = new Result(true, student, learnItem);
+
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonInString = mapper.writeValueAsString(resultToSave);
+
+		// when
+		mockMvc.perform(post(resultresource).contentType(MediaType.APPLICATION_JSON).content(jsonInString))
+				.andExpect(status().isOk());
+
+		Field f = resultController.getClass().getDeclaredField("eventEmitter");
+		f.setAccessible(true);
+		EventEmitter emitter = (EventEmitter) f.get(resultController);
+
+		ExecutorService executorService = emitter.getExecutorService();
+		executorService.shutdown();
+
+		executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+
+		List<Result> latestResults = resultRepository.getLastResultsForStudentAndLearnItem(student.getId(),
+				learnItem.getId(), new PageRequest(0, 5));
+		StudentItemRecord studentItemRecord = studentItemRecordRepository
+				.getStudentItemRecordForStudentAndLearnItemList(student.getId(), learnItem.getId());
+
+		// then
+		assertEquals(latestResults.size(), 1);
+		assertEquals(latestResults.get(0).getStudent().getId(), resultToSave.getStudent().getId());
+		assertEquals(latestResults.get(0).getLearnItem().getId(), resultToSave.getLearnItem().getId());
+
+		assertTrue(studentItemRecord != null);
+		assertTrue(studentItemRecord.getPriority() != null);
+	}
 }
