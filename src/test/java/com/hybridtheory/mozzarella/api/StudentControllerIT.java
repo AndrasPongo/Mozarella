@@ -1,6 +1,9 @@
 package com.hybridtheory.mozzarella.api;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -10,6 +13,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.lang.reflect.Field;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import javax.transaction.Transactional;
 
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -25,20 +30,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hybridtheory.mozarella.api.ResultController;
 import com.hybridtheory.mozarella.eventhandling.EventEmitter;
 import com.hybridtheory.mozarella.persistence.repository.LearnItemListRepository;
-import com.hybridtheory.mozarella.persistence.repository.SomeEntityRepository;
 import com.hybridtheory.mozarella.persistence.repository.StudentItemRecordRepository;
 import com.hybridtheory.mozarella.persistence.repository.StudentRepository;
 import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.Result;
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.SomeEntity;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class StudentControllerIT extends ApplicationTests {
 
-    private static final String studentsResource = "/api/students/";
-    private static String resultresource = "/api/results";
+    private static final String STUDENTSRESOURCE = "/api/students/";
+    private static final String RESULTRESOURCE = "/api/results";
+    private static final String STUDENTLEARNITEMLISTSRESOURCE = "/api/students/{studentid}/learnitemlists";
+    private static final String STUDENTLEARNITEMLISTRESOURCE = "/api/students/{studentid}/learnitemlists/{listid}";
+    
+    private static final String STUDENT1NAME = "Anakin Skywalker";
+    private static final String STUDENT2NAME = "Qui Gon Jinn";
     
 	@Autowired
     private WebApplicationContext webApplicationContext;
@@ -53,17 +61,13 @@ public class StudentControllerIT extends ApplicationTests {
     private LearnItemListRepository learnItemListRepository;
     
     @Autowired
-    private SomeEntityRepository someEntityRepository;
-    
-    @Autowired
     private ResultController resultController;
     
     private static Student student1 = new Student();
     private static Student student2 = new Student();
     private static LearnItemList learnItemsList;
     private static LearnItemList learnItemsList2;
-    private static String STUDENT1NAME = "Anakin Skywalker";
-    private static String STUDENT2NAME = "Qui Gon Jinn";
+   
     private static LearnItem learnItem = new LearnItem("someexpression","translation");
     private static LearnItem learnItem2 = new LearnItem("exampleword2","exampletranslation2");
 
@@ -90,25 +94,13 @@ public class StudentControllerIT extends ApplicationTests {
             
             student1.setName(STUDENT1NAME);
             student1 = studentRepository.save(student1);
-            //TODO: we only associate with already persisted learnItemLists!
-            //check for the id in the controller method!
-            
-            //as for this method, call for "persist manually"
+
             student1.associateWithLearnItemsList(learnItemsList);
             student1.associateWithLearnItemsList(learnItemsList2);
             
             student2.setName(STUDENT2NAME);
             student2 = studentRepository.save(student2);
             student2.associateWithLearnItemsList(learnItemsList);
-            
-            //learnItemsList.addLearnItem(learnitem1);
-            //learnItemsList.addLearnItem(learnitem2);
-            //learnItemsList.addLearnItem(learnitem3);
-            //	learnItemsList.addLearnItem(learnitem4);
-            
-            /*for(Integer i = 0; i<1000; i++){
-            	learnItemsList.addLearnItem(new Word("exampleword"+i,"exampletranslation"+i));
-            }*/
             
             studentRepository.save(student1);
             studentRepository.save(student2);
@@ -120,7 +112,7 @@ public class StudentControllerIT extends ApplicationTests {
     @Test
     public void validateGetStudent() throws Exception {
 
-        mockMvc.perform(get(studentsResource+student1.getId()))
+        mockMvc.perform(get(STUDENTSRESOURCE+student1.getId()))
                 .andExpect(status().isOk())
                 .andExpect(
                         content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
@@ -130,7 +122,7 @@ public class StudentControllerIT extends ApplicationTests {
     
     @Test
     public void validateGetStudentAgain() throws Exception {
-    	mockMvc.perform(get(studentsResource+student1.getId())).andExpect(status().isOk());
+    	mockMvc.perform(get(STUDENTSRESOURCE+student1.getId())).andExpect(status().isOk());
     }
     
     @Test
@@ -169,7 +161,9 @@ public class StudentControllerIT extends ApplicationTests {
     public void test2ValidateCantGetLearnableLearnItemsAgain() throws Exception{
     	
     	String path = "/api/students/"+student2.getId()+"/learnitemlists/"+learnItemsList.getId()+"/learnitems";
-    	System.out.println(learnItemsList.getNumberOfLearnItemsInList());
+    	
+    	
+    	System.out.println("PATH: "+path);
     	
     	Result result = new Result(true, student2, learnItem);
     	
@@ -177,7 +171,7 @@ public class StudentControllerIT extends ApplicationTests {
 		String jsonInString = mapper.writeValueAsString(result);
 		
 		//when
-		mockMvc.perform(post(resultresource).contentType(MediaType.APPLICATION_JSON).content(jsonInString))
+		mockMvc.perform(post(RESULTRESOURCE).contentType(MediaType.APPLICATION_JSON).content(jsonInString))
 		.andExpect(status().isOk());
 		
 		Field f = resultController.getClass().getDeclaredField("eventEmitter");
@@ -199,12 +193,47 @@ public class StudentControllerIT extends ApplicationTests {
     } 
     
     @Test
-    public void test(){
-    	SomeEntity entity = new SomeEntity();
-        long start = System.currentTimeMillis();
-        someEntityRepository.save(entity);
-        long end = System.currentTimeMillis();
-        System.out.println("cost time:" + (end - start));
+    @Transactional
+    public void testAssociateWithLearnItemList() throws Exception{
+    	Student student = new Student();
+    	LearnItemList learnItemList = new LearnItemList("aglast");
+    	
+    	studentRepository.save(student);
+    	learnItemListRepository.save(learnItemList);
+    	
+    	ObjectMapper mapper = new ObjectMapper();
+    	String jsonInString = mapper.writeValueAsString(learnItemList);
+    	
+    	System.out.println("before size() "+student.getLearnItemLists().size());
+    	
+    	mockMvc.perform(post(STUDENTLEARNITEMLISTSRESOURCE,student.getId()).contentType(MediaType.APPLICATION_JSON).content(jsonInString))
+        .andExpect(status().isOk());
+    	
+    	student = studentRepository.findOne(student.getId());
+    	
+    	System.out.println("after size() "+student.getLearnItemLists().size());
+    	
+    	assertTrue(student.getLearnItemLists().contains(learnItemList));
+    }
+    
+    @Test
+    @Transactional
+    public void testDisAssociateWithLearnItemList() throws Exception{
+    	Student student = new Student();
+    	LearnItemList learnItemList = new LearnItemList();
+    	
+    	studentRepository.save(student);
+    	learnItemListRepository.save(learnItemList);
+    	
+    	student.associateWithLearnItemsList(learnItemList);
+    	
+    	ObjectMapper mapper = new ObjectMapper();
+    	String jsonInString = mapper.writeValueAsString(learnItemList);
+    	
+    	mockMvc.perform(delete(STUDENTLEARNITEMLISTRESOURCE,student.getId(),learnItemList.getId()))
+        .andExpect(status().isOk());
+    	
+    	assertFalse(student.getLearnItemLists().contains(learnItemList));
     }
 
 }

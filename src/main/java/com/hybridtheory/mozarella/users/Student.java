@@ -183,4 +183,11 @@ public class Student implements UserDetails {
 	public int hashCode() {
 		return Objects.hash(id);
 	}
+
+	public void disAssociateWithLearnItemsList(LearnItemList list) {
+		if(learnItemLists.remove(list)){
+			list.removeStudent(this);
+		}
+		
+	}
 }
