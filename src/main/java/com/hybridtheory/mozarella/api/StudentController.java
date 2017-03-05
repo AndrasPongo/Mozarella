@@ -53,9 +53,9 @@ public class StudentController {
     private StudentFactory studentFactory;
 
     @RequestMapping(value="/api/students", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity create(@RequestBody Student student) {
+    public ResponseEntity<Integer> create(@RequestBody Student student) {
         studentRepository.save(studentFactory.createStudent(student));
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity<Integer>(student.getId(),HttpStatus.CREATED);
     }
     
     @RequestMapping(value="/api/students", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -98,6 +98,14 @@ public class StudentController {
     	studentRepository.save(student);
     	
     	return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
+    @RequestMapping(value="/api/students/{studentid}/learnitemlists", method=RequestMethod.GET)
+    public ResponseEntity<List<LearnItemList>> getLearnItemListsOfStudent(@PathVariable("studentid") Integer studentId, @RequestParam("pagenumber") Integer pageNumber, @RequestParam("pagesize") Integer pageSize) {
+    	PageRequest pageRequest = new PageRequest(pageNumber,pageSize);
+    	List<LearnItemList> result = learnItemListRepository.getLearnItemListsForStudent(studentId, pageRequest);
+    	
+    	return new ResponseEntity<>(result,HttpStatus.OK);
     }
     
     @RequestMapping(value="/api/students/{studentid}/learnitemlists/{listid}", method=RequestMethod.DELETE)

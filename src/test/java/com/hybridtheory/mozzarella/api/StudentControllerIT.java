@@ -1,6 +1,8 @@
 package com.hybridtheory.mozzarella.api;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is; 
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -47,6 +49,7 @@ public class StudentControllerIT extends ApplicationTests {
     
     private static final String STUDENT1NAME = "Anakin Skywalker";
     private static final String STUDENT2NAME = "Qui Gon Jinn";
+    
     
 	@Autowired
     private WebApplicationContext webApplicationContext;
@@ -214,6 +217,26 @@ public class StudentControllerIT extends ApplicationTests {
     	System.out.println("after size() "+student.getLearnItemLists().size());
     	
     	assertTrue(student.getLearnItemLists().contains(learnItemList));
+    }
+    
+    @Test
+    @Transactional
+    public void testGetLearnItemLists() throws Exception{
+    	Student student = new Student();
+    	LearnItemList learnItemList = new LearnItemList("aglast");
+    	
+    	student.associateWithLearnItemsList(learnItemList);
+    	
+    	studentRepository.save(student);
+    	learnItemListRepository.save(learnItemList);
+    	
+    	mockMvc.perform(get(STUDENTLEARNITEMLISTSRESOURCE,student.getId())
+    			.param("pagenumber", "0")
+    			.param("pagesize", "10"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$").isArray())
+        .andExpect(jsonPath("$",hasSize(Math.toIntExact(1))))
+        .andExpect(jsonPath("$[0].name").value(is(learnItemList.getName())));
     }
     
     @Test
