@@ -59,6 +59,10 @@ public class Result{
 		return learnItem;
 	}
 	
+	public void setLearnItem(LearnItem learnItem){
+		this.learnItem = learnItem;
+	}
+	
 	public Integer getId(){
 		return id;
 	}

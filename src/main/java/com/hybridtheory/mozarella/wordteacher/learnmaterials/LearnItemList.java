@@ -83,7 +83,7 @@ public class LearnItemList implements Iterable<LearnItem> {
 		return this.name;
 	}
 	
-	public int getNumberOfLearnItemsInList() {
+	public int getNumberOfLearnItems() {
 		return this.numberOfLearnItems;
 	}
 

@@ -1,8 +1,8 @@
 package com.hybridtheory.mozzarella.api;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is; 
-
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -23,27 +24,31 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hybridtheory.mozarella.api.ResultController;
+import com.hybridtheory.mozarella.api.StudentController;
 import com.hybridtheory.mozarella.eventhandling.EventEmitter;
 import com.hybridtheory.mozarella.persistence.repository.LearnItemListRepository;
+import com.hybridtheory.mozarella.persistence.repository.LearnItemRepository;
+import com.hybridtheory.mozarella.persistence.repository.ResultRepository;
 import com.hybridtheory.mozarella.persistence.repository.StudentItemRecordRepository;
 import com.hybridtheory.mozarella.persistence.repository.StudentRepository;
 import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.Result;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.StudentItemRecord;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class StudentControllerIT extends ApplicationTests {
 
     private static final String STUDENTSRESOURCE = "/api/students/";
-    private static final String RESULTRESOURCE = "/api/results";
+    private static final String RESULTRESOURCE = "/api/students/{studentid}/learnitemlists/{listid}/results";
     private static final String STUDENTLEARNITEMLISTSRESOURCE = "/api/students/{studentid}/learnitemlists";
     private static final String STUDENTLEARNITEMLISTRESOURCE = "/api/students/{studentid}/learnitemlists/{listid}";
     
@@ -64,7 +69,7 @@ public class StudentControllerIT extends ApplicationTests {
     private LearnItemListRepository learnItemListRepository;
     
     @Autowired
-    private ResultController resultController;
+    private StudentController studentController;
     
     private static Student student1 = new Student();
     private static Student student2 = new Student();
@@ -77,6 +82,14 @@ public class StudentControllerIT extends ApplicationTests {
     private MockMvc mockMvc;
     
     private static Boolean initializedFlag = false;
+    
+    @Autowired
+	private LearnItemRepository learnItemRepository;
+    
+    @Autowired
+	ResultRepository resultRepository;
+
+	private static String resultresource = "/api/students/{studentid}/learnitemlists/{listid}/results";
     
     @Before
     public void setup() {
@@ -150,14 +163,14 @@ public class StudentControllerIT extends ApplicationTests {
     public void test1ValidateGetLearnableLearnItems() throws Exception{
     	
     	String path = "/api/students/"+student2.getId()+"/learnitemlists/"+learnItemsList.getId()+"/learnitems";
-    	System.out.println(learnItemsList.getNumberOfLearnItemsInList());
+    	System.out.println(learnItemsList.getNumberOfLearnItems());
     	
     	mockMvc.perform(get(path).param("count", "10"))
         .andExpect(status().isOk())
         .andExpect(
                 content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
         .andExpect(jsonPath("$").isArray())
-        .andExpect(jsonPath("$",hasSize(Math.toIntExact(learnItemsList.getNumberOfLearnItemsInList()))));
+        .andExpect(jsonPath("$",hasSize(Math.toIntExact(learnItemsList.getNumberOfLearnItems()))));
     }
     
     @Test
@@ -174,12 +187,12 @@ public class StudentControllerIT extends ApplicationTests {
 		String jsonInString = mapper.writeValueAsString(result);
 		
 		//when
-		mockMvc.perform(post(RESULTRESOURCE).contentType(MediaType.APPLICATION_JSON).content(jsonInString))
+		mockMvc.perform(post(RESULTRESOURCE,student2.getId(),learnItem.getLearnItemsList().getId()).contentType(MediaType.APPLICATION_JSON).content(jsonInString))
 		.andExpect(status().isOk());
 		
-		Field f = resultController.getClass().getDeclaredField("eventEmitter");
+		Field f = studentController.getClass().getDeclaredField("eventEmitter");
 		f.setAccessible(true);
-		EventEmitter emitter = (EventEmitter) f.get(resultController);
+		EventEmitter emitter = (EventEmitter) f.get(studentController);
 		
 		ExecutorService executorService = emitter.getExecutorService();
 		executorService.shutdown();
@@ -258,5 +271,52 @@ public class StudentControllerIT extends ApplicationTests {
     	
     	assertFalse(student.getLearnItemLists().contains(learnItemList));
     }
+    
+	@Test
+	public void validateNewResultIsStored() throws Exception {
+
+		// given
+		Student student = new Student();
+		studentRepository.save(student);
+
+		LearnItemList list = new LearnItemList();
+		learnItemListRepository.save(list);
+		
+		LearnItem learnItem = new LearnItem("someexpression","sometranslation");
+		list.addLearnItem(learnItem);
+		
+		learnItemRepository.save(learnItem);
+
+		Result resultToSave = new Result(true, student, learnItem);
+
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonInString = mapper.writeValueAsString(resultToSave);
+
+		// when
+		mockMvc.perform(post(resultresource,student.getId(),list.getId()).contentType(MediaType.APPLICATION_JSON).content(jsonInString))
+				.andExpect(status().isOk());
+
+		Field f = studentController.getClass().getDeclaredField("eventEmitter");
+		f.setAccessible(true);
+		EventEmitter emitter = (EventEmitter) f.get(studentController);
+
+		ExecutorService executorService = emitter.getExecutorService();
+		executorService.shutdown();
+
+		executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+
+		List<Result> latestResults = resultRepository.getLastResultsForStudentAndLearnItem(student.getId(),
+				learnItem.getId(), new PageRequest(0, 5));
+		StudentItemRecord studentItemRecord = studentItemRecordRepository
+				.getStudentItemRecordForStudentAndLearnItemList(student.getId(), learnItem.getId());
+
+		// then
+		assertEquals(latestResults.size(), 1);
+		assertEquals(latestResults.get(0).getStudent().getId(), resultToSave.getStudent().getId());
+		assertEquals(latestResults.get(0).getLearnItem().getId(), resultToSave.getLearnItem().getId());
+
+		assertTrue(studentItemRecord != null);
+		assertTrue(studentItemRecord.getPriority() != null);
+	}
 
 }

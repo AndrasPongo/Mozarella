@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hybridtheory.mozarella.eventhandling.EventEmitter;
+import com.hybridtheory.mozarella.eventhandling.result.NewResultAvailableEvent;
 import com.hybridtheory.mozarella.persistence.repository.LearnItemListRepository;
 import com.hybridtheory.mozarella.persistence.repository.LearnItemRepository;
 import com.hybridtheory.mozarella.persistence.repository.StudentItemRecordRepository;
@@ -29,6 +31,7 @@ import com.hybridtheory.mozarella.users.StudentFactory;
 import com.hybridtheory.mozarella.utils.IdSplitter;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
+import com.hybridtheory.mozarella.wordteacher.learnmaterials.Result;
 
 import jersey.repackaged.com.google.common.collect.Lists;
 
@@ -51,6 +54,9 @@ public class StudentController {
     
     @Autowired
     private StudentFactory studentFactory;
+    
+    @Autowired
+    private EventEmitter eventEmitter;
 
     @RequestMapping(value="/api/students", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> create(@RequestBody Student student) {
@@ -86,7 +92,7 @@ public class StudentController {
     	return new ResponseEntity<>(learnItems, HttpStatus.OK);
     }
     
-    @RequestMapping(value="/api/students/{studentid}/learnitemlists", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/api/students/{studentid}/learnitemlists", method=RequestMethod.POST)
     public ResponseEntity<Object> associateStudentWithLearnItemList(@PathVariable("studentid") Integer studentId, @RequestBody LearnItemList list) {
     	Student student = studentRepository.findOne(studentId);
 
@@ -121,6 +127,24 @@ public class StudentController {
     	studentRepository.save(student);
     	
     	return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
+    @RequestMapping(value="/api/students/{studentid}/learnitemlists/{listid}/results", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> postResult(@PathVariable("studentid") Integer studentId, @PathVariable("listid") Integer listId, @RequestBody Result result) {
+    	LearnItem learnItem = learnItemRepository.findOne(result.getLearnItem().getId());
+    	Student student = studentRepository.findOne(result.getStudent().getId());
+    	
+    	//TODO
+    	if(learnItem.getLearnItemsList().getId().equals(listId) && student.getId().equals(studentId)){
+    		result.setStudent(student);
+    		result.setLearnItem(learnItem);
+    		
+    		eventEmitter.publish(new NewResultAvailableEvent(result));
+    	} else {
+    		return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+    	}
+    	
+    	return new ResponseEntity<Object>(HttpStatus.OK);
     }
     
     private List<Student> getStudentsByIds(List<Integer> ids){
