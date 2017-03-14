@@ -37,10 +37,12 @@ public class LearnItemList implements Iterable<LearnItem> {
 	private Set<Student> students = new HashSet<>();
 	
 	private Boolean isPublic;
+	
+	private Boolean isActivated = false;
 
-	private String fromLanguage;
+	private String fromLanguageCode;
 
-	private String toLanguage;
+	private String toLanguageCode;
 
 	private String name = "";
 
@@ -144,6 +146,30 @@ public class LearnItemList implements Iterable<LearnItem> {
 	
 	public void removeStudent(Student student){
 		this.students.remove(student);
+	}
+
+	public String getFromLanguageCode() {
+		return fromLanguageCode;
+	}
+
+	public void setFromLanguageCode(String fromLanguageCode) {
+		this.fromLanguageCode = fromLanguageCode;
+	}
+
+	public String getToLanguageCode() {
+		return toLanguageCode;
+	}
+
+	public void setToLanguageCode(String toLanguageCode) {
+		this.toLanguageCode = toLanguageCode;
+	}
+
+	public Boolean getIsActivated() {
+		return isActivated;
+	}
+
+	public void setIsActivated(Boolean isActivated) {
+		this.isActivated = isActivated;
 	}
 
 	//TODO unit test

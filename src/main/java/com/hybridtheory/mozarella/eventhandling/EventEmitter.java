@@ -9,12 +9,17 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import com.hybridtheory.mozarella.api.StudentController;
 import com.hybridtheory.mozarella.eventhandling.event.Event;
 
 public class EventEmitter{
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(StudentController.class);
+	
 	private Map<String,List<EventListener>> listeners = new HashMap<String,List<EventListener>>();
 	protected ExecutorService executor;
 	
@@ -26,9 +31,15 @@ public class EventEmitter{
 			executor = Executors.newCachedThreadPool();
 		}
 		
-		listeners.get(e.getClass().toString()).stream().forEach(listener->{
-			executor.execute(()->{listener.beNotifiedOfEvent(e);});
-		});
+		String name = e.getClass().toString();
+		List<EventListener> listenersOfEvent = listeners.get(e.getClass().toString());
+		if(listenersOfEvent!=null){
+			listeners.get(e.getClass().toString()).stream().forEach(listener->{
+				LOGGER.debug("emitting event of type e.getClass().toString()");
+				executor.execute(()->{listener.beNotifiedOfEvent(e);});
+			});
+		}
+		
 	}
 
 	public void subscribe(EventListener listener,Class<?> eventClass) {

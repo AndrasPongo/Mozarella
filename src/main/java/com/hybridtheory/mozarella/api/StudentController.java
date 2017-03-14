@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hybridtheory.mozarella.eventhandling.EventEmitter;
 import com.hybridtheory.mozarella.eventhandling.result.NewResultAvailableEvent;
+import com.hybridtheory.mozarella.eventhandling.result.StudentRegisteredEvent;
 import com.hybridtheory.mozarella.persistence.repository.LearnItemListRepository;
 import com.hybridtheory.mozarella.persistence.repository.LearnItemRepository;
 import com.hybridtheory.mozarella.persistence.repository.StudentItemRecordRepository;
@@ -61,6 +62,10 @@ public class StudentController {
     @RequestMapping(value="/api/students", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> create(@RequestBody Student student) {
         studentRepository.save(studentFactory.createStudent(student));
+        
+        StudentRegisteredEvent userRegisteredEvent = new StudentRegisteredEvent(student);
+        eventEmitter.publish(userRegisteredEvent);
+        
         return new ResponseEntity<Integer>(student.getId(),HttpStatus.CREATED);
     }
     

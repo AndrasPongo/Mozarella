@@ -53,6 +53,8 @@ public class Student implements UserDetails {
 	
 	private String role;
 	
+	private String email;
+	
 	@JsonIgnore
 	@ManyToMany
 	private Set<LearnItemList> learnItemLists = new HashSet<>(); 
@@ -174,6 +176,14 @@ public class Student implements UserDetails {
 		}
 	}
 	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	@Override
 	public boolean equals(Object other) {
 		return other instanceof Student && this.id.equals(((Student)(other)).id);
