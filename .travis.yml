@@ -1,3 +1,10 @@
 language: java
 jdk:
-  - oraclejdk8
+- oraclejdk8
+deploy:
+  provider: heroku
+  api_key:
+    secure: ixde4H5TFEAq8iF/Mah7OCdoqlCZDJyHy8pDhGGhjV4Oxg2eiiO6GewdH8Sc3V+zBckN68BaQuWZ/Bq4/UScAok5ikzt0Mr4SlncsckJCobdsV3q7AryQds9ig1apUBD20WllPouwSwGl4bRwpY7FhEeGifFeFJOrQ6qvtBlszv1Rhpb88JSe0hqDtIPvLIywbKZzziiAlZx8fRuczbF9FhMBtmDi8Hi570DD7VC5WDq/QNCo/U3srzVvYA9YLc9RIiuCiZYn1+t+2BPhWviCdFcd2JIdOoFnOYN134r+DB9skoDRxI1pYnrlT+SLpQ3CqzRIj1u4Q4YzZKkk9uT1LW9e8dUPkiG2NKQc1g59dOeZQPu2kRuuQUx5AlD1Ewv4Xp96kFD07JzePkQWJBS/lU0lYKGIwlmAGtT6F1BA77rdVF99PprnlCgbRXJK0g1zPwhcOM7jnncqnqN+xTFvKKrBQi31gYe2BghzhHL39dqn5iSPi9asiR1kg6uBPDtR6TilC6DsJMBHENSyn3lHk15OMO6bmuUyoVy0MYeLWMa50pmYX5STY3mPNqaxSfBxy3gXKo5EXRJF+ZmMJ2SbC8sv5fVGq8Qy5g/Q5w+D1xsqOkJrtTWtrwfT1j0s50pXV2xkMj70+EK3aUUbElJ2+eU1dezvdumkcM0g6FVu4M=
+  app: mysterious-cove-92631
+  on:
+    repo: chrisipacs/Mozarella
