@@ -1,0 +1,2 @@
+[![Builld Status](https://travis-ci.org/chrisipacs/Mozarella.svg?branch=master)](https://travis-ci.org/chrisipacs/Mozarella)
+
