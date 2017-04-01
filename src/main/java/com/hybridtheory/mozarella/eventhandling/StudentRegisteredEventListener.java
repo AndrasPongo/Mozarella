@@ -48,6 +48,8 @@ public class StudentRegisteredEventListener implements EventListener {
 	
 	@Override
 	public void beNotifiedOfEvent(Event e) {
+		LOGGER.debug("api key: "+API_KEY);
+		
 		StudentRegisteredEvent studentRegisteredEvent = (StudentRegisteredEvent) e;
 		
 		List<String> recipients = new ArrayList<String>();
