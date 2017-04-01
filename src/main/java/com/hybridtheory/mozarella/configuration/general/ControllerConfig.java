@@ -1,6 +1,5 @@
 package com.hybridtheory.mozarella.configuration.general;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -17,11 +16,11 @@ import com.hybridtheory.mozarella.api.StudentController;
 public class ControllerConfig {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(StudentController.class);
-	
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public void handle(HttpMessageNotReadableException e) {
-        LOGGER.warn("Returning HTTP 400 Bad Request", e);
-        throw e;
-    }
+
+	@ExceptionHandler
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public void handle(HttpMessageNotReadableException e) {
+		LOGGER.warn("Returning HTTP 400 Bad Request", e);
+		throw e;
+	}
 }

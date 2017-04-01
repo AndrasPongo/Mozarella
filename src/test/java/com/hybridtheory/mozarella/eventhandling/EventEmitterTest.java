@@ -18,8 +18,8 @@ public class EventEmitterTest {
 	@Test
 	public void test_emitter_notifies_listener() throws InterruptedException {
 		//given
-		/*CachedThreadPoolEventEmitter emitter = new CachedThreadPoolEventEmitter();	
-		EventListener listener = mock(StudentRegisteredEventListener.class);
+		EventEmitter emitter = new EventEmitter();	
+		EventListener listener = new StudentRegisteredEventListener(emitter);
 		
 		Student registeredStudent = new Student();
 		registeredStudent.setName("studentName");
@@ -36,7 +36,7 @@ public class EventEmitterTest {
 		executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 		
 		//then
-		verify(listener, times(1)).beNotifiedOfEvent(event);*/
+		//verify(listener, times(1)).beNotifiedOfEvent(event);
 	}
 
 }

@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.hybridtheory.mozarella.api.StudentController;
 import com.hybridtheory.mozarella.eventhandling.event.Event;
-import com.hybridtheory.mozarella.eventhandling.result.NewResultAvailableEvent;
 import com.hybridtheory.mozarella.eventhandling.result.StudentRegisteredEvent;
 import com.sparkpost.Client;
 import com.sparkpost.exception.SparkPostException;
@@ -30,13 +28,13 @@ public class StudentRegisteredEventListener implements EventListener {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(StudentRegisteredEventListener.class);
 	
-	@Value("${SPARKPOST_API_KEY}")
-	String API_KEY;
+	@Value("${sparkpost.api.key}")
+	String apiKey;
 	
-	@Value("${SPARKPOST_API_URL}")
-	String API_ENDPOINT;
+	@Value("${sparkpost.api.url}")
+	String apiEndpoint;
 	
-    Client client = new Client(API_KEY);
+    Client client = new Client(apiKey);
     
     EventEmitter emitter;
     
@@ -48,14 +46,14 @@ public class StudentRegisteredEventListener implements EventListener {
 	
 	@Override
 	public void beNotifiedOfEvent(Event e) {
-		LOGGER.debug("api key: "+API_KEY);
+		LOGGER.debug("api key: "+apiKey);
 		
 		StudentRegisteredEvent studentRegisteredEvent = (StudentRegisteredEvent) e;
 		
 		List<String> recipients = new ArrayList<String>();
 		//TODO: send email verification mail
 		try {
-			sendEmail("mozarella@mozarella.com", recipients, studentRegisteredEvent.getRegisteredStudent().getEmail());
+			sendEmail("mail.mozarella.tech", recipients, studentRegisteredEvent.getRegisteredStudent().getEmail());
 		} catch (SparkPostException e1) {
 			e1.printStackTrace();
 			LOGGER.error(e1.getMessage());
@@ -88,13 +86,12 @@ public class StudentRegisteredEventListener implements EventListener {
 	    transmission.setContentAttributes(contentAttributes);
 
 	    // Send the Email
-	    RestConnection connection = new RestConnection(client, API_ENDPOINT);
-	    LOGGER.debug("Api endpoint is: " + API_ENDPOINT);
-	    LOGGER.debug("Api key is: " + API_KEY);
+	    client.setAuthKey(apiKey); //TODO why does this have to be done here?
 	    
+	    RestConnection connection = new RestConnection(client, apiEndpoint);
 	    Response response = ResourceTransmissions.create(connection, 0, transmission);
 
-	    LOGGER.debug("Transmission Response: " + response);
+	    LOGGER.info("Transmission Response: " + response);
 	}
 
 }
