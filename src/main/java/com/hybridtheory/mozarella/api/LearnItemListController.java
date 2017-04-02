@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,7 +42,8 @@ public class LearnItemListController {
     private LearnItemRepository learnItemRepository;
 
     @RequestMapping(value="/api/learnitemlists", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Iterable<LearnItemList>> getLearnItemLists(@RequestParam(value="fromLanguages") Optional<List<String>> fromLanguages, 
+    public ResponseEntity<Iterable<LearnItemList>> getLearnItemLists(@RequestHeader("Authorization") Optional<String> authHeader,
+    																@RequestParam(value="fromLanguages") Optional<List<String>> fromLanguages, 
     																@RequestParam(value="toLanguage") Optional<String> toLanguage,
     																@RequestParam("pagenumber") Integer pageNumber, 
     																@RequestParam("pagesize") Integer pageSize) {
@@ -62,7 +64,7 @@ public class LearnItemListController {
     }
 	
     @RequestMapping(value="/api/learnitemlists/{id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Iterable<LearnItemList>> getLearnItemList(@PathVariable("id") Integer id) {
+    public ResponseEntity<Iterable<LearnItemList>> getLearnItemListAuthorized(@RequestHeader("Authorization") Optional<String> authHeader, @PathVariable("id") Integer id) {
     	LOGGER.debug("start of learnItemList call");
     	LearnItemList list = learnItemListRepository.findOne(id);
     	List<LearnItemList> result = new ArrayList<LearnItemList>();
@@ -73,7 +75,7 @@ public class LearnItemListController {
     }
     
     @RequestMapping(value="/api/learnitemlists/{id}/learnitems", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<List<LearnItem>> getItems(@PathVariable("id") Integer id, @RequestParam("pagenumber") Optional<Integer> pageNumber, @RequestParam("pagesize") Optional<Integer> pageSize) {
+    public ResponseEntity<List<LearnItem>> getItemsAuthorized(@RequestHeader("Authorization") Optional<String> authHeader, @PathVariable("id") Integer id, @RequestParam("pagenumber") Optional<Integer> pageNumber, @RequestParam("pagesize") Optional<Integer> pageSize) {
     	if(pageNumber.isPresent() && pageSize.isPresent()){
     		LOGGER.debug("start of learnItems call");
     		
@@ -94,7 +96,7 @@ public class LearnItemListController {
     }
     
     @RequestMapping(value="/api/learnitemlists/{id}/learnitems", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<List<LearnItem>> addItems(@PathVariable("id") Integer id, @RequestBody List<LearnItem> learnItemsToPersist) {
+    public ResponseEntity<List<LearnItem>> addItemsAuthorized(@RequestHeader("Authorization") Optional<String> authHeader, @PathVariable("id") Integer id, @RequestBody List<LearnItem> learnItemsToPersist) {
     	LearnItemList listToAssociateWith = learnItemListRepository.findOne(id);
     	
     	learnItemsToPersist.stream().forEach(learnItem -> learnItem.setLearnItemsList(listToAssociateWith));
