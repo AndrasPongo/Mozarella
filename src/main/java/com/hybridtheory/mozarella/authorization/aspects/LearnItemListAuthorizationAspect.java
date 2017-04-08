@@ -47,7 +47,7 @@ public class LearnItemListAuthorizationAspect {
 			Integer listId = ((Integer)(joinPoint.getArgs()[1]));
 			Integer supposedStudentId = learnItemListRepository.getOwnerOfListByListId(listId);
 			
-			isAuthorized = supposedStudentId.equals(studentTryingToAccessResource.getId());
+			isAuthorized = supposedStudentId == null || supposedStudentId.equals(studentTryingToAccessResource.getId());
 		} else if(true){
 			//TODO
 		}

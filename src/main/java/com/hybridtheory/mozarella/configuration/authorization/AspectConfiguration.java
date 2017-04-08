@@ -1,4 +1,4 @@
-package com.hybridtheory.mozarella.configuration.general;
+package com.hybridtheory.mozarella.configuration.authorization;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

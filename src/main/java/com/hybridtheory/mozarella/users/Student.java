@@ -33,9 +33,6 @@ import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
 @Entity
 public class Student implements UserDetails {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id @GeneratedValue(strategy=GenerationType.AUTO)
@@ -200,4 +197,5 @@ public class Student implements UserDetails {
 		}
 		
 	}
+	
 }

@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Transient;
@@ -57,6 +58,9 @@ public class LearnItemList implements Iterable<LearnItem> {
 	@Transient
 	private InputSanitizer inputSanitizer = new InputSanitizer();
 	private boolean validName = false;
+	
+	@ManyToOne
+	private Student owner;
 
 	public LearnItemList(){
 		
@@ -180,6 +184,14 @@ public class LearnItemList implements Iterable<LearnItem> {
 			learnItem.setLearnItemsList(null);
 		}
 		return wasSuccessful;
+	}
+
+	public Student getOwner() {
+		return owner;
+	}
+
+	public void setOwner(Student owner) {
+		this.owner = owner;
 	}
 	
 }

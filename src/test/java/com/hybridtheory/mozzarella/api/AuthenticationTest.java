@@ -14,15 +14,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.hybridtheory.mozarella.LanguageTeacherApplication;
+import com.hybridtheory.mozarella.configuration.JwtUtilConfiguration;
 import com.hybridtheory.mozarella.persistence.repository.StudentRepository;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+//@ContextConfiguration(classes=JwtUtilConfiguration.class, loader=AnnotationConfigContextLoader.class)
 public class AuthenticationTest extends AuthenticationApplicationTests {
 	
 	@Autowired

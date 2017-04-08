@@ -11,7 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @SpringBootApplication
-@ComponentScan({"com.hybridtheory.mozarella.configuration.general","com.hybridtheory.mozarella.configuration.authentication"})
+@ComponentScan({"com.hybridtheory.mozarella.configuration.general","com.hybridtheory.mozarella.configuration.authentication","com.hybridtheory.mozarella.configuration.authorization"})
 public class LanguageTeacherApplication {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(LanguageTeacherApplication.class);

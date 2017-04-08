@@ -14,7 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.hybridtheory.mozarella.api.LearnItemListController;
-import com.hybridtheory.mozarella.configuration.general.AspectConfiguration;
+import com.hybridtheory.mozarella.configuration.authorization.AspectConfiguration;
 import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozzarella.authentication.JwtUtil;
 

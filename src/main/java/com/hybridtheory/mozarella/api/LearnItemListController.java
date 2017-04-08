@@ -24,8 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hybridtheory.mozarella.persistence.LearnItemListRepositoryCustom;
 import com.hybridtheory.mozarella.persistence.repository.LearnItemListRepository;
 import com.hybridtheory.mozarella.persistence.repository.LearnItemRepository;
+import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
+import com.hybridtheory.mozzarella.authentication.JwtUtil;
 
 @RestController
 public class LearnItemListController {
@@ -40,6 +42,8 @@ public class LearnItemListController {
 	
 	@Autowired
     private LearnItemRepository learnItemRepository;
+	
+	@Autowired JwtUtil jwtUtil;
 
     @RequestMapping(value="/api/learnitemlists", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Iterable<LearnItemList>> getLearnItemLists(@RequestHeader("Authorization") Optional<String> authHeader,
@@ -106,7 +110,13 @@ public class LearnItemListController {
     }
     
     @RequestMapping(value="/api/learnitemlists", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<LearnItemList>> saveLearnItemList(@RequestBody LearnItemList learnItemListToPersist) {
+    public ResponseEntity<List<LearnItemList>> saveLearnItemList(@RequestHeader("Authorization") Optional<String> authHeader, @RequestBody LearnItemList learnItemListToPersist) {
+
+    	if(authHeader.isPresent()){
+        	Student owner = jwtUtil.parseToken(authHeader.get().substring(7));
+        	learnItemListToPersist.setOwner(owner);
+    	}
+
     	LearnItemList savedLearnItemList = learnItemListRepository.save(learnItemListToPersist);
     	List<LearnItemList> result = new ArrayList<LearnItemList>();
     	result.add(savedLearnItemList);
