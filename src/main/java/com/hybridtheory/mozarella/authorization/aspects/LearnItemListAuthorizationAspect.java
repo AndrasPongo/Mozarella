@@ -38,18 +38,29 @@ public class LearnItemListAuthorizationAspect {
 		wasCalled = true;
 
 		String authHeader = ((Optional<String>)(joinPoint.getArgs()[0])).get();
+		String token = authHeader.substring(7);
 		LOGGER.info("Auth header is :"+authHeader);
 		
-		Student studentTryingToAccessResource = jwtUtil.parseToken(authHeader);
+		Student studentTryingToAccessResource = jwtUtil.parseToken(token);
 		LearnItemList learnItemListToModify;
 		
-		if(joinPoint.getSignature().getName().equals("getLearnItemListAuthorized")){
+		if(joinPoint.getSignature().getName().equals("addItemsAuthorized")){
 			Integer listId = ((Integer)(joinPoint.getArgs()[1]));
 			Integer supposedStudentId = learnItemListRepository.getOwnerOfListByListId(listId);
 			
 			isAuthorized = supposedStudentId == null || supposedStudentId.equals(studentTryingToAccessResource.getId());
-		} else if(true){
-			//TODO
+		} else if(joinPoint.getSignature().getName().equals("saveLearnItemListAuthorized")){
+			LearnItemList listToSave = (LearnItemList)(joinPoint.getArgs()[1]);
+			if(listToSave.getId()==null){
+				isAuthorized = true;
+			} else {
+				Integer supposedStudentId = learnItemListRepository.getOwnerOfListByListId(listToSave.getId());
+				isAuthorized = studentTryingToAccessResource.getId().equals(supposedStudentId);
+			}
+			
+		} else if(joinPoint.getSignature().getName().equals("getLearnItemListAuthorized") || joinPoint.getSignature().getName().equals("getItemsAuthorized")){
+			//TODO implement this (not as important ad forbiding unathuorized modification)
+			isAuthorized = true;
 		}
     	
         Object result;

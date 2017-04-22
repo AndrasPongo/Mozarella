@@ -110,7 +110,7 @@ public class LearnItemListController {
     }
     
     @RequestMapping(value="/api/learnitemlists", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<LearnItemList>> saveLearnItemList(@RequestHeader("Authorization") Optional<String> authHeader, @RequestBody LearnItemList learnItemListToPersist) {
+    public ResponseEntity<List<LearnItemList>> saveLearnItemListAuthorized(@RequestHeader("Authorization") Optional<String> authHeader, @RequestBody LearnItemList learnItemListToPersist) {
 
     	if(authHeader.isPresent()){
         	Student owner = jwtUtil.parseToken(authHeader.get().substring(7));
