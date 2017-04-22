@@ -59,7 +59,7 @@ public class LearnItemListAuthorizationAspect {
 			}
 			
 		} else if(joinPoint.getSignature().getName().equals("getLearnItemListAuthorized") || joinPoint.getSignature().getName().equals("getItemsAuthorized")){
-			//TODO implement this (not as important ad forbiding unathuorized modification)
+			//TODO implement this (not as important ad forbidding unauthorized modification)
 			isAuthorized = true;
 		}
     	
