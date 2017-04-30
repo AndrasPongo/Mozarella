@@ -9,5 +9,5 @@ import org.springframework.data.domain.Pageable;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
 
 public interface LearnItemListRepositoryCustom {
-	public Page<LearnItemList> findBasedOnLanguage(Optional<List<String>> fromLanguages, Optional<String> toLanguage, Pageable pageable);
+	public Page<LearnItemList> findBasedOnLanguage(Optional<String> name, Optional<String> fromLanguages, Optional<String> toLanguage, Pageable pageable);
 }

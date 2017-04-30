@@ -102,6 +102,7 @@ public class LearnItemList implements Iterable<LearnItem> {
 		return id;
 	}
 
+	@JsonIgnore
 	public List<Student> getContributors() {
 		return contributors;
 	}

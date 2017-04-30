@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hybridtheory.mozarella.persistence.LearnItemListRepositoryCustom;
 import com.hybridtheory.mozarella.persistence.repository.LearnItemListRepository;
 import com.hybridtheory.mozarella.persistence.repository.LearnItemRepository;
+import com.hybridtheory.mozarella.persistence.repository.StudentRepository;
 import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
@@ -43,18 +44,22 @@ public class LearnItemListController {
 	@Autowired
     private LearnItemRepository learnItemRepository;
 	
+	@Autowired
+	private StudentRepository studentRepository;
+	
 	@Autowired JwtUtil jwtUtil;
 
     @RequestMapping(value="/api/learnitemlists", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Iterable<LearnItemList>> getLearnItemLists(@RequestHeader("Authorization") Optional<String> authHeader,
-    																@RequestParam(value="fromLanguages") Optional<List<String>> fromLanguages, 
+    																@RequestParam(value="name") Optional<String> name,
+    																@RequestParam(value="fromLanguage") Optional<String> fromLanguage, 
     																@RequestParam(value="toLanguage") Optional<String> toLanguage,
     																@RequestParam("pagenumber") Integer pageNumber, 
     																@RequestParam("pagesize") Integer pageSize) {
     	LOGGER.debug("start of learnItemLists call");
     	
     	Page<LearnItemList> lists;
-    	lists = learnItemListRepositoryCustom.findBasedOnLanguage(fromLanguages,toLanguage,new PageRequest(pageNumber,pageSize));
+    	lists = learnItemListRepositoryCustom.findBasedOnLanguage(name,fromLanguage,toLanguage,new PageRequest(pageNumber,pageSize));
     	
     	HttpHeaders headers = new HttpHeaders();
         headers.add("X-total-count", Long.toString(lists.getTotalElements()));
@@ -112,15 +117,29 @@ public class LearnItemListController {
     @RequestMapping(value="/api/learnitemlists", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<LearnItemList>> saveLearnItemListAuthorized(@RequestHeader("Authorization") Optional<String> authHeader, @RequestBody LearnItemList learnItemListToPersist) {
 
-    	if(authHeader.isPresent()){
-        	Student owner = jwtUtil.parseToken(authHeader.get().substring(7));
-        	learnItemListToPersist.setOwner(owner);
-    	}
+    	Boolean isNewList = learnItemListToPersist.getId()==null;
+    	Student owner;
 
-    	LearnItemList savedLearnItemList = learnItemListRepository.save(learnItemListToPersist);
-    	List<LearnItemList> result = new ArrayList<LearnItemList>();
-    	result.add(savedLearnItemList);
+    	if(authHeader.isPresent()){
+    		owner = jwtUtil.parseToken(authHeader.get().substring(7));
+        	learnItemListToPersist.setOwner(owner);
+
+        	LearnItemList savedLearnItemList = learnItemListRepository.save(learnItemListToPersist);
+        	
+        	if(isNewList){
+        		//owner only has to be saved if the learnitemlist is new
+        		owner = studentRepository.findOne(owner.getId());
+        		owner.associateWithLearnItemsList(learnItemListToPersist); //TODO test this
+            	
+            	studentRepository.save(owner);
+            	
+            	List<LearnItemList> result = new ArrayList<LearnItemList>();
+            	result.add(savedLearnItemList);
+            	
+            	return new ResponseEntity<List<LearnItemList>>(result,HttpStatus.OK);
+        	}
+    	}
     	
-    	return new ResponseEntity<List<LearnItemList>>(result,HttpStatus.OK);
+    	return new ResponseEntity<List<LearnItemList>>(HttpStatus.UNAUTHORIZED);
     }
 }

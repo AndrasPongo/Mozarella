@@ -1,8 +1,8 @@
 package com.hybridtheory.mozzarella.api;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -16,8 +16,10 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hybridtheory.mozarella.persistence.repository.LearnItemListRepository;
+import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
+import com.hybridtheory.mozzarella.authentication.JwtUtil;
 
 public class LearnItemListControllerIT extends ApplicationTests {
 
@@ -71,10 +73,17 @@ public class LearnItemListControllerIT extends ApplicationTests {
 
 	@Test
 	public void validateCreateLearnItemLists() throws Exception {
+		Student owner = new Student();
+		JwtUtil jwtUtil = new JwtUtil();
+		
+		String token = jwtUtil.generateToken(owner);
+		
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonInString = mapper.writeValueAsString(learnItemsListToSave);
 		
-		mockMvc.perform(post(learnitemlistsresource).contentType(MediaType.APPLICATION_JSON).content(jsonInString))
+		mockMvc.perform(post(learnitemlistsresource)
+		.header("Authorization", "Bearer "+token)
+		.contentType(MediaType.APPLICATION_JSON).content(jsonInString))
 		.andExpect(status().isOk());
 	}
 	
