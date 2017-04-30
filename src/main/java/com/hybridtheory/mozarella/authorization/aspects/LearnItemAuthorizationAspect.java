@@ -2,17 +2,14 @@ package com.hybridtheory.mozarella.authorization.aspects;
 
 import java.util.Optional;
 
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.hybridtheory.mozarella.persistence.repository.LearnItemListRepository;
 import com.hybridtheory.mozarella.persistence.repository.StudentRepository;
 import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
@@ -20,8 +17,8 @@ import com.hybridtheory.mozzarella.authentication.JwtUtil;
 
 @Component
 @Aspect
-public class LearnItemListAuthorizationAspect {
-
+public class LearnItemAuthorizationAspect {
+    
 	@Autowired
 	JwtUtil jwtUtil;
 	
@@ -31,11 +28,11 @@ public class LearnItemListAuthorizationAspect {
 	private Boolean wasCalled = false;
 	private static Logger LOGGER = LoggerFactory.getLogger(LearnItemListAuthorizationAspect.class);
 	
-    @Around("execution(* com.hybridtheory.mozarella.api.LearnItemListController.*Authorized(..))")
+	
+	@Around("execution(* com.hybridtheory.mozarella.api.LearnItemController.*Authorized(..))")
     public Object doAuthorization(ProceedingJoinPoint joinPoint) throws Throwable {
 		LOGGER.info("entering authorized method"+ joinPoint.getStaticPart().getSignature().toString());
 		Boolean isAuthorized = false;
-		
 		wasCalled = true;
 
 		String authHeader = ((Optional<String>)(joinPoint.getArgs()[0])).get();
@@ -43,25 +40,12 @@ public class LearnItemListAuthorizationAspect {
 		LOGGER.info("Auth header is :"+authHeader);
 		
 		Student studentTryingToAccessResource = jwtUtil.parseToken(token);
-		LearnItemList learnItemListToModify;
 		
-		if(joinPoint.getSignature().getName().equals("addItemsAuthorized")){
-			Integer listId = ((Integer)(joinPoint.getArgs()[1]));
-			Integer supposedStudentId = studentRepository.getOwnerOfListByListId(listId);
+		if(joinPoint.getSignature().getName().equals("deleteItemAuthorized")){
+			Integer itemId = ((Integer)(joinPoint.getArgs()[1]));
+			Integer supposedStudentId = studentRepository.getOwnerOfItemByItemId(itemId);
 			
-			isAuthorized = supposedStudentId == null || supposedStudentId.equals(studentTryingToAccessResource.getId());
-		} else if(joinPoint.getSignature().getName().equals("saveLearnItemListAuthorized")){
-			LearnItemList listToSave = (LearnItemList)(joinPoint.getArgs()[1]);
-			if(listToSave.getId()==null){
-				isAuthorized = true;
-			} else {
-				Integer supposedStudentId = studentRepository.getOwnerOfListByListId(listToSave.getId());
-				isAuthorized = studentTryingToAccessResource.getId().equals(supposedStudentId);
-			}
-			
-		} else if(joinPoint.getSignature().getName().equals("getLearnItemListAuthorized") || joinPoint.getSignature().getName().equals("getItemsAuthorized")){
-			//TODO implement this (not as important ad forbidding unauthorized modification)
-			isAuthorized = true;
+			isAuthorized = supposedStudentId.equals(studentTryingToAccessResource.getId());
 		}
     	
         Object result = null;
@@ -80,5 +64,4 @@ public class LearnItemListAuthorizationAspect {
 	public void setWasCalled(boolean b) {
 		this.wasCalled = false;
 	}
-	
 }

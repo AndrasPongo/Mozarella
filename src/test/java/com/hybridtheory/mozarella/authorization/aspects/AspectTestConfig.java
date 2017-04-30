@@ -155,9 +155,6 @@ public class AspectTestConfig{
 	@Bean
 	LearnItemListRepository learnItemListRepository(){
 		LearnItemListRepository learnItemListRepository = Mockito.mock(LearnItemListRepository.class);
-
-        when(learnItemListRepository.getOwnerOfListByListId(0)).thenReturn(0);
-        when(learnItemListRepository.getOwnerOfListByListId(1)).thenReturn(1);
         
         return learnItemListRepository;
 	}
@@ -180,6 +177,11 @@ public class AspectTestConfig{
 	StudentRepository studentRepository(){
 		StudentRepository studentRepository = Mockito.mock(StudentRepository.class);
 
+        when(studentRepository.getOwnerOfListByListId(0)).thenReturn(0);
+        when(studentRepository.getOwnerOfListByListId(1)).thenReturn(1);
+        
+        when(studentRepository.getOwnerOfItemByItemId(0)).thenReturn(0);
+		
         return studentRepository;
 	}
 	

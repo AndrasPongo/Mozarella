@@ -14,6 +14,4 @@ public interface LearnItemListRepository extends CrudRepository<LearnItemList,In
 	@Query("select l from Student s join s.learnItemLists l where s.id = :studentId")
 	public List<LearnItemList> getLearnItemListsForStudent(@Param("studentId") Integer studentId, Pageable pageable);
 	
-	@Query("select s.id from LearnItemList l join l.owner s where l.id = :listId")
-	public Integer getOwnerOfListByListId(@Param("listId") Integer listId);
 }
