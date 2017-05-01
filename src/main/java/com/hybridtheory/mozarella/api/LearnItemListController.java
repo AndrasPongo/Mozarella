@@ -132,12 +132,11 @@ public class LearnItemListController {
         		owner.associateWithLearnItemsList(learnItemListToPersist); //TODO test this
             	
             	studentRepository.save(owner);
-            	
-            	List<LearnItemList> result = new ArrayList<LearnItemList>();
-            	result.add(savedLearnItemList);
-            	
-            	return new ResponseEntity<List<LearnItemList>>(result,HttpStatus.OK);
         	}
+        	List<LearnItemList> result = new ArrayList<LearnItemList>();
+        	result.add(savedLearnItemList);
+        	
+        	return new ResponseEntity<List<LearnItemList>>(result,HttpStatus.OK);
     	}
     	
     	return new ResponseEntity<List<LearnItemList>>(HttpStatus.UNAUTHORIZED);
