@@ -12,7 +12,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import com.hybridtheory.mozarella.eventhandling.EventEmitter;
-import com.hybridtheory.mozarella.users.StudentFactory; 
+import com.hybridtheory.mozarella.eventhandling.StudentRegisteredEventListener;
+import com.hybridtheory.mozarella.users.StudentFactory;
 import com.hybridtheory.mozarella.wordteacher.priority.LatestResultsBasedPriorityCalculator;
 import com.hybridtheory.mozarella.wordteacher.priority.PriorityCalculator;
 import com.hybridtheory.mozarella.wordteacher.teacher.ItemPrioritizer;
@@ -60,8 +61,14 @@ public class Config{
     	return new EventEmitter();
     }
     
+    @Bean
+    public StudentRegisteredEventListener studentRegisteredEventListener(){
+    	return new StudentRegisteredEventListener(emitter());
+    }
+    
     @Bean 
     PriorityCalculator priorityCalculator(){
     	return new LatestResultsBasedPriorityCalculator(3);
     }
+   
 }

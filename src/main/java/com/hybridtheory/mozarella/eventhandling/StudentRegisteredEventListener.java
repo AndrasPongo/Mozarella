@@ -23,23 +23,23 @@ import com.sparkpost.model.responses.Response;
 import com.sparkpost.resources.ResourceTransmissions;
 import com.sparkpost.transport.RestConnection;
 
-@Component
 public class StudentRegisteredEventListener implements EventListener {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(StudentRegisteredEventListener.class);
 	
 	@Value("${sparkpost.api.key}")
-	String apiKey;
+	private String apiKey;
 	
 	@Value("${sparkpost.api.url}")
-	String apiEndpoint;
+	private String apiEndpoint;
 	
-    Client client = new Client(apiKey);
+    private Client client = new Client(apiKey);
     
-    EventEmitter emitter;
     
-	@Autowired
-	StudentRegisteredEventListener(EventEmitter emitter){
+    private EventEmitter emitter;
+    
+    @Autowired
+	public StudentRegisteredEventListener(EventEmitter emitter){
 		this.emitter = emitter;
 		emitter.subscribe(this, StudentRegisteredEvent.class);
 	}
@@ -86,12 +86,31 @@ public class StudentRegisteredEventListener implements EventListener {
 	    transmission.setContentAttributes(contentAttributes);
 
 	    // Send the Email
-	    client.setAuthKey(apiKey); //TODO why does this have to be done here?
+	    client.setAuthKey(apiKey); 
+	    //TODO why does this have to be done here?
 	    
 	    RestConnection connection = new RestConnection(client, apiEndpoint);
 	    Response response = ResourceTransmissions.create(connection, 0, transmission);
 
 	    LOGGER.info("Transmission Response: " + response);
 	}
+
+	public String getApiKey() {
+		return apiKey;
+	}
+
+	public void setApiKey(String apiKey) {
+		this.apiKey = apiKey;
+	}
+
+	public String getApiEndpoint() {
+		return apiEndpoint;
+	}
+
+	public void setApiEndpoint(String apiEndpoint) {
+		this.apiEndpoint = apiEndpoint;
+	}
+	
+	
 
 }

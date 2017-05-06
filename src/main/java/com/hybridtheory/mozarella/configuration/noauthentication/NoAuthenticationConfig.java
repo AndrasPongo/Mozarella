@@ -37,12 +37,5 @@ public class NoAuthenticationConfig extends WebSecurityConfigurerAdapter {
 		.authorizeRequests()
 			.anyRequest().permitAll();
     }
-    
-    //public void configure(WebSecurity web) throws Exception {
-    //    web
-    //        .ignoring()
-    //        .antMatchers("/login")
-    //        .antMatchers("/registration");
-    //}
   
 }

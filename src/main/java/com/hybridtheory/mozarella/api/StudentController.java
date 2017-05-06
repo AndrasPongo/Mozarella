@@ -139,6 +139,9 @@ public class StudentController {
     	LearnItem learnItem = learnItemRepository.findOne(result.getLearnItem().getId());
     	Student student = studentRepository.findOne(result.getStudent().getId());
     	
+    	LOGGER.debug("learnItem.getLearnItemsList"+learnItem.getLearnItemsList());
+    	//LOGGER.debug("learnItem.getLearnItemsList"+learnItem.getLearnItemsList());
+    	
     	//TODO
     	if(learnItem.getLearnItemsList().getId().equals(listId) && student.getId().equals(studentId)){
     		result.setStudent(student);

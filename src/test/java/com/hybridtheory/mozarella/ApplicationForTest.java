@@ -4,12 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan({"com.hybridtheory.mozarella.configuration.general,com.hybridtheory.mozarella.configuration.noauthentication"})
+@ComponentScan({"com.hybridtheory.mozarella.configuration.general,com.hybridtheory.mozarella.configuration.noauthentication","com.hybridtheory.mozarella.eventHandling"})
 public class ApplicationForTest {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(LanguageTeacherApplication.class);

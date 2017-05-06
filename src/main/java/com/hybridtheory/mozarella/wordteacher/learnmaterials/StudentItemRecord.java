@@ -1,12 +1,12 @@
 package com.hybridtheory.mozarella.wordteacher.learnmaterials;
 
-import org.joda.time.LocalDateTime;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+
+import org.joda.time.LocalDateTime;
 
 import com.hybridtheory.mozarella.users.Student;
 

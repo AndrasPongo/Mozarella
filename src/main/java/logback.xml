@@ -5,10 +5,18 @@
 			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</Pattern>
 		</layout>
 	</appender>
+	
+	  <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+	    <file>testFile.log</file>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</Pattern>
+		</layout>
+	  </appender>
 
 	<logger name="com.hybridtheory.mozarella" additivity="false">
 		<level value="TRACE"/>
 		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
 	</logger> 
 
 	<root level="DEBUG">

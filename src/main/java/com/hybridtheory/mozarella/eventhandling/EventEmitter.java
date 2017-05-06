@@ -36,7 +36,7 @@ public class EventEmitter{
 		if(listenersOfEvent!=null){
 			listeners.get(e.getClass().toString()).stream().forEach(listener->{
 				LOGGER.debug("emitting event of type e.getClass().toString()");
-				executor.execute(()->{listener.beNotifiedOfEvent(e);});
+				/*executor.execute(()->{*/listener.beNotifiedOfEvent(e);/*});*/
 			});
 		}
 		
