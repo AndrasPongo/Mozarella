@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -26,7 +27,7 @@ public class EventEmitterTest extends ApplicationTests {
 	public void test_emitter_notifies_listener() throws InterruptedException {
 		//given
 		EventEmitter emitter = new EventEmitter();	
-		EventListener listener = new StudentRegisteredEventListener(emitter);
+		EventListener listener = Mockito.mock(StudentRegisteredEventListener.class);
 		
 		((StudentRegisteredEventListener)listener).setApiEndpoint("");
 		((StudentRegisteredEventListener)listener).setApiKey("");
