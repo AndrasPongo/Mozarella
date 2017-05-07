@@ -7,12 +7,12 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -44,6 +44,9 @@ public class LearnItem implements Comparable<LearnItem>, Serializable {
 	protected String pictureReference;
 	
 	private String helperItem;
+	
+	@Transient
+	Boolean alreadyPracticed; //to be filled during learnItem retrieval
 	
 	public LearnItem(){
 	}
@@ -144,13 +147,12 @@ public class LearnItem implements Comparable<LearnItem>, Serializable {
 		this.id=id;
 	}
 
-	//public List<StudentItemRecord> getStudentItemRecords() {
-	//	return studentItemRecords;
-	//}
+	public Boolean getAlreadyPracticed() {
+		return alreadyPracticed;
+	}
 
-	//public void setStudentItemRecords(List<StudentItemRecord> studentItemRecords) {
-	//	this.studentItemRecords = studentItemRecords;
-	//}
-
+	public void setAlreadyPracticed(Boolean alreadyPracticed) {
+		this.alreadyPracticed = alreadyPracticed;
+	}
 	
 }

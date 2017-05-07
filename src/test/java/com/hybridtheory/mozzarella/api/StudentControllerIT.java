@@ -174,6 +174,32 @@ public class StudentControllerIT extends ApplicationTests {
     }
     
     @Test
+    public void test3AlreadyPracticedIsCorrect() throws Exception{
+    	LearnItem item = new LearnItem("dog","kutya");
+    	LearnItemList learnItemList = new LearnItemList();
+    	Student student = new Student();
+    	
+    	student.associateWithLearnItemsList(learnItemList);
+    	
+    	learnItemList.addLearnItem(item);
+    	
+    	learnItemListRepository.save(learnItemList);
+    	studentRepository.save(student);
+    	
+    	String path = "/api/students/"+student.getId()+"/learnitemlists/"+learnItemList.getId()+"/learnitems";
+    	
+    	mockMvc.perform(get(path).param("count", "1"))
+        .andExpect(status().isOk())
+        .andExpect(
+                content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .andExpect(jsonPath("$").isArray())
+        .andExpect(jsonPath("$",hasSize(Math.toIntExact(1))))
+        .andExpect(jsonPath("$[0].alreadyPracticed").value(is(false)));
+    	
+    	//"true" case is hard to integration test because of the 24h rule, but if the "false" case worked, this one should too
+    }
+    
+    @Test
     public void test2ValidateCantGetLearnableLearnItemsAgain() throws Exception{
     	
     	String path = "/api/students/"+student2.getId()+"/learnitemlists/"+learnItemsList.getId()+"/learnitems";

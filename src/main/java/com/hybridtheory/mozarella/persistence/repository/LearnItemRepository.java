@@ -1,6 +1,8 @@
 package com.hybridtheory.mozarella.persistence.repository;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.joda.time.LocalDateTime;
 import org.springframework.data.domain.Page;
@@ -9,8 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import java.util.Arrays;
 
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 
@@ -28,9 +28,16 @@ public interface LearnItemRepository extends JpaRepository<LearnItem,Integer> {
 		
 		List<LearnItem> toReturn = getPracticedLearnItemsForStudent(studentId, learnItemListids, oneDayAgo, now);	
 		System.out.println("toReturn size: "+toReturn.size()+"learnItemListids :"+Arrays.toString(learnItemListids.toArray())+" studentId: "+studentId);
+		toReturn.forEach(item->item.setAlreadyPracticed(true));
 		
+		//TODO test this properly
 		if(toReturn.size()<pageable.getPageSize()){
-			toReturn.addAll(getNewItemsForStudent(studentId, learnItemListids, new PageRequest(0,pageable.getPageSize()-toReturn.size())));
+			List<LearnItem> newItems = getNewItemsForStudent(studentId, learnItemListids, new PageRequest(0,pageable.getPageSize()-toReturn.size()));
+			newItems.forEach(item -> {
+				item.setAlreadyPracticed(false);
+			});
+			
+			toReturn.addAll(newItems);
 		}
 		
 		return toReturn;

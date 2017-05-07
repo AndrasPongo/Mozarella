@@ -3,6 +3,9 @@ package com.hybridtheory.mozarella.eventhandling;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.context.annotation.ComponentScan;
@@ -43,7 +46,7 @@ public class EventEmitterTest extends ApplicationTests {
 		executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 		
 		//then
-		//verify(listener, times(1)).beNotifiedOfEvent(event);
+		verify(listener, times(1)).beNotifiedOfEvent(event);
 	}
 
 }
