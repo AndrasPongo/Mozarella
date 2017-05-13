@@ -69,8 +69,9 @@ public class AuthenticationConfig extends WebSecurityConfigurerAdapter {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowCredentials(true);
-		config.addAllowedOrigin("http://localhost:3000");
+		//config.addAllowedOrigin("http://localhost:3000");
 		config.addAllowedOrigin("https://mozarella.herokuapp.com");
+		config.addAllowedOrigin("https://www.mozarella.tech");
 		config.addAllowedHeader("*");
 		config.addAllowedMethod("*");
 		source.registerCorsConfiguration("/**", config);

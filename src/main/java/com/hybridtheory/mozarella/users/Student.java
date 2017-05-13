@@ -32,50 +32,51 @@ import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
 
 @Entity
 public class Student implements UserDetails {
-	
+
 	private static final long serialVersionUID = 1L;
 
-	@Id @GeneratedValue(strategy=GenerationType.AUTO)
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
-	
-	@Column(unique=true)
+
+	@Column(unique = true)
 	private Integer facebookId;
-	
-	@Column(unique=true)
+
+	@Column(unique = true)
 	private Integer googleId;
-	
+
 	private String name = "";
 	private String password = "";
 	private String salt = "abcd";
-	
+
 	private String role;
-	
+
 	private String email;
-	
+
 	@JsonIgnore
 	@ManyToMany
-	private Set<LearnItemList> learnItemLists = new HashSet<>(); 
-	
+	private Set<LearnItemList> learnItemLists = new HashSet<>();
+
 	public Set<LearnItemList> getLearnItemLists() {
 		return learnItemLists;
 	}
 
 	@JsonIgnore
 	@Transient
-	@OneToOne(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY, optional = false)
+	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, optional = false)
 	private Pet pet;
 
 	@ElementCollection
 	@JsonDeserialize(using = AuthorityDeserializer.class)
 	private List<GrantedAuthority> authorities;
-	
-	public Student(){
-		if(pet == null){
-			 pet = new CubeFish();
+
+	public Student() {
+		if (pet == null) {
+			pet = new CubeFish();
 		}
 		role = "user";
 	}
-	
+
 	public Student(Integer id2, String username, String token, List<GrantedAuthority> authorityList) {
 		// TODO Auto-generated constructor stub
 	}
@@ -83,7 +84,7 @@ public class Student implements UserDetails {
 	public String getName() {
 		return this.name;
 	}
-	
+
 	public String getPassword() {
 		return this.password;
 	}
@@ -91,17 +92,17 @@ public class Student implements UserDetails {
 	protected void initializePet(String petName) {
 		pet = new CubeFish(petName);
 	}
-	
+
 	public Pet getPet() {
 		return pet;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	@Override
-	public String toString(){
+	public String toString() {
 		return "Student with name " + name + "id: " + id;
 	}
 
@@ -111,7 +112,7 @@ public class Student implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-	    return Arrays.asList(new SimpleGrantedAuthority("ROLE_STUDENT"));
+		return Arrays.asList(new SimpleGrantedAuthority("ROLE_STUDENT"));
 	}
 
 	@Override
@@ -142,37 +143,37 @@ public class Student implements UserDetails {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
-	public String getRole(){
+
+	public String getRole() {
 		return role;
 	}
-	
-	public String getSalt(){
+
+	public String getSalt() {
 		return salt;
 	}
 
 	public void setUsername(String name) {
 		this.name = name;
 	}
-	
-	public void setId(Integer id){
+
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
 	public void setRole(String role) {
 		this.role = role;
 	}
-	
-	public void setPassword(String password){
+
+	public void setPassword(String password) {
 		this.password = password;
 	}
 
 	public void associateWithLearnItemsList(LearnItemList learnItemsList) {
-		if(learnItemLists.add(learnItemsList)){
+		if (learnItemLists.add(learnItemsList)) {
 			learnItemsList.addStudent(this);
 		}
 	}
-	
+
 	public String getEmail() {
 		return email;
 	}
@@ -183,19 +184,19 @@ public class Student implements UserDetails {
 
 	@Override
 	public boolean equals(Object other) {
-		return other instanceof Student && this.id.equals(((Student)(other)).id);
+		return other instanceof Student && this.id.equals(((Student) (other)).id);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
 	}
 
 	public void disAssociateWithLearnItemsList(LearnItemList list) {
-		if(learnItemLists.remove(list)){
+		if (learnItemLists.remove(list)) {
 			list.removeStudent(this);
 		}
-		
+
 	}
-	
+
 }
