@@ -27,10 +27,10 @@ public class EventEmitterTest extends ApplicationTests {
 	public void test_emitter_notifies_listener() throws InterruptedException {
 		//given
 		EventEmitter emitter = new EventEmitter();	
-		EventListener listener = Mockito.mock(StudentRegisteredEventListener.class);
+		EventListener listener = Mockito.mock(RegistrationEmailSender.class);
 		
-		((StudentRegisteredEventListener)listener).setApiEndpoint("");
-		((StudentRegisteredEventListener)listener).setApiKey("");
+		((RegistrationEmailSender)listener).setApiEndpoint("");
+		((RegistrationEmailSender)listener).setApiKey("");
 		
 		Student registeredStudent = new Student();
 		registeredStudent.setName("studentName");

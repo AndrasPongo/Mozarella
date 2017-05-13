@@ -23,9 +23,9 @@ import com.sparkpost.model.responses.Response;
 import com.sparkpost.resources.ResourceTransmissions;
 import com.sparkpost.transport.RestConnection;
 
-public class StudentRegisteredEventListener implements EventListener {
+public class RegistrationEmailSender implements EventListener {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(StudentRegisteredEventListener.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RegistrationEmailSender.class);
 	
 	@Value("${sparkpost.api.key}")
 	private String apiKey;
@@ -39,7 +39,7 @@ public class StudentRegisteredEventListener implements EventListener {
     private EventEmitter emitter;
     
     @Autowired
-	public StudentRegisteredEventListener(EventEmitter emitter){
+	public RegistrationEmailSender(EventEmitter emitter){
 		this.emitter = emitter;
 		emitter.subscribe(this, StudentRegisteredEvent.class);
 	}
@@ -51,9 +51,11 @@ public class StudentRegisteredEventListener implements EventListener {
 		StudentRegisteredEvent studentRegisteredEvent = (StudentRegisteredEvent) e;
 		
 		List<String> recipients = new ArrayList<String>();
+		recipients.add(studentRegisteredEvent.getRegisteredStudent().getEmail());
+		
 		//TODO: send email verification mail
 		try {
-			sendEmail("mail.mozarella.tech", recipients, studentRegisteredEvent.getRegisteredStudent().getEmail());
+			sendEmail("mail@mozarella.tech", recipients, studentRegisteredEvent.getRegisteredStudent().getEmail());
 		} catch (SparkPostException e1) {
 			e1.printStackTrace();
 			LOGGER.error(e1.getMessage());
