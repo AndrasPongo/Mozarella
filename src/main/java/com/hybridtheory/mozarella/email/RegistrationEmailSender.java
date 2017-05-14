@@ -90,7 +90,7 @@ public class RegistrationEmailSender implements EventListener {
 	    contentAttributes.setFrom(new AddressAttributes(from,"Mozarella.tech",from));
 	    contentAttributes.setSubject("Mozarella activation");
 	    contentAttributes.setHtml("Dear {{name}}, thank you for your subscription"
-	    		+"please visit the following link to activate your subsciption <a href=\"{{host}}?activationCode={{activationCode}}\">{{host}}?activationCode={{activationCode}}</a>");
+	    		+"please visit the following link to activate your subsciption <a href=\"{{host}}/activate?activationCode={{activationCode}}\">{{host}}?activationCode={{activationCode}}</a>");
 	    transmission.setContentAttributes(contentAttributes);
 
 	    // Send the Email
