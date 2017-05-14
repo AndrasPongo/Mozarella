@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.hybridtheory.mozarella.authorization.aspects.AspectTestConfig;
 import com.hybridtheory.mozarella.configuration.authorization.AspectConfiguration;
+import com.hybridtheory.mozarella.email.RegistrationEmailSender;
 import com.hybridtheory.mozarella.eventhandling.event.Event;
 import com.hybridtheory.mozarella.eventhandling.result.StudentRegisteredEvent;
 import com.hybridtheory.mozarella.users.Student;

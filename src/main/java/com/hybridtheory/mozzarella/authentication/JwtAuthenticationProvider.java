@@ -1,7 +1,9 @@
 package com.hybridtheory.mozzarella.authentication;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AccountStatusException;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 
@@ -27,6 +29,10 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
         if (parsedUser == null) {
             throw new JwtTokenMalformedException("JWT token is not valid");
+        }
+        
+        if(!parsedUser.isActivated()){
+        	throw new DisabledException("User account is not activated");
         }
 
         //List<GrantedAuthority> authorityList = AuthorityUtils.commaSeparatedStringToAuthorityList(parsedUser.getRole());

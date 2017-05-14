@@ -52,6 +52,10 @@ public class Student implements UserDetails {
 	private String role;
 
 	private String email;
+	
+	private Boolean isActivated=false;
+	
+	private String activationCode = SaltGenerator.getSaltString(16);
 
 	@JsonIgnore
 	@ManyToMany
@@ -182,6 +186,23 @@ public class Student implements UserDetails {
 		this.email = email;
 	}
 
+	public Boolean isActivated() {
+		return isActivated;
+	}
+
+	public void setActivated(Boolean isActivated) {
+		this.isActivated = isActivated;
+	}
+
+	@JsonIgnore
+	public String getActivationCode() {
+		return activationCode;
+	}
+
+	public void setActivationCode(String activationCode) {
+		this.activationCode = activationCode;
+	}
+
 	@Override
 	public boolean equals(Object other) {
 		return other instanceof Student && this.id.equals(((Student) (other)).id);
@@ -196,7 +217,5 @@ public class Student implements UserDetails {
 		if (learnItemLists.remove(list)) {
 			list.removeStudent(this);
 		}
-
 	}
-
 }

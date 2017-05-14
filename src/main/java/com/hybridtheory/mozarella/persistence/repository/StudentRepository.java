@@ -18,4 +18,6 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 
 	@Query("select s.id from LearnItem i join i.learnItemList l join l.owner s where i.id = :itemId")
 	public Integer getOwnerOfItemByItemId(@Param("itemId") Integer itemId);
+	
+	public Student findByActivationCode(String code);
 }

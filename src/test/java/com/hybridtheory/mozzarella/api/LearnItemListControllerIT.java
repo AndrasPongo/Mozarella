@@ -16,6 +16,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hybridtheory.mozarella.persistence.repository.LearnItemListRepository;
+import com.hybridtheory.mozarella.persistence.repository.StudentRepository;
 import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
@@ -28,6 +29,12 @@ public class LearnItemListControllerIT extends ApplicationTests {
 
 	@Autowired
 	private LearnItemListRepository repository;
+	
+	@Autowired
+	private StudentRepository studentRepository;
+	
+	@Autowired
+	JwtUtil jwtUtil;
 
 	private static LearnItemList learnItemsList;
 	private static LearnItemList learnItemsList2;
@@ -74,7 +81,7 @@ public class LearnItemListControllerIT extends ApplicationTests {
 	@Test
 	public void validateCreateLearnItemLists() throws Exception {
 		Student owner = new Student();
-		JwtUtil jwtUtil = new JwtUtil();
+		studentRepository.save(owner);
 		
 		String token = jwtUtil.generateToken(owner);
 		

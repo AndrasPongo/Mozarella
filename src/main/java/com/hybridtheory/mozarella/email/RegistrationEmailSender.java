@@ -1,4 +1,4 @@
-package com.hybridtheory.mozarella.eventhandling;
+package com.hybridtheory.mozarella.email;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,10 +9,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
+import com.hybridtheory.mozarella.eventhandling.EventEmitter;
+import com.hybridtheory.mozarella.eventhandling.EventListener;
 import com.hybridtheory.mozarella.eventhandling.event.Event;
 import com.hybridtheory.mozarella.eventhandling.result.StudentRegisteredEvent;
+import com.hybridtheory.mozarella.users.Student;
 import com.sparkpost.Client;
 import com.sparkpost.exception.SparkPostException;
 import com.sparkpost.model.AddressAttributes;
@@ -35,8 +37,10 @@ public class RegistrationEmailSender implements EventListener {
 	
     private Client client = new Client(apiKey);
     
-    
     private EventEmitter emitter;
+    
+    @Value("${hostname}")
+    private String host;
     
     @Autowired
 	public RegistrationEmailSender(EventEmitter emitter){
@@ -50,41 +54,43 @@ public class RegistrationEmailSender implements EventListener {
 		
 		StudentRegisteredEvent studentRegisteredEvent = (StudentRegisteredEvent) e;
 		
-		List<String> recipients = new ArrayList<String>();
-		recipients.add(studentRegisteredEvent.getRegisteredStudent().getEmail());
-		
 		//TODO: send email verification mail
 		try {
-			sendEmail("mail@mozarella.tech", recipients, studentRegisteredEvent.getRegisteredStudent().getEmail());
+			sendEmail("registration@mozarella.tech", studentRegisteredEvent.getRegisteredStudent(), studentRegisteredEvent.getRegisteredStudent().getEmail());
 		} catch (SparkPostException e1) {
 			e1.printStackTrace();
 			LOGGER.error(e1.getMessage());
 		}
 	}
 	
-	private void sendEmail(String from, List<String> recipients, String email) throws SparkPostException {
+	private void sendEmail(String from, Student student, String email) throws SparkPostException {
 	    TransmissionWithRecipientArray transmission = new TransmissionWithRecipientArray();
 
 	    // Populate Recipients
 	    List<RecipientAttributes> recipientArray = new ArrayList<RecipientAttributes>();
+	    List<String> recipients = new ArrayList<String>();
+		recipients.add(student.getEmail());
+	    
 	    for (String recipient : recipients) {
 	    RecipientAttributes recipientAttribs = new RecipientAttributes();
 	        recipientAttribs.setAddress(new AddressAttributes(recipient));
 	        recipientArray.add(recipientAttribs);
 	    }
 	    transmission.setRecipientArray(recipientArray);
-
-	     // Populate Substitution Data
+	    
 	    Map<String, Object> substitutionData = new HashMap<String, Object>();
-	    substitutionData.put("yourContent", "You can add substitution data too.");
+	    substitutionData.put("name", student.getName());
+	    substitutionData.put("host", host);
+	    substitutionData.put("activationCode", student.getActivationCode());
+	    
 	    transmission.setSubstitutionData(substitutionData);
 
 	    // Populate Email Body
 	    TemplateContentAttributes contentAttributes = new TemplateContentAttributes();
-	    contentAttributes.setFrom(new AddressAttributes(from));
-	    contentAttributes.setSubject("Your subject content here. {{yourContent}}");
-	    contentAttributes.setText("Your Text content here.  {{yourContent}}");
-	    contentAttributes.setHtml("<p>Your <b>HTML</b> content here.  {{yourContent}}</p>");
+	    contentAttributes.setFrom(new AddressAttributes(from,"Mozarella.tech",from));
+	    contentAttributes.setSubject("Mozarella activation");
+	    contentAttributes.setHtml("Dear {{name}}, thank you for your subscription"
+	    		+"please visit the following link to activate your subsciption <a href=\"{{host}}?activationCode={{activationCode}}\">{{host}}?activationCode={{activationCode}}</a>");
 	    transmission.setContentAttributes(contentAttributes);
 
 	    // Send the Email

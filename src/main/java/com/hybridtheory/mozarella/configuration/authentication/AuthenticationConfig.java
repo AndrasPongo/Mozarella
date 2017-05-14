@@ -44,6 +44,7 @@ public class AuthenticationConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/register**").permitAll()
             .antMatchers("/static/**").permitAll()
             .antMatchers("/usernameavailable").permitAll()
+            .antMatchers("/activate").permitAll()
             .antMatchers("/admin/**").authenticated()//.access("hasRole('ROLE_ADMIN')")
         .and()
 	        .exceptionHandling()
@@ -69,7 +70,7 @@ public class AuthenticationConfig extends WebSecurityConfigurerAdapter {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowCredentials(true);
-		//config.addAllowedOrigin("http://localhost:3000");
+		config.addAllowedOrigin("http://localhost:3000");
 		config.addAllowedOrigin("https://mozarella.herokuapp.com");
 		config.addAllowedOrigin("https://www.mozarella.tech");
 		config.addAllowedHeader("*");
