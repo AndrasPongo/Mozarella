@@ -20,13 +20,13 @@ public class StudentProgressTracker {
 	}
 	
 	//TODO: repositories
-	public int returnWordsOfCertainStrength(LearnItemList learnItemsList, int strength) {
-	int count = 0;
-		for(LearnItem li : learnItemsList) {
-			if (li.getStrength() == strength) {
-				count++;				
-			}
-		}
-		return count;
-	}
+	//public int returnWordsOfCertainStrength(LearnItemList learnItemsList, int strength) {
+	//int count = 0;
+	//	for(LearnItem li : learnItemsList.) {
+	//		if (li.getStrength() == strength) {
+	//			count++;				
+	//		}
+	//	}
+	//	return count;
+	//}
 }

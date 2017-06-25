@@ -8,6 +8,7 @@ import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -148,6 +149,42 @@ public class AspectTestConfig{
 			public void deleteAll() {
 				// TODO Auto-generated method stub
 				
+			}
+
+			@Override
+			public <S extends Result> List<S> findAll(Example<S> arg0) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public <S extends Result> List<S> findAll(Example<S> arg0, Sort arg1) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public <S extends Result> long count(Example<S> arg0) {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+
+			@Override
+			public <S extends Result> boolean exists(Example<S> arg0) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public <S extends Result> Page<S> findAll(Example<S> arg0, Pageable arg1) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public <S extends Result> S findOne(Example<S> arg0) {
+				// TODO Auto-generated method stub
+				return null;
 			}
 		};
 	}

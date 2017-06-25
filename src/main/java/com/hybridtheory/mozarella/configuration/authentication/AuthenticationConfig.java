@@ -1,7 +1,7 @@
 package com.hybridtheory.mozarella.configuration.authentication;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.embedded.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -22,7 +22,6 @@ import org.springframework.web.filter.CorsFilter;
 
 import com.hybridtheory.mozzarella.authentication.JwtAuthenticationFilter;
 import com.hybridtheory.mozzarella.authentication.JwtAuthenticationProvider;
-import com.hybridtheory.mozzarella.authentication.JwtUtil;
 import com.hybridtheory.mozzarella.authentication.RestAuthenticationEntryPoint;
 import com.hybridtheory.mozzarella.authentication.RestAuthenticationSuccessHandler;
 
@@ -70,7 +69,7 @@ public class AuthenticationConfig extends WebSecurityConfigurerAdapter {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowCredentials(true);
-		//config.addAllowedOrigin("http://localhost:3000");
+		config.addAllowedOrigin("http://localhost:3000");
 		config.addAllowedOrigin("https://mozarella.herokuapp.com");
 		config.addAllowedOrigin("https://www.mozarella.tech");
 		config.addAllowedHeader("*");

@@ -26,7 +26,7 @@ import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.InputSanitizer;
 
 @Entity
-public class LearnItemList implements Iterable<LearnItem> {
+public class LearnItemList /*implements Iterable<LearnItem>*/ {
 	
 	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
@@ -93,10 +93,10 @@ public class LearnItemList implements Iterable<LearnItem> {
 		return this.numberOfLearnItems;
 	}
 
-	@Override
-	public Iterator<LearnItem> iterator() {
-		return learnItems.iterator();
-	}
+//	@Override
+//	public Iterator<LearnItem> iterator() {
+//		return learnItems.iterator();
+//	}
 
 	public Integer getId() {
 		return id;

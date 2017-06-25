@@ -5,6 +5,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import javax.sql.DataSource;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -16,7 +18,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hybridtheory.mozarella.LanguageTeacherApplication;
 import com.hybridtheory.mozarella.persistence.repository.LearnItemListRepository;
 import com.hybridtheory.mozarella.persistence.repository.LearnItemRepository;
 import com.hybridtheory.mozarella.persistence.repository.ResultRepository;
@@ -46,6 +47,9 @@ public class LearnItemControllerIT extends ApplicationTests {
 	
 	@Autowired
 	private ResultRepository resultRepository;
+	
+	@Autowired
+	DataSource dataSource;
 
 	private MockMvc mockMvc;
 

@@ -123,6 +123,4 @@ public class RegistrationEmailSender implements EventListener {
 		this.apiEndpoint = apiEndpoint;
 	}
 	
-	
-
 }

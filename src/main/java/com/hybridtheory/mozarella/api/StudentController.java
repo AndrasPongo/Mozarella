@@ -116,7 +116,7 @@ public class StudentController {
     	PageRequest pageRequest = new PageRequest(pageNumber,pageSize);
     	List<LearnItemList> result = learnItemListRepository.getLearnItemListsForStudent(studentId, pageRequest);
     	
-    	return new ResponseEntity<>(result,HttpStatus.OK);
+    	return new ResponseEntity<List<LearnItemList>>(result,HttpStatus.OK);
     }
     
     @RequestMapping(value="/api/students/{studentid}/learnitemlists/{listid}", method=RequestMethod.DELETE)
