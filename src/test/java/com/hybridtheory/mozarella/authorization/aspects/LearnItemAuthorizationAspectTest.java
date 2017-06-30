@@ -2,7 +2,6 @@ package com.hybridtheory.mozarella.authorization.aspects;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
@@ -13,17 +12,16 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import com.hybridtheory.mozarella.api.LearnItemController;
 import com.hybridtheory.mozarella.configuration.authorization.AspectConfiguration;
 import com.hybridtheory.mozarella.users.Student;
 import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItem;
-import com.hybridtheory.mozarella.wordteacher.learnmaterials.LearnItemList;
 import com.hybridtheory.mozzarella.authentication.JwtUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {AspectConfiguration.class, AspectTestConfig.class})
-//when(studentRepository.getOwnerOfItemByItemId(0)).thenReturn(0);
+@ContextConfiguration(classes = {AspectConfiguration.class, AspectTestConfig.class},loader = AnnotationConfigContextLoader.class)
 public class LearnItemAuthorizationAspectTest {
 	
 	@Autowired

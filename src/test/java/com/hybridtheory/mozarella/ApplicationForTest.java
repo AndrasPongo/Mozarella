@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
 @ComponentScan({"com.hybridtheory.mozarella.configuration.general,com.hybridtheory.mozarella.configuration.noauthentication","com.hybridtheory.mozarella.eventHandling"})
