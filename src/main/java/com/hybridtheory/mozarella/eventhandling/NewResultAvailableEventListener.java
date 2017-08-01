@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hybridtheory.mozarella.api.StudentController;
 import com.hybridtheory.mozarella.eventhandling.event.Event;
@@ -43,6 +44,7 @@ public class NewResultAvailableEventListener implements EventListener {
 	}
 	
 	@Override
+	@Transactional
 	public void beNotifiedOfEvent(Event e) {
 		
 		try{
@@ -77,6 +79,7 @@ public class NewResultAvailableEventListener implements EventListener {
 		}
 		
 		studentItemRecord.setPriority(priority);
+		System.out.println("saving studentItemRecord "+studentItemRecord);
 		studentItemRecordRepository.save(studentItemRecord);
 	}
 

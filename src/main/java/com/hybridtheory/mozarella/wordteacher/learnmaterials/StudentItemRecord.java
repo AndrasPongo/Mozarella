@@ -27,6 +27,8 @@ public class StudentItemRecord {
 	private Integer strength;
 	private Double priority;
 	
+	private Integer modificationCount=0;
+	
 	private LocalDateTime lastModified;
 	
 	public StudentItemRecord(){
@@ -38,6 +40,16 @@ public class StudentItemRecord {
 		
 		this.learnItem = learnItem;
 		this.student = student;
+	}
+	
+	private void registerModification(){
+		if(modificationCount==null){ //for older entities that have this as null
+			modificationCount=0;
+		}
+		
+		System.out.println("registerModification has been called");
+		lastModified = LocalDateTime.now();
+		modificationCount += 1;
 	}
 
 	public LearnItem getLearnItem() {
@@ -70,11 +82,15 @@ public class StudentItemRecord {
 
 	public void setPriority(Double priority) {
 		this.priority = priority;
-		lastModified = LocalDateTime.now();
+		registerModification();
 	}
 
 	public LocalDateTime getLastModified() {
 		return lastModified;
 	}
 	
+	@Override
+	public String toString(){
+		return this.hashCode()+ " studentItemRecord, id: "+this.id+" lastModified: "+this.lastModified;
+	}
 }
