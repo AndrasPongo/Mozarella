@@ -136,22 +136,29 @@ public class StudentController {
     
     @RequestMapping(value="/api/students/{studentid}/learnitemlists/{listid}/results", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> postResult(@PathVariable("studentid") Integer studentId, @PathVariable("listid") Integer listId, @RequestBody Result result) {
-    	LearnItem learnItem = learnItemRepository.findOne(result.getLearnItem().getId());
-    	Student student = studentRepository.findOne(result.getStudent().getId());
+    	LOGGER.debug("---postResult has been called");
+    	LearnItem learnItem = result.getLearnItem();
+    	LOGGER.debug("---learnItem found");
+    	Student student = result.getStudent();
+    	LOGGER.debug("---student found");
     	
-    	LOGGER.debug("learnItem.getLearnItemsList"+learnItem.getLearnItemsList());
+    	LOGGER.debug("---learnItemList found"+learnItem.getLearnItemsList());
     	//LOGGER.debug("learnItem.getLearnItemsList"+learnItem.getLearnItemsList());
     	
+    	LearnItemList learnItemList = learnItemListRepository.getLearnItemListOfLearnItem(learnItem.getId());
+    	
     	//TODO
-    	if(learnItem.getLearnItemsList().getId().equals(listId) && student.getId().equals(studentId)){
-    		result.setStudent(student);
-    		result.setLearnItem(learnItem);
+    	if(learnItemList.getId().equals(listId) && student.getId().equals(studentId)){
+    		//result.setStudent(student);
+    		//result.setLearnItem(learnItem);
     		
+    		LOGGER.debug("---event publishing"+learnItemList.getId());
     		eventEmitter.publish(new NewResultAvailableEvent(result));
     	} else {
     		return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
     	}
     	
+    	LOGGER.debug("---returning");
     	return new ResponseEntity<Object>(HttpStatus.OK);
     }
     
