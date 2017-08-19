@@ -5,6 +5,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.lang.reflect.Field;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import javax.sql.DataSource;
 
 import org.junit.Before;
@@ -18,6 +22,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hybridtheory.mozarella.api.StudentController;
+import com.hybridtheory.mozarella.eventhandling.EventEmitter;
 import com.hybridtheory.mozarella.persistence.repository.LearnItemListRepository;
 import com.hybridtheory.mozarella.persistence.repository.LearnItemRepository;
 import com.hybridtheory.mozarella.persistence.repository.ResultRepository;
@@ -49,8 +55,11 @@ public class LearnItemControllerIT extends ApplicationTests {
 	private ResultRepository resultRepository;
 	
 	@Autowired
-	DataSource dataSource;
-
+	private DataSource dataSource;
+	
+	@Autowired
+	private StudentController studentController;
+	
 	private MockMvc mockMvc;
 
 	private static String LEARNITEMRESOURCE = "/api/learnitems/{id}";
@@ -91,12 +100,19 @@ public class LearnItemControllerIT extends ApplicationTests {
 				.contentType(MediaType.APPLICATION_JSON).content(jsonInString))
 				.andExpect(status().isOk());
 		
+		Field f = studentController.getClass().getDeclaredField("eventEmitter");
+		f.setAccessible(true);
+		EventEmitter emitter = (EventEmitter) f.get(studentController);
+
+		ExecutorService executorService = emitter.getExecutorService();
+		executorService.shutdown();
+
+		executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+		
 		Long resultCountBeforeDelete = resultRepository.count();
 		
 		mockMvc.perform(delete(LEARNITEMRESOURCE,learnItem.getId()))
 		.andExpect(status().isOk());	
-		
-		//Thread.sleep(10000);
 		
 		//then
 		LOGGER.debug("resultRepository.count() "+resultRepository.count());
