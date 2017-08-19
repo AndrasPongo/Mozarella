@@ -137,7 +137,6 @@ public class StudentController {
     }
     
     @RequestMapping(value="/api/students/{studentid}/learnitemlists/{listid}/results", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Transactional
     public ResponseEntity<Object> postResult(@PathVariable("studentid") Integer studentId, @PathVariable("listid") Integer listId, @RequestBody Result result) {
     	LearnItem learnItem = result.getLearnItem();
     	Student student = result.getStudent();
