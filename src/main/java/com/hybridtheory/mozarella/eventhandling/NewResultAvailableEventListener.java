@@ -64,7 +64,7 @@ public class NewResultAvailableEventListener implements EventListener {
 			
 			LOGGER.debug("processing new result for student "+student.getId()+" and learnItem "+learnItem.getId()+" ENDED");
 		} catch(Exception ex){
-			LOGGER.error(ex.toString());
+			ex.printStackTrace();
 		}
 
 	}

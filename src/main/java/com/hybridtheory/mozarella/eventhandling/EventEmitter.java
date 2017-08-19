@@ -31,14 +31,12 @@ public class EventEmitter{
 			executor = Executors.newCachedThreadPool();
 		}
 		
-		String name = e.getClass().toString();
 		List<EventListener> listenersOfEvent = listeners.get(e.getClass().toString());
 		if(listenersOfEvent!=null){
 			listeners.get(e.getClass().toString()).stream().forEach(listener->{
 				LOGGER.debug("emitting event of type e.getClass().toString()");
 				
-				//TODO: run in separate thread via the executor
-				listener.beNotifiedOfEvent(e);
+				executor.execute(()->listener.beNotifiedOfEvent(e));
 			});
 		}
 		

@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,30 +137,22 @@ public class StudentController {
     }
     
     @RequestMapping(value="/api/students/{studentid}/learnitemlists/{listid}/results", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Transactional
     public ResponseEntity<Object> postResult(@PathVariable("studentid") Integer studentId, @PathVariable("listid") Integer listId, @RequestBody Result result) {
-    	LOGGER.debug("---postResult has been called");
     	LearnItem learnItem = result.getLearnItem();
-    	LOGGER.debug("---learnItem found");
     	Student student = result.getStudent();
-    	LOGGER.debug("---student found");
     	
     	LOGGER.debug("---learnItemList found"+learnItem.getLearnItemsList());
-    	//LOGGER.debug("learnItem.getLearnItemsList"+learnItem.getLearnItemsList());
-    	
     	LearnItemList learnItemList = learnItemListRepository.getLearnItemListOfLearnItem(learnItem.getId());
     	
-    	//TODO
     	if(learnItemList.getId().equals(listId) && student.getId().equals(studentId)){
-    		//result.setStudent(student);
-    		//result.setLearnItem(learnItem);
-    		
-    		LOGGER.debug("---event publishing"+learnItemList.getId());
+    		LOGGER.debug("new result available event publishing");
     		eventEmitter.publish(new NewResultAvailableEvent(result));
     	} else {
     		return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
     	}
     	
-    	LOGGER.debug("---returning");
+    	LOGGER.debug("returning");
     	return new ResponseEntity<Object>(HttpStatus.OK);
     }
     

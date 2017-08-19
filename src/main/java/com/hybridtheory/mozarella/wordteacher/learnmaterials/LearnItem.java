@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,7 +32,7 @@ public class LearnItem implements Comparable<LearnItem>, Serializable {
 	@OneToMany(mappedBy = "learnItem", cascade = { CascadeType.ALL })
 	protected List<Result> results;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JsonIgnore
 	protected LearnItemList learnItemList;
 
@@ -141,6 +142,10 @@ public class LearnItem implements Comparable<LearnItem>, Serializable {
 
 	@Override
 	public int compareTo(LearnItem other) {
+		System.out.println("learnItem compareTo, this id: "+id);
+		System.out.println("learnItem compareTo, this text: "+text);
+		System.out.println("learnItem compareTo, other id: "+other.id);
+		System.out.println("learnItem compareTo, other text: "+other.text);
 		return this.text.compareTo(other.text);
 	}
 
