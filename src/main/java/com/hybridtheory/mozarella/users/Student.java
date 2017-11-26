@@ -22,6 +22,7 @@ import javax.persistence.Transient;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.keygen.KeyGenerators;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -47,7 +48,8 @@ public class Student implements UserDetails {
 
 	private String name = "";
 	private String password = "";
-	private String salt = "abcd";
+	
+	private String salt = KeyGenerators.secureRandom(5).generateKey().toString();
 
 	private String role;
 
